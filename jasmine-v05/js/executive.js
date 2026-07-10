@@ -1,9 +1,7 @@
-const params =
-new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
 
-const executiveID =
-params.get("id");
+const executiveID = params.get("id");
 
 
 
@@ -14,162 +12,210 @@ fetch("data/executives.json")
 .then(data => {
 
 
-const executive =
-data.executives.find(
-item => item.id === executiveID
-);
+    const executive = data.executives.find(
+        item => item.id === executiveID
+    );
 
 
+    if (!executive) {
 
-fetch(executive.file)
+        document.getElementById("executive-profile").innerHTML =
+        "Executive not found";
 
-.then(response => response.json())
+        return;
 
-.then(profile => {
+    }
 
 
 
-const container =
-document.getElementById("executive-profile");
+    fetch(executive.file)
 
+    .then(response => response.json())
 
+    .then(profile => {
 
-container.innerHTML = `
 
 
+        const container =
+        document.getElementById("executive-profile");
 
-<div class="dashboard-card">
 
 
-<h2>
+        container.innerHTML = `
 
-${profile.profile.name}
 
-</h2>
 
+        <div class="dashboard-card">
 
-<p>
 
-${profile.profile.title}
+            <h2>
+            ${profile.profile.name}
+            </h2>
 
-<br>
 
-${profile.profile.company}
+            <p>
 
-</p>
+            ${profile.profile.title}
 
+            <br>
 
-</div>
+            ${profile.profile.company}
 
+            </p>
 
 
+        </div>
 
 
-<div class="dashboard-card">
 
 
-<h3>
-✈ Current Travel
-</h3>
 
+        <div class="dashboard-card">
 
 
-<h2>
+            <h3>
+            ✈ Current Travel
+            </h3>
 
-${profile.currentTrip.destination}
 
-</h2>
+            <h2>
+            ${profile.currentTrip.destination}
+            </h2>
 
 
-<p>
+            <p>
 
-${profile.currentTrip.dates}
+            ${profile.currentTrip.dates}
 
-<br>
+            <br>
 
-Status:
-${profile.currentTrip.status}
+            Status:
+            ${profile.currentTrip.status}
 
-</p>
+            </p>
 
 
-</div>
 
+            <button onclick="openTrip('${profile.currentTrip.id}')">
 
+            Open Itinerary
 
+            </button>
 
 
-<div class="dashboard-card">
+        </div>
 
 
-<h3>
-Upcoming Trips
-</h3>
 
 
 
-${profile.upcomingTrips.map(trip => `
+        <div class="dashboard-card">
 
 
-<p>
+            <h3>
+            Upcoming Trips
+            </h3>
 
-<strong>
-${trip.destination}
-</strong>
 
-<br>
+            ${
+            profile.upcomingTrips.length
 
-${trip.date}
+            ?
 
-</p>
+            profile.upcomingTrips.map(trip => `
 
 
-`).join("")}
+                <p>
 
+                <strong>
+                ${trip.destination}
+                </strong>
 
-</div>
+                <br>
 
+                ${trip.date}
 
+                </p>
 
 
+            `).join("")
 
-<div class="dashboard-card">
 
+            :
 
-<h3>
-Travel History
-</h3>
+            "<p>No upcoming trips</p>"
 
+            }
 
 
-${profile.travelHistory.map(trip => `
+        </div>
 
 
-<p>
 
-<strong>
-${trip.destination}
-</strong>
 
-<br>
 
-${trip.date}
+        <div class="dashboard-card">
 
-</p>
 
+            <h3>
+            Travel History
+            </h3>
 
-`).join("")}
 
 
-</div>
+            ${
+            profile.travelHistory.length
 
+            ?
 
+            profile.travelHistory.map(trip => `
 
-`;
 
+                <p>
+
+                <strong>
+                ${trip.destination}
+                </strong>
+
+                <br>
+
+                ${trip.date}
+
+                </p>
+
+
+            `).join("")
+
+
+            :
+
+            "<p>No travel history</p>"
+
+            }
+
+
+
+        </div>
+
+
+
+        `;
+
+
+
+    });
 
 
 });
 
 
-});
+
+
+function openTrip(id) {
+
+
+    window.location.href =
+    `trip.html?id=${id}`;
+
+
+}
