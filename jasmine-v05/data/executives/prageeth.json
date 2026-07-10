@@ -1,18 +1,16 @@
 {
   "profile": {
 
-    "name": "Prageeth Seneviratne",
+    "name": "Prageeth Ranasinghe",
 
-    "title": "Head of Ocean Freight - East Africa",
+    "title": "Regional Finance Manager - East Africa",
 
     "company": "EFL Global"
 
   },
 
 
-"currentTrip": {
-
-    "id": "prageeth-uganda-2026",
+  "currentTrip": {
 
     "destination": "Uganda",
 
@@ -20,7 +18,7 @@
 
     "status": "Upcoming"
 
-},
+  },
 
 
   "upcomingTrips": [

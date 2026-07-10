@@ -1,0 +1,98 @@
+{
+  "executive": {
+
+    "name": "Wasantha Ranasinghe",
+
+    "title": "Director - East Africa"
+
+  },
+
+
+  "trip": {
+
+    "name": "India Regional Visit",
+
+    "destination": "India",
+
+    "dates": "5 - 10 August 2026",
+
+    "status": "Upcoming"
+
+  },
+
+
+  "flight": {
+
+    "airline": "Kenya Airways",
+
+    "flightNumber": "KQ",
+
+    "route": "Nairobi - India",
+
+    "departure": "5 August 2026"
+
+  },
+
+
+  "hotel": {
+
+    "name": "Hotel Details Pending",
+
+    "checkIn": "5 August 2026",
+
+    "checkOut": "10 August 2026"
+
+  },
+
+
+  "schedule": [
+
+    {
+
+      "date": "6 August 2026",
+
+      "time": "10:00",
+
+      "event": "Business Meetings",
+
+      "location": "India"
+
+    }
+
+  ],
+
+
+  "documents": [
+
+    {
+
+      "name": "Flight Ticket",
+
+      "status": "Ready"
+
+    },
+
+    {
+
+      "name": "Hotel Voucher",
+
+      "status": "Pending"
+
+    }
+
+  ],
+
+
+  "contacts": [
+
+    {
+
+      "name": "EFL Office",
+
+      "type": "Support"
+
+    }
+
+  ]
+
+}

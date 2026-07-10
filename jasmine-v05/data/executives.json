@@ -8,14 +8,14 @@
     },
     {
       "id": "prageeth",
-      "name": "Prageeth Seneviratne",
-      "title": "Head of Ocean Freight - East Africa",
+      "name": "Prageeth Ranasinghe",
+      "title": "Regional Finance Manager - East Africa",
       "file": "data/executives/prageeth.json"
     },
     {
       "id": "kavinda",
-      "name": "Kavinda Atapattu",
-      "title": "Country Manager",
+      "name": "Kavinda",
+      "title": "Executive",
       "file": "data/executives/kavinda.json"
     }
   ]

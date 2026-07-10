@@ -9,9 +9,8 @@
 
   },
 
-"currentTrip": {
 
-    "id": "wasantha-india-2026",
+  "currentTrip": {
 
     "destination": "India",
 
@@ -19,7 +18,7 @@
 
     "status": "Upcoming"
 
-},
+  },
 
 
   "upcomingTrips": [
