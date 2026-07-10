@@ -1,22 +1,21 @@
-/* 
-Jasmine v0.5
-Executive Travel & Business Companion
+/*
+Personal Assistant
+Executive Travel Experience
 */
 
 
 * {
 
-box-sizing: border-box;
+box-sizing:border-box;
 
 }
 
 
-
 body {
 
-margin: 0;
+margin:0;
 
-background: #f5f5f7;
+background:#f5f5f7;
 
 font-family:
 
@@ -27,7 +26,7 @@ Roboto,
 Arial,
 sans-serif;
 
-color: #222;
+color:#222;
 
 }
 
@@ -35,46 +34,44 @@ color: #222;
 
 .container {
 
-max-width: 900px;
+max-width:900px;
 
-margin: 0 auto;
+margin:auto;
 
-padding: 25px;
+padding:25px;
 
 }
 
 
 
-/* Branding */
+/* Header */
 
 
 .header {
 
-margin-bottom: 35px;
+margin-bottom:35px;
 
 }
-
 
 
 .brand {
 
-display: flex;
+display:flex;
 
-align-items: center;
+align-items:center;
 
-gap: 15px;
+gap:15px;
 
 }
 
 
-
 .logo {
 
-width: 55px;
+width:55px;
 
-height: 55px;
+height:55px;
 
-object-fit: contain;
+object-fit:contain;
 
 }
 
@@ -82,11 +79,11 @@ object-fit: contain;
 
 .brand h1 {
 
-margin: 0;
+margin:0;
 
-font-size: 32px;
+font-size:30px;
 
-font-weight: 700;
+font-weight:700;
 
 }
 
@@ -94,77 +91,63 @@ font-weight: 700;
 
 .brand p {
 
-margin: 5px 0 0;
+margin:5px 0 0;
 
-color: #666;
+color:#666;
 
-font-size: 15px;
-
-}
-
-
-
-/* Sections */
-
-
-h2 {
-
-font-size: 24px;
-
-margin-bottom: 20px;
+font-size:15px;
 
 }
 
 
 
-/* Executive Cards */
+/* Cards */
 
 
+.dashboard-card,
 .trip-card {
 
-background: white;
+background:white;
 
-padding: 25px;
+padding:25px;
 
-border-radius: 24px;
+border-radius:24px;
 
-margin-bottom: 18px;
+margin-bottom:18px;
 
 box-shadow:
 
 0 10px 30px rgba(0,0,0,0.06);
 
-transition: transform 0.2s ease;
-
 }
 
 
 
-.trip-card:hover {
-
-transform: translateY(-3px);
-
-}
-
-
-
+.dashboard-card h2,
 .trip-card h2 {
 
-margin-top: 0;
-
-margin-bottom: 8px;
-
-font-size: 22px;
+margin-top:0;
 
 }
 
 
 
+.dashboard-card h3 {
+
+margin-top:0;
+
+font-size:18px;
+
+}
+
+
+
+.dashboard-card p,
 .trip-card p {
 
-color: #555;
+color:#555;
 
-line-height: 1.5;
+line-height:1.5;
 
 }
 
@@ -175,21 +158,19 @@ line-height: 1.5;
 
 button {
 
-background: #111;
+background:#111;
 
-color: white;
+color:white;
 
-border: none;
+border:none;
 
-padding: 12px 22px;
+padding:12px 22px;
 
-border-radius: 25px;
+border-radius:25px;
 
-font-size: 15px;
+cursor:pointer;
 
-cursor: pointer;
-
-margin-top: 15px;
+font-size:15px;
 
 }
 
@@ -197,56 +178,38 @@ margin-top: 15px;
 
 button:hover {
 
-opacity: 0.85;
+opacity:.85;
 
 }
 
 
 
-/* Dashboard Cards (future use) */
+/* Mobile */
 
 
-.dashboard-card {
+@media(max-width:600px){
 
-background: white;
 
-padding: 25px;
+.container{
 
-border-radius: 24px;
-
-margin-bottom: 18px;
-
-box-shadow:
-
-0 10px 30px rgba(0,0,0,0.06);
+padding:18px;
 
 }
 
 
+.brand h1{
 
-/* Mobile optimisation */
-
-
-@media (max-width:600px) {
-
-
-.container {
-
-padding: 18px;
+font-size:25px;
 
 }
 
 
-.brand h1 {
+.dashboard-card,
+.trip-card{
 
-font-size: 26px;
+padding:20px;
 
-}
-
-
-.trip-card {
-
-padding: 20px;
+border-radius:20px;
 
 }
 
