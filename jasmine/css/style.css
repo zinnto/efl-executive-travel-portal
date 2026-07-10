@@ -324,3 +324,12 @@ box-shadow:0 5px 15px rgba(0,0,0,.08);
 button{
 cursor:pointer;
 }
+hr {
+
+border:none;
+
+border-top:1px solid #ddd;
+
+margin:20px 0;
+
+}
