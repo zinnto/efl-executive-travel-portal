@@ -1,11 +1,15 @@
 const params = new URLSearchParams(window.location.search);
 
-
 const tripID = params.get("id");
+
+
+const container =
+document.getElementById("trip-dashboard");
 
 
 
 const tripFiles = {
+
 
     "wasantha-india-2026":
     "data/trips/wasantha-india-2026.json",
@@ -14,30 +18,70 @@ const tripFiles = {
     "prageeth-uganda-2026":
     "data/trips/prageeth-uganda-2026.json"
 
+
 };
 
 
 
+console.log("Trip ID:", tripID);
+
+
+
+if (!tripFiles[tripID]) {
+
+
+    container.innerHTML = `
+
+    <div class="dashboard-card">
+
+    <h3>
+    Trip Not Found
+    </h3>
+
+    <p>
+    ID received:
+    ${tripID}
+    </p>
+
+    </div>
+
+    `;
+
+
+}
+
+else {
+
 
 fetch(tripFiles[tripID])
 
-.then(response => response.json())
+
+.then(response => {
+
+
+    if(!response.ok){
+
+        throw new Error(
+        "Trip JSON file could not be loaded"
+        );
+
+    }
+
+
+    return response.json();
+
+
+})
+
 
 .then(trip => {
-
-
-
-const container =
-document.getElementById("trip-dashboard");
 
 
 
 container.innerHTML = `
 
 
-
 <div class="dashboard-card">
-
 
 <h2>
 
@@ -58,12 +102,12 @@ ${trip.executive.title}
 
 
 
-
 <div class="dashboard-card">
 
-
 <h3>
+
 🌍 ${trip.trip.name}
+
 </h3>
 
 
@@ -89,11 +133,7 @@ ${trip.trip.status}
 </div>
 
 
-
-
-
 <div class="dashboard-card">
-
 
 <h3>
 ✈ Flight
@@ -102,21 +142,11 @@ ${trip.trip.status}
 
 <p>
 
-<strong>
 ${trip.flight.airline}
-</strong>
-
-<br>
-
-${trip.flight.flightNumber}
 
 <br>
 
 ${trip.flight.route}
-
-<br>
-
-${trip.flight.departure}
 
 </p>
 
@@ -125,10 +155,7 @@ ${trip.flight.departure}
 
 
 
-
-
 <div class="dashboard-card">
-
 
 <h3>
 🏨 Hotel
@@ -137,19 +164,7 @@ ${trip.flight.departure}
 
 <p>
 
-<strong>
 ${trip.hotel.name}
-</strong>
-
-<br>
-
-Check-in:
-${trip.hotel.checkIn}
-
-<br>
-
-Check-out:
-${trip.hotel.checkOut}
 
 </p>
 
@@ -158,18 +173,14 @@ ${trip.hotel.checkOut}
 
 
 
-
-
 <div class="dashboard-card">
-
 
 <h3>
 📅 Schedule
 </h3>
 
 
-${
-trip.schedule.map(item => `
+${trip.schedule.map(item => `
 
 <p>
 
@@ -179,40 +190,25 @@ ${item.date}
 
 <br>
 
-${item.time}
-
-<br>
-
 ${item.event}
-
-<br>
-
-${item.location}
 
 </p>
 
-
-`).join("")
-
-}
+`).join("")}
 
 
 </div>
 
 
 
-
-
 <div class="dashboard-card">
-
 
 <h3>
 📄 Documents
 </h3>
 
 
-${
-trip.documents.map(doc => `
+${trip.documents.map(doc => `
 
 <p>
 
@@ -222,58 +218,11 @@ ${doc.name}
 
 <br>
 
-Status:
 ${doc.status}
 
 </p>
 
-
-`).join("")
-
-}
-
-
-</div>
-
-
-
-
-<div class="dashboard-card">
-
-
-<h3>
-☎ Contacts
-</h3>
-
-
-${
-trip.contacts.length
-
-?
-
-trip.contacts.map(contact => `
-
-<p>
-
-<strong>
-${contact.name}
-</strong>
-
-<br>
-
-${contact.type}
-
-</p>
-
-
-`).join("")
-
-
-:
-
-"<p>No contacts added</p>"
-
-}
+`).join("")}
 
 
 </div>
@@ -283,5 +232,32 @@ ${contact.type}
 `;
 
 
+})
+
+
+.catch(error => {
+
+
+console.error(error);
+
+
+container.innerHTML = `
+
+<div class="dashboard-card">
+
+<h3>
+Error Loading Travel Details
+</h3>
+
+<p>
+${error.message}
+</p>
+
+</div>
+
+`;
 
 });
+
+
+}
