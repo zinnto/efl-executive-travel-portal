@@ -1,0 +1,27 @@
+{
+  "executive": {
+    "name": "Wasantha Ranasinghe",
+    "title": "Regional Director - East Africa"
+  },
+
+  "trip": {
+    "destination": "India",
+    "dates": "5–10 August 2026"
+  },
+
+  "documents": [
+    {
+      "title": "Flight Ticket",
+      "type": "flight",
+      "url": "https://your-onedrive-link"
+    }
+  ],
+
+  "contacts": [
+    {
+      "name": "Driver",
+      "role": "Transport",
+      "phone": "+254700000000"
+    }
+  ]
+}
