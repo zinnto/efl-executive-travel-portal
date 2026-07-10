@@ -333,3 +333,59 @@ border-top:1px solid #ddd;
 margin:20px 0;
 
 }
+.hero-card {
+
+background:white;
+
+padding:30px;
+
+border-radius:30px;
+
+margin-bottom:20px;
+
+box-shadow:
+0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+.trip-card {
+
+background:white;
+
+padding:25px;
+
+border-radius:25px;
+
+margin-bottom:20px;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,.07);
+
+}
+
+
+.trip-card h3 {
+
+margin-top:0;
+
+}
+
+
+.action {
+
+display:inline-block;
+
+background:#111;
+
+color:white;
+
+padding:12px 20px;
+
+border-radius:25px;
+
+text-decoration:none;
+
+margin-top:10px;
+
+}
