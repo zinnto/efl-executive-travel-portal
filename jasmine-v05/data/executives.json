@@ -1,0 +1,22 @@
+{
+  "executives": [
+    {
+      "id": "wasantha",
+      "name": "Wasantha Ranasinghe",
+      "title": "Director - East Africa",
+      "file": "data/executives/wasantha.json"
+    },
+    {
+      "id": "prageeth",
+      "name": "Prageeth Ranasinghe",
+      "title": "Regional Finance Manager - East Africa",
+      "file": "data/executives/prageeth.json"
+    },
+    {
+      "id": "kavinda",
+      "name": "Kavinda",
+      "title": "Executive",
+      "file": "data/executives/kavinda.json"
+    }
+  ]
+}

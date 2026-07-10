@@ -1,0 +1,38 @@
+{
+  "profile": {
+
+    "name": "Prageeth Ranasinghe",
+
+    "title": "Regional Finance Manager - East Africa",
+
+    "company": "EFL Global"
+
+  },
+
+
+  "currentTrip": {
+
+    "destination": "Uganda",
+
+    "dates": "20 - 27 July 2026",
+
+    "status": "Upcoming"
+
+  },
+
+
+  "upcomingTrips": [
+
+    {
+      "destination": "Uganda",
+
+      "date": "20 July 2026"
+
+    }
+
+  ],
+
+
+  "travelHistory": []
+
+}

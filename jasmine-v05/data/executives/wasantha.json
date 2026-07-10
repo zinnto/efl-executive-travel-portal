@@ -1,0 +1,47 @@
+{
+  "profile": {
+
+    "name": "Wasantha Ranasinghe",
+
+    "title": "Director - East Africa",
+
+    "company": "EFL Global"
+
+  },
+
+
+  "currentTrip": {
+
+    "destination": "India",
+
+    "dates": "5 - 10 August 2026",
+
+    "status": "Upcoming"
+
+  },
+
+
+  "upcomingTrips": [
+
+    {
+      "destination": "India",
+
+      "date": "5 August 2026"
+
+    }
+
+  ],
+
+
+  "travelHistory": [
+
+    {
+      "destination": "Uganda",
+
+      "date": "July 2026"
+
+    }
+
+  ]
+
+}
