@@ -9,19 +9,61 @@
     "dates": "5–10 August 2026"
   },
 
+   "flight": {
+
+    "airline": "Kenya Airways",
+
+    "number": "KQ414",
+
+    "route": "Nairobi → Entebbe",
+
+    "departure": "09:30 AM",
+
+    "seat": "2A",
+
+    "gate": "12",
+
+    "ticket": "https://your-onedrive-link"
+
+  },
+
+
+  "hotel": {
+
+    "name": "Sheraton Kampala",
+
+    "checkin": "20 July",
+
+    "checkout": "27 July",
+
+    "voucher": "https://your-onedrive-link"
+
+  },
+
+
   "documents": [
+
     {
       "title": "Flight Ticket",
-      "type": "flight",
+      "url": "https://your-onedrive-link"
+    },
+
+    {
+      "title": "Hotel Voucher",
       "url": "https://your-onedrive-link"
     }
+
   ],
 
+
   "contacts": [
+
     {
-      "name": "Driver",
-      "role": "Transport",
+      "name": "John Kamau",
+      "role": "Driver",
       "phone": "+254700000000"
     }
+
   ]
+
 }
