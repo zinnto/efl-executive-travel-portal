@@ -389,3 +389,44 @@ text-decoration:none;
 margin-top:10px;
 
 }
+.brand {
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+margin-bottom:30px;
+
+}
+
+
+.logo {
+
+width:55px;
+
+height:55px;
+
+object-fit:contain;
+
+}
+
+
+.header h1,
+.brand h1 {
+
+margin:0;
+
+font-size:32px;
+
+}
+
+
+.brand p {
+
+margin-top:5px;
+
+color:#666;
+
+}
