@@ -1,0 +1,18 @@
+{
+  "trips": [
+    {
+      "id": "prageeth-uganda-2026",
+      "executive": "Prageeth Ranasinghe",
+      "destination": "Uganda",
+      "dates": "20–27 July 2026",
+      "file": "data/trips/prageeth-uganda-2026.json"
+    },
+    {
+      "id": "wasantha-india-2026",
+      "executive": "Wasantha Ranasinghe",
+      "destination": "India",
+      "dates": "5–10 August 2026",
+      "file": "data/trips/wasantha-india-2026.json"
+    }
+  ]
+}
