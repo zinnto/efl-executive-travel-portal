@@ -14,7 +14,38 @@ color:#1d1d1f;
 
 }
 
+.trip-card {
 
+background:white;
+
+padding:25px;
+
+border-radius:24px;
+
+margin-bottom:18px;
+
+
+box-shadow:
+
+0 10px 30px rgba(0,0,0,0.06);
+
+}
+
+
+.trip-card h2 {
+
+font-size:24px;
+
+}
+
+
+.trip-card h3 {
+
+font-size:18px;
+
+color:#444;
+
+}
 
 .app {
 
