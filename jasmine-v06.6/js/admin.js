@@ -11,63 +11,18 @@ const updateExecutiveButton = document.getElementById("update-executive");
 
 const generateTripButton = document.getElementById("generate-trip");
 
+const addScheduleButton = document.getElementById("add-schedule");
+
+const schedulePreview = document.getElementById("schedule-preview");
+
+
 
 let existingExecutives = [];
 
+let scheduleItems = [];
 
 
 
-
-/*
-LOAD EXECUTIVES
-*/
-
-
-function loadExecutives(){
-
-
-fetch("data/executives.json")
-
-.then(response => {
-
-    if(!response.ok){
-
-        throw new Error("Unable to load executives.json");
-
-    }
-
-    return response.json();
-
-})
-
-.then(data => {
-
-    existingExecutives = data.executives || [];
-
-    displayExecutives();
-
-})
-
-.catch(error => {
-
-
-    if(executiveList){
-
-        executiveList.innerHTML = `
-
-        <p>
-        ${error.message}
-        </p>
-
-        `;
-
-    }
-
-
-});
-
-
-}
 
 
 
@@ -78,10 +33,53 @@ loadExecutives();
 
 
 
+function loadExecutives(){
 
-/*
-DISPLAY EXECUTIVES
-*/
+
+fetch("data/executives.json")
+
+.then(response => {
+
+if(!response.ok){
+
+throw new Error("Unable to load executives.json");
+
+}
+
+return response.json();
+
+})
+
+.then(data => {
+
+existingExecutives = data.executives || [];
+
+displayExecutives();
+
+})
+
+.catch(error => {
+
+
+if(executiveList){
+
+executiveList.innerHTML =
+
+`<p>${error.message}</p>`;
+
+}
+
+
+});
+
+
+}
+
+
+
+
+
+
 
 
 function displayExecutives(){
@@ -89,26 +87,13 @@ function displayExecutives(){
 
 if(!executiveList){
 
-    return;
-
-}
-
-
-if(existingExecutives.length === 0){
-
-
-executiveList.innerHTML =
-"<p>No executives found.</p>";
-
-
 return;
 
-
 }
 
 
-
 executiveList.innerHTML =
+
 
 existingExecutives.map(executive => `
 
@@ -139,7 +124,6 @@ Edit
 `).join("");
 
 
-
 }
 
 
@@ -151,7 +135,7 @@ Edit
 
 
 /*
-CREATE EXECUTIVE
+ADD EXECUTIVE
 */
 
 
@@ -165,55 +149,26 @@ const id =
 document.getElementById("executive-id").value.trim();
 
 
-const name =
-document.getElementById("executive-name").value.trim();
-
-
-const title =
-document.getElementById("executive-title").value.trim();
-
-
-const company =
-document.getElementById("executive-company").value.trim();
-
-
-
-if(!id || !name || !title || !company){
-
-alert("Please complete all executive fields.");
-
-return;
-
-}
-
-
-
-const exists =
-existingExecutives.some(item => item.id === id);
-
-
-
-if(exists){
-
-alert("Executive ID already exists.");
-
-return;
-
-}
-
-
-
-const executiveData = {
+const data = {
 
 
 "profile": {
 
 
-"name": name,
+"name":
 
-"title": title,
+document.getElementById("executive-name").value.trim(),
 
-"company": company
+
+"title":
+
+document.getElementById("executive-title").value.trim(),
+
+
+"company":
+
+document.getElementById("executive-company").value.trim()
+
 
 },
 
@@ -234,14 +189,17 @@ const executiveData = {
 
 
 
-downloadJSON(
+if(!id){
 
-executiveData,
+alert("Executive ID required.");
 
-id + ".json"
+return;
 
-);
+}
 
+
+
+downloadJSON(data,id+".json");
 
 
 });
@@ -279,11 +237,7 @@ return;
 
 
 
-if(editSection){
-
-editSection.style.display = "block";
-
-}
+editSection.style.display="block";
 
 
 
@@ -304,14 +258,6 @@ document.getElementById("edit-company").value =
 
 
 
-editSection.scrollIntoView({
-
-behavior:"smooth"
-
-});
-
-
-
 };
 
 
@@ -325,11 +271,13 @@ behavior:"smooth"
 if(updateExecutiveButton){
 
 
-updateExecutiveButton.addEventListener("click", function(){
+updateExecutiveButton.addEventListener("click",function(){
+
 
 
 const id =
 document.getElementById("edit-id").value;
+
 
 
 const data = {
@@ -339,14 +287,17 @@ const data = {
 
 
 "name":
+
 document.getElementById("edit-name").value,
 
 
 "title":
+
 document.getElementById("edit-title").value,
 
 
 "company":
+
 document.getElementById("edit-company").value
 
 
@@ -369,13 +320,7 @@ document.getElementById("edit-company").value
 
 
 
-downloadJSON(
-
-data,
-
-id + ".json"
-
-);
+downloadJSON(data,id+".json");
 
 
 
@@ -384,6 +329,136 @@ id + ".json"
 
 }
 
+
+
+
+
+
+
+
+
+/*
+SCHEDULE BUILDER
+*/
+
+
+if(addScheduleButton){
+
+
+addScheduleButton.addEventListener("click",function(){
+
+
+
+const item = {
+
+
+"date":
+
+document.getElementById("schedule-date").value.trim(),
+
+
+"time":
+
+document.getElementById("schedule-time").value.trim(),
+
+
+"event":
+
+document.getElementById("schedule-event").value.trim(),
+
+
+"location":
+
+document.getElementById("schedule-location").value.trim()
+
+
+};
+
+
+
+
+if(!item.date || !item.event){
+
+
+alert("Date and event are required.");
+
+return;
+
+}
+
+
+
+scheduleItems.push(item);
+
+
+
+displaySchedule();
+
+
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+
+function displaySchedule(){
+
+
+if(!schedulePreview){
+
+return;
+
+}
+
+
+
+schedulePreview.innerHTML =
+
+
+scheduleItems.map(item => `
+
+
+<div class="dashboard-card">
+
+
+<strong>
+
+${item.date}
+
+</strong>
+
+
+<br>
+
+${item.time}
+
+
+<br>
+
+${item.event}
+
+
+<br>
+
+${item.location}
+
+
+</div>
+
+
+`).join("");
+
+
+
+}
 
 
 
@@ -401,7 +476,7 @@ CREATE TRIP
 if(generateTripButton){
 
 
-generateTripButton.addEventListener("click", function(){
+generateTripButton.addEventListener("click",function(){
 
 
 
@@ -411,16 +486,15 @@ document.getElementById("trip-id").value.trim();
 
 
 
+
 if(!tripID){
 
 
-alert("Please enter Trip ID.");
+alert("Trip ID required.");
 
 return;
 
-
 }
-
 
 
 
@@ -439,11 +513,10 @@ document.getElementById("trip-executive").value.trim()
 },
 
 
-
 "trip": {
 
 
-"id": tripID,
+"id":tripID,
 
 
 "name":
@@ -467,7 +540,6 @@ document.getElementById("trip-status").value.trim()
 
 
 },
-
 
 
 "flight": {
@@ -496,7 +568,6 @@ document.getElementById("flight-departure").value.trim()
 },
 
 
-
 "hotel": {
 
 
@@ -518,18 +589,17 @@ document.getElementById("hotel-checkout").value.trim()
 },
 
 
+"schedule":
 
-"schedule": [],
-
-
-"documents": [],
+scheduleItems,
 
 
-"contacts": [],
+"documents":[],
+
+"contacts":[],
 
 
-
-"readiness": [
+"readiness":[
 
 
 {
@@ -571,7 +641,7 @@ downloadJSON(
 
 tripData,
 
-tripID + ".json"
+tripID+".json"
 
 );
 
@@ -590,22 +660,14 @@ tripID + ".json"
 
 
 
-/*
-DOWNLOAD JSON
-*/
 
-
-function downloadJSON(data, filename){
+function downloadJSON(data,filename){
 
 
 
 const blob = new Blob(
 
-[
-
-JSON.stringify(data,null,2)
-
-],
+[JSON.stringify(data,null,2)],
 
 {
 
@@ -617,13 +679,13 @@ type:"application/json"
 
 
 
-const link = document.createElement("a");
+const link=document.createElement("a");
 
 
-link.href = URL.createObjectURL(blob);
+link.href=URL.createObjectURL(blob);
 
 
-link.download = filename;
+link.download=filename;
 
 
 document.body.appendChild(link);
@@ -633,18 +695,6 @@ link.click();
 
 
 document.body.removeChild(link);
-
-
-
-URL.revokeObjectURL(link.href);
-
-
-
-alert(
-
-filename + " generated successfully."
-
-);
 
 
 
