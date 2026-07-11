@@ -21,7 +21,8 @@ fetch("data/executives.json")
 
 
     if (!executive) {
-
+console.log("TRIP OBJECT:", trip);
+console.log("TRIP ID:", trip.trip.id);
         container.innerHTML =
         "Executive not found";
 
