@@ -1,6 +1,6 @@
 /*
-Jasmine Executive Travel Portal
-Application Theme
+Jasmine v1.0
+Executive Assistant OS
 */
 
 
@@ -39,11 +39,11 @@ color:#222;
 
 
 /*
-ADMIN APPLICATION LAYOUT
+APP STRUCTURE
 */
 
 
-.admin-layout {
+.app-layout {
 
 display:flex;
 
@@ -61,9 +61,9 @@ width:260px;
 
 background:white;
 
-padding:25px;
+border-right:1px solid #ddd;
 
-border-right:1px solid #e5e5e5;
+padding:25px;
 
 }
 
@@ -71,7 +71,7 @@ border-right:1px solid #e5e5e5;
 
 
 
-.sidebar-brand {
+.brand {
 
 text-align:center;
 
@@ -81,11 +81,11 @@ margin-bottom:40px;
 
 
 
-.sidebar-brand .logo {
+.brand .logo {
 
-width:70px;
+width:75px;
 
-height:70px;
+height:75px;
 
 object-fit:contain;
 
@@ -93,10 +93,9 @@ object-fit:contain;
 
 
 
+.brand h2 {
 
-.sidebar-brand h2 {
-
-margin:10px 0 5px;
+margin:15px 0 5px;
 
 font-size:26px;
 
@@ -104,17 +103,27 @@ font-size:26px;
 
 
 
-.sidebar-brand p {
+.brand p {
 
 margin:0;
 
 color:#777;
+
+font-size:14px;
 
 }
 
 
 
 
+
+
+
+
+
+/*
+NAVIGATION
+*/
 
 
 .sidebar nav {
@@ -129,44 +138,52 @@ gap:12px;
 
 
 
+.nav-button {
 
-
-.menu-btn {
 
 border:none;
 
-background:#f5f5f7;
+background:#eeeeef;
 
 padding:15px 18px;
 
 border-radius:14px;
 
-text-align:left;
-
 font-size:15px;
+
+text-align:left;
 
 cursor:pointer;
 
-}
+color:#333;
 
-
-
-.menu-btn:hover {
-
-background:#eaeaea;
 
 }
 
 
 
+.nav-button:hover {
 
-.menu-btn.active {
+
+background:#dedee2;
+
+
+}
+
+
+
+
+
+.nav-button.active {
+
 
 background:#111;
 
 color:white;
 
+
 }
+
 
 
 
@@ -176,11 +193,11 @@ color:white;
 
 
 /*
-MAIN CONTENT
+MAIN AREA
 */
 
 
-.admin-main {
+.main-content {
 
 flex:1;
 
@@ -192,7 +209,7 @@ padding:35px;
 
 
 
-.admin-header {
+.page-header {
 
 margin-bottom:35px;
 
@@ -200,7 +217,7 @@ margin-bottom:35px;
 
 
 
-.admin-header h1 {
+.page-header h1 {
 
 margin:0;
 
@@ -210,7 +227,9 @@ font-size:32px;
 
 
 
-.admin-header p {
+.page-header p {
+
+margin-top:8px;
 
 color:#666;
 
@@ -223,29 +242,13 @@ color:#666;
 
 
 
-/*
-PANELS
-*/
-
-
-.admin-panel {
-
-max-width:1100px;
-
-}
-
-
-
-
-
-
 
 /*
 CARDS
 */
 
 
-.dashboard-card {
+.card {
 
 background:white;
 
@@ -253,18 +256,20 @@ padding:25px;
 
 border-radius:24px;
 
-margin-bottom:20px;
-
 box-shadow:
 
 0 10px 30px rgba(0,0,0,0.06);
+
+margin-bottom:20px;
 
 }
 
 
 
-.dashboard-card h2,
-.dashboard-card h3 {
+
+
+.card h2,
+.card h3 {
 
 margin-top:0;
 
@@ -275,7 +280,16 @@ margin-top:0;
 
 
 
+
+
+
+/*
+DASHBOARD
+*/
+
+
 .stats-grid {
+
 
 display:grid;
 
@@ -285,7 +299,39 @@ repeat(3,1fr);
 
 gap:20px;
 
+
 }
+
+
+
+
+
+.stats-grid .card {
+
+
+min-height:130px;
+
+
+}
+
+
+
+
+
+.stats-grid p {
+
+
+font-size:32px;
+
+font-weight:700;
+
+margin:10px 0;
+
+
+}
+
+
+
 
 
 
@@ -293,24 +339,31 @@ gap:20px;
 
 
 /*
-FORM ELEMENTS
+EXECUTIVE LIST
 */
 
 
-input,
-select {
+.executive-card {
 
-width:100%;
 
-padding:14px;
+background:#f8f8fa;
 
-border-radius:14px;
+padding:18px;
 
-border:1px solid #ddd;
+border-radius:16px;
 
-font-size:15px;
+margin-bottom:12px;
 
-margin-bottom:15px;
+
+}
+
+
+
+.executive-card h3 {
+
+
+margin:0 0 8px;
+
 
 }
 
@@ -318,22 +371,26 @@ margin-bottom:15px;
 
 
 
-label {
-
-display:block;
-
-font-weight:600;
-
-margin-bottom:6px;
-
-}
 
 
 
-
+/*
+BUTTONS
+*/
 
 
 button {
+
+
+font-family:inherit;
+
+
+}
+
+
+
+.card button {
+
 
 background:#111;
 
@@ -341,22 +398,23 @@ color:white;
 
 border:none;
 
-padding:13px 22px;
+padding:12px 22px;
 
 border-radius:25px;
 
 cursor:pointer;
 
-font-size:15px;
 
 }
 
 
 
 
-button:hover {
+.card button:hover {
+
 
 opacity:.85;
+
 
 }
 
@@ -368,69 +426,15 @@ opacity:.85;
 
 
 /*
-OLD PORTAL SUPPORT
+UTILITIES
 */
 
 
-.container {
-
-max-width:900px;
-
-margin:auto;
-
-padding:25px;
-
-}
+.hidden {
 
 
+display:none;
 
-.header {
-
-margin-bottom:35px;
-
-}
-
-
-
-.brand {
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-}
-
-
-
-.logo {
-
-width:55px;
-
-height:55px;
-
-object-fit:contain;
-
-}
-
-
-
-
-
-.trip-card {
-
-background:white;
-
-padding:25px;
-
-border-radius:24px;
-
-margin-bottom:18px;
-
-box-shadow:
-
-0 10px 30px rgba(0,0,0,0.06);
 
 }
 
@@ -450,9 +454,12 @@ MOBILE
 @media(max-width:900px){
 
 
-.admin-layout {
+
+.app-layout {
+
 
 flex-direction:column;
+
 
 }
 
@@ -460,9 +467,9 @@ flex-direction:column;
 
 .sidebar {
 
+
 width:100%;
 
-border-right:none;
 
 }
 
@@ -470,15 +477,19 @@ border-right:none;
 
 .stats-grid {
 
+
 grid-template-columns:1fr;
+
 
 }
 
 
 
-.admin-main {
+.main-content {
+
 
 padding:20px;
+
 
 }
 
