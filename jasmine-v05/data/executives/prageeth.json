@@ -10,40 +10,18 @@
   },
 
 
-  "currentTrip": {
-
-    "id": "prageeth-uganda-2026",
-
-    "destination": "Uganda",
-
-    "dates": "20 - 27 July 2026",
-
-    "status": "Upcoming"
-
-  },
+  "currentTrip": "prageeth-uganda-2026",
 
 
   "upcomingTrips": [
 
-    {
-      "destination": "Uganda",
-
-      "date": "20 July 2026"
-
-    }
+    "prageeth-uganda-2026"
 
   ],
 
 
   "travelHistory": [
 
-    {
-      "destination": "Previous Business Travel",
-
-      "date": "2026"
-
-    }
-
-  ]
+    ]
 
 }
