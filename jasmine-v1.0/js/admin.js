@@ -158,7 +158,8 @@ list.innerHTML =
 executives.map(executive=>`
 
 
-<div class="executive-card">
+<div class="executive-card"
+onclick='openTripWorkspace(${JSON.stringify(trip)})'>
 
 
 <h3>
