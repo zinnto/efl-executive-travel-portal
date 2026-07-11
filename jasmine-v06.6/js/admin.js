@@ -1,12 +1,21 @@
 console.log("Jasmine Admin Loaded");
 
 
+
 const executiveList =
 document.getElementById("executive-list");
 
 
 const generateButton =
 document.getElementById("generate-executive");
+
+
+const editSection =
+document.getElementById("edit-section");
+
+
+const updateButton =
+document.getElementById("update-executive");
 
 
 
@@ -25,7 +34,6 @@ loadExecutives();
 
 
 function loadExecutives(){
-
 
 
 fetch("data/executives.json")
@@ -65,13 +73,9 @@ displayExecutives();
 executiveList.innerHTML = `
 
 <p>
-
 Unable to load executives.
-
 <br>
-
 ${error.message}
-
 </p>
 
 `;
@@ -79,6 +83,7 @@ ${error.message}
 
 
 });
+
 
 
 }
@@ -96,13 +101,9 @@ function displayExecutives(){
 if(existingExecutives.length === 0){
 
 
-executiveList.innerHTML = `
+executiveList.innerHTML =
 
-<p>
-No executives found.
-</p>
-
-`;
+"<p>No executives found.</p>";
 
 return;
 
@@ -111,9 +112,7 @@ return;
 
 
 
-
 executiveList.innerHTML =
-
 
 existingExecutives.map(executive => `
 
@@ -186,7 +185,6 @@ document.getElementById("executive-company").value.trim();
 
 
 
-
 if(!id || !name || !title || !company){
 
 
@@ -209,13 +207,12 @@ executive.id === id
 
 
 
-
 if(exists){
 
 
 alert(
 
-"Executive ID already exists. Please use Edit instead."
+"Executive ID already exists. Please use Edit."
 
 );
 
@@ -228,9 +225,7 @@ return;
 
 
 
-
-
-const executiveData = {
+const data = {
 
 
 "profile": {
@@ -238,9 +233,7 @@ const executiveData = {
 
 "name": name,
 
-
 "title": title,
-
 
 "company": company
 
@@ -253,9 +246,7 @@ const executiveData = {
 
 "current": [],
 
-
 "upcoming": [],
-
 
 "history": []
 
@@ -267,11 +258,9 @@ const executiveData = {
 
 
 
-
-
 downloadJSON(
 
-executiveData,
+data,
 
 id + ".json"
 
@@ -292,14 +281,152 @@ id + ".json"
 function editExecutive(id){
 
 
-alert(
 
-"Edit function will be added in the next module: " + id
+const executive =
+
+existingExecutives.find(item =>
+
+item.id === id
 
 );
 
 
+
+if(!executive){
+
+return;
+
 }
+
+
+
+
+
+editSection.style.display = "block";
+
+
+
+document.getElementById("edit-id").value =
+executive.id;
+
+
+
+document.getElementById("edit-name").value =
+executive.name;
+
+
+
+document.getElementById("edit-title").value =
+executive.title;
+
+
+
+document.getElementById("edit-company").value =
+"EFL Global";
+
+
+
+editSection.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+
+
+}
+
+
+
+
+
+
+
+
+
+updateButton.addEventListener("click", function(){
+
+
+
+const id =
+document.getElementById("edit-id").value;
+
+
+
+const name =
+document.getElementById("edit-name").value.trim();
+
+
+
+const title =
+document.getElementById("edit-title").value.trim();
+
+
+
+const company =
+document.getElementById("edit-company").value.trim();
+
+
+
+
+
+if(!name || !title || !company){
+
+
+alert("Please complete all fields.");
+
+return;
+
+
+}
+
+
+
+
+const data = {
+
+
+"profile": {
+
+
+"name": name,
+
+"title": title,
+
+"company": company
+
+
+},
+
+
+"trips": {
+
+
+"current": [],
+
+"upcoming": [],
+
+"history": []
+
+}
+
+
+};
+
+
+
+
+downloadJSON(
+
+data,
+
+id + ".json"
+
+);
+
+
+
+});
 
 
 
@@ -327,7 +454,6 @@ null,
 
 
 
-
 const blob = new Blob(
 
 [fileContent],
@@ -342,18 +468,17 @@ type:"application/json"
 
 
 
-
 const link = document.createElement("a");
 
 
 
 link.href =
+
 URL.createObjectURL(blob);
 
 
 
-link.download =
-filename;
+link.download = filename;
 
 
 
@@ -367,7 +492,7 @@ URL.revokeObjectURL(link.href);
 
 alert(
 
-"Executive JSON created successfully."
+"JSON file generated successfully."
 
 );
 
