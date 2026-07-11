@@ -31,7 +31,7 @@ Jasmine Admin Dashboard
 
 
 <img
-src="assets/logo.png"
+src="images/logo.png"
 class="logo"
 alt="Logo"
 >
@@ -61,27 +61,83 @@ Jasmine Admin Dashboard
 
 
 
+
 <div class="dashboard-card admin-card">
 
 
 <h2>
-Executive Management
+Add Executive
 </h2>
 
 
-<p>
-Create and manage executive profiles.
-</p>
+
+<label>
+Executive ID
+</label>
 
 
-<button>
+<input 
+type="text"
+id="executive-id"
+placeholder="e.g. wasantha"
+>
 
-Add Executive
+
+
+
+<label>
+Full Name
+</label>
+
+
+<input 
+type="text"
+id="executive-name"
+placeholder="e.g. Wasantha Ranasinghe"
+>
+
+
+
+
+<label>
+Job Title
+</label>
+
+
+<input 
+type="text"
+id="executive-title"
+placeholder="e.g. Director - East Africa"
+>
+
+
+
+
+<label>
+Company
+</label>
+
+
+<input 
+type="text"
+id="executive-company"
+placeholder="e.g. EFL Global"
+>
+
+
+
+
+<button id="generate-executive">
+
+Generate Executive JSON
 
 </button>
 
 
+
 </div>
+
+
 
 
 
@@ -97,18 +153,13 @@ Trip Management
 
 
 <p>
-Create travel records and itineraries.
+Coming next:
+Create travel itineraries.
 </p>
 
 
-<button>
-
-Create Trip
-
-</button>
-
-
 </div>
+
 
 
 
@@ -120,23 +171,17 @@ Create Trip
 
 <h2>
 Documents
-
 </h2>
 
 
 <p>
-Add and manage document links.
+Coming next:
+Add document links.
 </p>
 
 
-<button>
-
-Add Documents
-
-</button>
-
-
 </div>
+
 
 
 
@@ -147,24 +192,18 @@ Add Documents
 
 
 <h2>
-System Export
+Export
 
 </h2>
 
 
 <p>
-Generate JSON files for GitHub upload.
+Generate files for GitHub upload.
 </p>
 
 
-<button>
-
-Export Data
-
-</button>
-
-
 </div>
+
 
 
 
