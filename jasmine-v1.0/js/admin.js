@@ -7,80 +7,48 @@ Admin Controller
 console.log("Jasmine Admin Controller Loaded");
 
 
+let executives = [];
 
 
 
 /*
-PAGE NAVIGATION
+NAVIGATION
 */
 
-
-const navButtons =
-document.querySelectorAll(".nav-button");
-
-
-
-const sections =
-document.querySelectorAll(".page-section");
-
-
-
+const navButtons = document.querySelectorAll(".nav-button");
+const sections = document.querySelectorAll(".page-section");
 
 
 navButtons.forEach(button => {
 
+    button.addEventListener("click", function(){
+
+        const target = this.dataset.page;
 
 
-button.addEventListener("click", function(){
+        navButtons.forEach(btn=>{
+            btn.classList.remove("active");
+        });
 
 
-
-const target =
-this.dataset.page;
+        this.classList.add("active");
 
 
-
-navButtons.forEach(btn => {
-
-btn.classList.remove("active");
-
-});
+        sections.forEach(section=>{
+            section.classList.add("hidden");
+        });
 
 
-
-this.classList.add("active");
-
+        const page = document.getElementById(target);
 
 
-sections.forEach(section => {
+        if(page){
+            page.classList.remove("hidden");
+        }
 
-section.classList.add("hidden");
-
-});
-
-
-
-const selected =
-document.getElementById(target);
-
-
-
-if(selected){
-
-selected.classList.remove("hidden");
-
-}
-
-
+    });
 
 });
-
-
-});
-
-
-
-
 
 
 
@@ -91,34 +59,18 @@ EXECUTIVES
 */
 
 
-let executives = [];
-
-
-
-
-
 function loadExecutives(){
 
 
-
-executives =
-[...Jasmine.getExecutives()];
+    executives = [...Jasmine.getExecutives()];
 
 
+    renderExecutives();
 
-renderExecutives();
-
-
-
-updateDashboard();
-
+    updateExecutiveCount();
 
 
 }
-
-
-
-
 
 
 
@@ -126,90 +78,52 @@ updateDashboard();
 function renderExecutives(){
 
 
-
-const list =
-document.getElementById(
-"executive-list"
-);
+    const list =
+    document.getElementById("executive-list");
 
 
-
-
-if(!list){
-
-return;
-
-}
+    if(!list){
+        return;
+    }
 
 
 
+    if(executives.length === 0){
 
-if(executives.length === 0){
+        list.innerHTML =
+        "<p>No executives found.</p>";
 
+        return;
 
-list.innerHTML =
-
-`
-<p>
-No executives found.
-</p>
-
-`;
-
-return;
-
-
-}
+    }
 
 
 
+    list.innerHTML = executives.map(executive => `
 
 
+        <div class="executive-card">
 
-list.innerHTML =
+            <h3>
+            ${executive.name}
+            </h3>
 
+            <p>
+            ${executive.title}
+            </p>
 
+            <p>
+            ${executive.company}
+            </p>
 
-executives.map(executive => `
+            <p>
+            ${executive.status}
+            </p>
 
-
-<div class="executive-card">
-
-
-<h3>
-
-${executive.name}
-
-</h3>
-
-
-<p>
-
-${executive.title}
-
-</p>
+        </div>
 
 
-<p>
-
-${executive.company}
-
-</p>
-
-
-<p>
-
-${executive.email || ""}
-
-</p>
-
-
-
-</div>
-
-
-`).join("");
-
+    `).join("");
 
 
 }
@@ -217,34 +131,22 @@ ${executive.email || ""}
 
 
 
+function updateExecutiveCount(){
 
 
+    const count =
+    document.getElementById("executive-count");
 
 
+    if(count){
 
-function updateDashboard(){
+        count.innerText =
+        executives.length;
 
-
-
-const count =
-document.getElementById(
-"executive-count"
-);
-
-
-
-if(count){
-
-count.innerText =
-executives.length;
-
-}
-
+    }
 
 
 }
-
-
 
 
 
@@ -253,51 +155,32 @@ executives.length;
 
 
 /*
-ADD EXECUTIVE FORM
+ADD EXECUTIVE
 */
 
 
 const newExecutiveButton =
-
-document.getElementById(
-"new-executive"
-);
-
-
+document.getElementById("new-executive");
 
 
 const executiveForm =
-
-document.getElementById(
-"executive-form"
-);
-
-
-
-
+document.getElementById("executive-form");
 
 
 
 if(newExecutiveButton){
 
 
-
-newExecutiveButton.addEventListener(
-"click",
-function(){
+    newExecutiveButton.onclick = function(){
 
 
-executiveForm.classList.toggle(
-"hidden"
-);
+        executiveForm.classList.toggle("hidden");
 
 
-});
+    };
 
 
 }
-
-
 
 
 
@@ -306,156 +189,74 @@ executiveForm.classList.toggle(
 
 
 const saveExecutiveButton =
-
-document.getElementById(
-"save-executive"
-);
-
-
-
+document.getElementById("save-executive");
 
 
 
 if(saveExecutiveButton){
 
 
-
-saveExecutiveButton.addEventListener(
-"click",
-function(){
+saveExecutiveButton.onclick = function(){
 
 
-
-const newExecutive = {
-
-
-id:
-
-"exec" +
-
-String(
-
-executives.length + 1
-
-).padStart(3,"0"),
+    const executive = {
 
 
+        id:
+        "exec" +
+        String(executives.length + 1).padStart(3,"0"),
 
 
-name:
-
-document.getElementById(
-"executive-name"
-).value,
+        name:
+        document.getElementById("executive-name").value,
 
 
-
-title:
-
-document.getElementById(
-"executive-title"
-).value,
+        title:
+        document.getElementById("executive-title").value,
 
 
+        company:
+        document.getElementById("executive-company").value,
 
-company:
 
-document.getElementById(
-"executive-company"
-).value,
+        email:
+        document.getElementById("executive-email").value,
+
+
+        phone:
+        document.getElementById("executive-phone").value,
+
+
+        status:"Active"
+
+
+    };
 
 
 
-email:
+    if(!executive.name){
 
-document.getElementById(
-"executive-email"
-).value,
+        alert("Executive name required.");
 
+        return;
 
-
-phone:
-
-document.getElementById(
-"executive-phone"
-).value,
+    }
 
 
 
-status:
-"Active"
+    executives.push(executive);
+
+
+    renderExecutives();
+
+    updateExecutiveCount();
+
+
+    executiveForm.classList.add("hidden");
 
 
 };
 
-
-
-
-
-
-if(!newExecutive.name){
-
-
-alert(
-"Please enter executive name."
-);
-
-
-return;
-
-
-}
-
-
-
-
-
-executives.push(newExecutive);
-
-
-
-renderExecutives();
-
-
-
-updateDashboard();
-
-
-
-
-
-
-document.getElementById(
-"executive-name"
-).value="";
-
-document.getElementById(
-"executive-title"
-).value="";
-
-document.getElementById(
-"executive-company"
-).value="";
-
-document.getElementById(
-"executive-email"
-).value="";
-
-document.getElementById(
-"executive-phone"
-).value="";
-
-
-
-
-
-alert(
-"Executive added successfully."
-);
-
-
-
-});
 
 
 }
@@ -469,50 +270,36 @@ alert(
 
 
 /*
-WAIT FOR ENGINE
+WAIT FOR DATA ENGINE
 */
 
 
-function waitForJasmine(){
+function waitForData(){
 
 
 
-if(
+    if(
+        Jasmine &&
+        Jasmine.data &&
+        Jasmine.data.executives &&
+        Jasmine.data.executives.length > 0
+    ){
 
-Jasmine &&
+        loadExecutives();
 
-Jasmine.data &&
+    }
+    else{
 
-Jasmine.data.executives
+        setTimeout(
+            waitForData,
+            300
+        );
 
-){
-
-
-loadExecutives();
-
-
-}
-
-else{
-
-
-setTimeout(
-
-waitForJasmine,
-
-200
-
-);
+    }
 
 
 }
 
 
 
-}
-
-
-
-
-
-waitForJasmine();
+waitForData();
