@@ -2,68 +2,22 @@ const params = new URLSearchParams(window.location.search);
 
 const tripID = params.get("id");
 
-
 const container =
 document.getElementById("trip-dashboard");
-
-
-
-const tripFiles = {
-
-
-    "wasantha-india-2026":
-    "data/trips/wasantha-india-2026.json",
-
-
-    "prageeth-uganda-2026":
-    "data/trips/prageeth-uganda-2026.json"
-
-
-};
-
 
 
 console.log("Trip ID:", tripID);
 
 
 
-if (!tripFiles[tripID]) {
-
-
-    container.innerHTML = `
-
-    <div class="dashboard-card">
-
-    <h3>
-    Trip Not Found
-    </h3>
-
-    <p>
-    ID received:
-    ${tripID}
-    </p>
-
-    </div>
-
-    `;
-
-
-}
-
-else {
-
-
-fetch(tripFiles[tripID])
-
+fetch(`data/trips/${tripID}.json`)
 
 .then(response => {
 
 
-    if(!response.ok){
+    if (!response.ok) {
 
-        throw new Error(
-        "Trip JSON file could not be loaded"
-        );
+        throw new Error("Trip not found");
 
     }
 
@@ -74,162 +28,10 @@ fetch(tripFiles[tripID])
 })
 
 
-.then(trip => {
+.then(data => {
 
 
-
-container.innerHTML = `
-
-
-<div class="dashboard-card">
-
-<h2>
-
-${trip.executive.name}
-
-</h2>
-
-
-<p>
-
-${trip.executive.title}
-
-</p>
-
-
-</div>
-
-
-
-
-<div class="dashboard-card">
-
-<h3>
-
-🌍 ${trip.trip.name}
-
-</h3>
-
-
-<h2>
-
-${trip.trip.destination}
-
-</h2>
-
-
-<p>
-
-${trip.trip.dates}
-
-<br>
-
-Status:
-${trip.trip.status}
-
-</p>
-
-
-</div>
-
-
-<div class="dashboard-card">
-
-<h3>
-✈ Flight
-</h3>
-
-
-<p>
-
-${trip.flight.airline}
-
-<br>
-
-${trip.flight.route}
-
-</p>
-
-
-</div>
-
-
-
-<div class="dashboard-card">
-
-<h3>
-🏨 Hotel
-</h3>
-
-
-<p>
-
-${trip.hotel.name}
-
-</p>
-
-
-</div>
-
-
-
-<div class="dashboard-card">
-
-<h3>
-📅 Schedule
-</h3>
-
-
-${trip.schedule.map(item => `
-
-<p>
-
-<strong>
-${item.date}
-</strong>
-
-<br>
-
-${item.event}
-
-</p>
-
-`).join("")}
-
-
-</div>
-
-
-
-<div class="dashboard-card">
-
-<h3>
-📄 Documents
-</h3>
-
-
-${trip.documents.map(doc => `
-
-<p>
-
-<strong>
-${doc.name}
-</strong>
-
-<br>
-
-${doc.status}
-
-</p>
-
-`).join("")}
-
-
-</div>
-
-
-
-`;
+    displayTrip(data);
 
 
 })
@@ -246,8 +48,12 @@ container.innerHTML = `
 <div class="dashboard-card">
 
 <h3>
-Error Loading Travel Details
+Trip Not Found
 </h3>
+
+<p>
+ID received: ${tripID}
+</p>
 
 <p>
 ${error.message}
@@ -258,6 +64,319 @@ ${error.message}
 `;
 
 });
+
+
+
+
+
+
+
+function displayTrip(data){
+
+
+
+container.innerHTML = `
+
+
+
+
+<div class="dashboard-card">
+
+
+<h1>
+
+${data.trip.name}
+
+</h1>
+
+
+<h2>
+
+🌍 ${data.trip.destination}
+
+</h2>
+
+
+<p>
+
+${data.trip.dates}
+
+</p>
+
+
+<p>
+
+Status:
+🟢 ${data.trip.status}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h3>
+✈ Flight Details
+</h3>
+
+
+
+<p>
+
+<strong>
+Airline:
+</strong>
+
+${data.flight.airline}
+
+</p>
+
+
+<p>
+
+<strong>
+Flight:
+</strong>
+
+${data.flight.flightNumber}
+
+</p>
+
+
+<p>
+
+<strong>
+Route:
+</strong>
+
+${data.flight.route}
+
+</p>
+
+
+<p>
+
+<strong>
+Departure:
+</strong>
+
+${data.flight.departure}
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h3>
+🏨 Accommodation
+</h3>
+
+
+
+<p>
+
+<strong>
+Hotel:
+</strong>
+
+${data.hotel.name}
+
+</p>
+
+
+<p>
+
+Check-in:
+
+${data.hotel.checkIn}
+
+</p>
+
+
+<p>
+
+Check-out:
+
+${data.hotel.checkOut}
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h3>
+📅 Schedule
+</h3>
+
+
+
+${
+
+data.schedule.map(item => `
+
+
+<p>
+
+<strong>
+
+${item.date}
+
+</strong>
+
+<br>
+
+${item.time}
+
+<br>
+
+${item.event}
+
+<br>
+
+${item.location}
+
+</p>
+
+
+`).join("")
+
+}
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h3>
+📄 Documents
+</h3>
+
+
+
+${
+
+data.documents.map(doc => `
+
+
+<p>
+
+${doc.status === "Ready" ? "✅" : "⏳"}
+
+<strong>
+
+${doc.name}
+
+</strong>
+
+
+<br>
+
+${doc.status}
+
+
+</p>
+
+
+`).join("")
+
+}
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h3>
+📞 Contacts
+</h3>
+
+
+
+${
+
+data.contacts.length
+
+?
+
+data.contacts.map(contact => `
+
+
+<p>
+
+<strong>
+
+${contact.name}
+
+</strong>
+
+<br>
+
+${contact.type}
+
+</p>
+
+
+`).join("")
+
+:
+
+"<p>No contacts added</p>"
+
+}
+
+
+</div>
+
+
+
+
+
+`;
+
 
 
 }
