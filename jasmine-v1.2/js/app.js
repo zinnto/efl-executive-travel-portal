@@ -19,7 +19,7 @@ const STORAGE_KEYS = {
     settings: "jasmine_settings"
 
 };
-
+const WORKSPACE_KEY = "jasmine_workspace";
 
 /*
 Master list of everything a trip's readiness can be tracked
@@ -79,6 +79,17 @@ const Jasmine = {
 
 
     ready: false,
+	workspace: {
+
+    modified: false,
+
+    lastExport: null,
+
+    githubConfirmed: false,
+
+    changes: {}
+
+},
 
 
 
@@ -131,19 +142,82 @@ const Jasmine = {
     },
 
 
-    saveLocal(key, value){
+   saveLocal(key, value){
 
-        try {
+    try {
 
-            localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(key, JSON.stringify(value));
 
-        } catch(error){
+        this.markWorkspaceModified(key);
 
-            console.error("Jasmine Storage Error:", error);
+    } catch(error){
 
-        }
+        console.error("Jasmine Storage Error:", error);
 
-    },
+    }
+
+},
+
+loadWorkspace(){
+
+    const saved = this.loadLocal(WORKSPACE_KEY);
+
+    if(saved){
+
+        this.workspace = saved;
+
+    }
+
+},
+
+saveWorkspace(){
+
+    localStorage.setItem(
+
+        WORKSPACE_KEY,
+
+        JSON.stringify(this.workspace)
+
+    );
+
+},
+
+markWorkspaceModified(storageKey){
+
+    this.workspace.modified = true;
+
+    this.workspace.githubConfirmed = false;
+
+    this.workspace.changes[storageKey] = true;
+
+    this.saveWorkspace();
+
+},
+
+markWorkspaceExported(){
+
+    this.workspace.modified = false;
+
+    this.workspace.lastExport = new Date().toISOString();
+
+    this.saveWorkspace();
+
+},
+
+confirmGithubUpdated(){
+
+    this.workspace.githubConfirmed = true;
+
+    this.saveWorkspace();
+
+},
+
+getWorkspaceStatus(){
+
+    return structuredClone(this.workspace);
+
+},
+
 
 
 
@@ -155,6 +229,7 @@ const Jasmine = {
     async init(){
 
         console.log("Initializing Jasmine v1.0...");
+		this.loadWorkspace();
 
 
         // Reference data: always loaded fresh from JSON, not user-editable.
