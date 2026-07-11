@@ -1,27 +1,73 @@
 console.log("Jasmine Admin Loaded");
 
 
+const executiveList = document.getElementById("executive-list");
 
-const executiveList =
-document.getElementById("executive-list");
+const generateExecutiveButton = document.getElementById("generate-executive");
 
+const editSection = document.getElementById("edit-section");
 
-const generateButton =
-document.getElementById("generate-executive");
+const updateExecutiveButton = document.getElementById("update-executive");
 
-
-const editSection =
-document.getElementById("edit-section");
-
-
-const updateButton =
-document.getElementById("update-executive");
-
+const generateTripButton = document.getElementById("generate-trip");
 
 
 let existingExecutives = [];
 
 
+
+
+
+/*
+LOAD EXECUTIVES
+*/
+
+
+function loadExecutives(){
+
+
+fetch("data/executives.json")
+
+.then(response => {
+
+    if(!response.ok){
+
+        throw new Error("Unable to load executives.json");
+
+    }
+
+    return response.json();
+
+})
+
+.then(data => {
+
+    existingExecutives = data.executives || [];
+
+    displayExecutives();
+
+})
+
+.catch(error => {
+
+
+    if(executiveList){
+
+        executiveList.innerHTML = `
+
+        <p>
+        ${error.message}
+        </p>
+
+        `;
+
+    }
+
+
+});
+
+
+}
 
 
 
@@ -33,77 +79,27 @@ loadExecutives();
 
 
 
-function loadExecutives(){
-
-
-fetch("data/executives.json")
-
-
-.then(response => {
-
-
-if(!response.ok){
-
-throw new Error("Could not load executives.json");
-
-}
-
-
-return response.json();
-
-
-})
-
-
-.then(data => {
-
-
-existingExecutives = data.executives || [];
-
-
-displayExecutives();
-
-
-})
-
-
-.catch(error => {
-
-
-executiveList.innerHTML = `
-
-<p>
-Unable to load executives.
-<br>
-${error.message}
-</p>
-
-`;
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
+/*
+DISPLAY EXECUTIVES
+*/
 
 
 function displayExecutives(){
+
+
+if(!executiveList){
+
+    return;
+
+}
 
 
 if(existingExecutives.length === 0){
 
 
 executiveList.innerHTML =
-
 "<p>No executives found.</p>";
+
 
 return;
 
@@ -121,18 +117,13 @@ existingExecutives.map(executive => `
 
 
 <h3>
-
 ${executive.name}
-
 </h3>
 
 
 <p>
-
 ${executive.title}
-
 </p>
-
 
 
 <button onclick="editExecutive('${executive.id}')">
@@ -143,7 +134,6 @@ Edit
 
 
 </div>
-
 
 
 `).join("");
@@ -159,23 +149,28 @@ Edit
 
 
 
-generateButton.addEventListener("click", function(){
 
+/*
+CREATE EXECUTIVE
+*/
+
+
+if(generateExecutiveButton){
+
+
+generateExecutiveButton.addEventListener("click", function(){
 
 
 const id =
 document.getElementById("executive-id").value.trim();
 
 
-
 const name =
 document.getElementById("executive-name").value.trim();
 
 
-
 const title =
 document.getElementById("executive-title").value.trim();
-
 
 
 const company =
@@ -183,49 +178,32 @@ document.getElementById("executive-company").value.trim();
 
 
 
-
-
 if(!id || !name || !title || !company){
 
-
-alert("Please complete all fields.");
+alert("Please complete all executive fields.");
 
 return;
-
 
 }
 
 
 
-
-
-const exists = existingExecutives.some(executive =>
-
-executive.id === id
-
-);
+const exists =
+existingExecutives.some(item => item.id === id);
 
 
 
 if(exists){
 
-
-alert(
-
-"Executive ID already exists. Please use Edit."
-
-);
-
+alert("Executive ID already exists.");
 
 return;
-
 
 }
 
 
 
-
-const data = {
+const executiveData = {
 
 
 "profile": {
@@ -236,7 +214,6 @@ const data = {
 "title": title,
 
 "company": company
-
 
 },
 
@@ -257,10 +234,9 @@ const data = {
 
 
 
-
 downloadJSON(
 
-data,
+executiveData,
 
 id + ".json"
 
@@ -271,6 +247,7 @@ id + ".json"
 });
 
 
+}
 
 
 
@@ -278,17 +255,19 @@ id + ".json"
 
 
 
-function editExecutive(id){
 
+
+/*
+EDIT EXECUTIVE
+*/
+
+
+window.editExecutive = function(id){
 
 
 const executive =
 
-existingExecutives.find(item =>
-
-item.id === id
-
-);
+existingExecutives.find(item => item.id === id);
 
 
 
@@ -300,9 +279,11 @@ return;
 
 
 
-
+if(editSection){
 
 editSection.style.display = "block";
+
+}
 
 
 
@@ -310,15 +291,12 @@ document.getElementById("edit-id").value =
 executive.id;
 
 
-
 document.getElementById("edit-name").value =
 executive.name;
 
 
-
 document.getElementById("edit-title").value =
 executive.title;
-
 
 
 document.getElementById("edit-company").value =
@@ -334,7 +312,7 @@ behavior:"smooth"
 
 
 
-}
+};
 
 
 
@@ -344,43 +322,14 @@ behavior:"smooth"
 
 
 
-updateButton.addEventListener("click", function(){
+if(updateExecutiveButton){
 
+
+updateExecutiveButton.addEventListener("click", function(){
 
 
 const id =
 document.getElementById("edit-id").value;
-
-
-
-const name =
-document.getElementById("edit-name").value.trim();
-
-
-
-const title =
-document.getElementById("edit-title").value.trim();
-
-
-
-const company =
-document.getElementById("edit-company").value.trim();
-
-
-
-
-
-if(!name || !title || !company){
-
-
-alert("Please complete all fields.");
-
-return;
-
-
-}
-
-
 
 
 const data = {
@@ -389,11 +338,16 @@ const data = {
 "profile": {
 
 
-"name": name,
+"name":
+document.getElementById("edit-name").value,
 
-"title": title,
 
-"company": company
+"title":
+document.getElementById("edit-title").value,
+
+
+"company":
+document.getElementById("edit-company").value
 
 
 },
@@ -415,7 +369,6 @@ const data = {
 
 
 
-
 downloadJSON(
 
 data,
@@ -429,34 +382,230 @@ id + ".json"
 });
 
 
+}
 
 
 
 
 
+
+
+
+
+
+/*
+CREATE TRIP
+*/
+
+
+if(generateTripButton){
+
+
+generateTripButton.addEventListener("click", function(){
+
+
+
+const tripID =
+
+document.getElementById("trip-id").value.trim();
+
+
+
+if(!tripID){
+
+
+alert("Please enter Trip ID.");
+
+return;
+
+
+}
+
+
+
+
+
+const tripData = {
+
+
+"executive": {
+
+
+"id":
+
+document.getElementById("trip-executive").value.trim()
+
+
+},
+
+
+
+"trip": {
+
+
+"id": tripID,
+
+
+"name":
+
+document.getElementById("trip-name").value.trim(),
+
+
+"destination":
+
+document.getElementById("trip-destination").value.trim(),
+
+
+"dates":
+
+document.getElementById("trip-dates").value.trim(),
+
+
+"status":
+
+document.getElementById("trip-status").value.trim()
+
+
+},
+
+
+
+"flight": {
+
+
+"airline":
+
+document.getElementById("flight-airline").value.trim(),
+
+
+"flightNumber":
+
+document.getElementById("flight-number").value.trim(),
+
+
+"route":
+
+document.getElementById("flight-route").value.trim(),
+
+
+"departure":
+
+document.getElementById("flight-departure").value.trim()
+
+
+},
+
+
+
+"hotel": {
+
+
+"name":
+
+document.getElementById("hotel-name").value.trim(),
+
+
+"checkIn":
+
+document.getElementById("hotel-checkin").value.trim(),
+
+
+"checkOut":
+
+document.getElementById("hotel-checkout").value.trim()
+
+
+},
+
+
+
+"schedule": [],
+
+
+"documents": [],
+
+
+"contacts": [],
+
+
+
+"readiness": [
+
+
+{
+
+"item":"Flight Ticket",
+
+"status":"Pending"
+
+},
+
+
+{
+
+"item":"Hotel",
+
+"status":"Pending"
+
+},
+
+
+{
+
+"item":"Documents",
+
+"status":"Pending"
+
+}
+
+
+]
+
+
+};
+
+
+
+
+downloadJSON(
+
+tripData,
+
+tripID + ".json"
+
+);
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
+/*
+DOWNLOAD JSON
+*/
 
 
 function downloadJSON(data, filename){
 
 
 
-const fileContent =
-
-JSON.stringify(
-
-data,
-
-null,
-
-2
-
-);
-
-
-
 const blob = new Blob(
 
-[fileContent],
+[
+
+JSON.stringify(data,null,2)
+
+],
 
 {
 
@@ -471,18 +620,19 @@ type:"application/json"
 const link = document.createElement("a");
 
 
-
-link.href =
-
-URL.createObjectURL(blob);
-
+link.href = URL.createObjectURL(blob);
 
 
 link.download = filename;
 
 
+document.body.appendChild(link);
+
 
 link.click();
+
+
+document.body.removeChild(link);
 
 
 
@@ -492,7 +642,7 @@ URL.revokeObjectURL(link.href);
 
 alert(
 
-"JSON file generated successfully."
+filename + " generated successfully."
 
 );
 
