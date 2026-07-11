@@ -1,6 +1,8 @@
 {
   "executive": {
 
+    "id": "prageeth",
+
     "name": "Prageeth Seneviratne",
 
     "title": "Head of Ocean Freight - East Africa"
@@ -8,7 +10,7 @@
   },
 
 
-"trip": {
+  "trip": {
 
     "id": "prageeth-uganda-2026",
 
@@ -20,7 +22,7 @@
 
     "status": "Upcoming"
 
-},
+  },
 
 
   "flight": {
@@ -70,7 +72,23 @@
 
       "name": "Flight Ticket",
 
-      "status": "Ready"
+      "type": "PDF",
+
+      "status": "Pending",
+
+      "url": ""
+
+    },
+
+    {
+
+      "name": "Hotel Voucher",
+
+      "type": "PDF",
+
+      "status": "Pending",
+
+      "url": ""
 
     }
 
