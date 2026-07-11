@@ -57,7 +57,8 @@ fetch("data/executives.json")
 
 .then(profile => {
 
-
+console.log(profile);
+console.log(profile.currentTrip);
 
 container.innerHTML = `
 
