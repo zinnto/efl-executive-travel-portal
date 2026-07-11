@@ -1,0 +1,24 @@
+{
+  "executives": [
+    {
+      "id": "exec001",
+      "name": "Wasantha Ranasinghe",
+      "title": "Director - East Africa",
+      "company": "EFL Global",
+      "email": "",
+      "phone": "",
+      "assistant": "Zenat",
+      "status": "Active"
+    },
+    {
+      "id": "exec002",
+      "name": "Prageeth Seneviratne",
+      "title": "Head of Ocean Freight - East Africa",
+      "company": "EFL Global",
+      "email": "",
+      "phone": "",
+      "assistant": "Zenat",
+      "status": "Active"
+    }
+  ]
+}
