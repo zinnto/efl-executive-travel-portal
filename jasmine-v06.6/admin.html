@@ -74,17 +74,14 @@ Existing Executives
 
 <div id="executive-list">
 
-
 <p>
 Loading executives...
 </p>
 
-
 </div>
 
 
 </div>
-
 
 
 
@@ -101,18 +98,14 @@ Add Executive
 </h2>
 
 
-
 <label>
 Executive ID
 </label>
 
-
 <input 
 type="text"
 id="executive-id"
-placeholder="e.g. wasantha"
 >
-
 
 
 
@@ -120,13 +113,10 @@ placeholder="e.g. wasantha"
 Full Name
 </label>
 
-
 <input 
 type="text"
 id="executive-name"
-placeholder="e.g. Wasantha Ranasinghe"
 >
-
 
 
 
@@ -134,13 +124,10 @@ placeholder="e.g. Wasantha Ranasinghe"
 Job Title
 </label>
 
-
 <input 
 type="text"
 id="executive-title"
-placeholder="e.g. Director - East Africa"
 >
-
 
 
 
@@ -148,13 +135,10 @@ placeholder="e.g. Director - East Africa"
 Company
 </label>
 
-
 <input 
 type="text"
 id="executive-company"
-placeholder="e.g. EFL Global"
 >
-
 
 
 
@@ -163,7 +147,6 @@ placeholder="e.g. EFL Global"
 Generate Executive JSON
 
 </button>
-
 
 
 </div>
@@ -188,18 +171,15 @@ Edit Executive
 </h2>
 
 
-
 <input 
 type="hidden"
 id="edit-id"
 >
 
 
-
 <label>
 Full Name
 </label>
-
 
 <input 
 type="text"
@@ -208,11 +188,9 @@ id="edit-name"
 
 
 
-
 <label>
 Job Title
 </label>
-
 
 <input 
 type="text"
@@ -221,11 +199,9 @@ id="edit-title"
 
 
 
-
 <label>
 Company
 </label>
-
 
 <input 
 type="text"
@@ -234,13 +210,11 @@ id="edit-company"
 
 
 
-
 <button id="update-executive">
 
 Generate Updated JSON
 
 </button>
-
 
 
 </div>
@@ -261,18 +235,14 @@ Create New Trip
 </h2>
 
 
-
 <label>
 Trip ID
 </label>
 
-
 <input
 type="text"
 id="trip-id"
-placeholder="wasantha-india-2026"
 >
-
 
 
 
@@ -280,13 +250,10 @@ placeholder="wasantha-india-2026"
 Executive ID
 </label>
 
-
 <input
 type="text"
 id="trip-executive"
-placeholder="wasantha"
 >
-
 
 
 
@@ -294,13 +261,10 @@ placeholder="wasantha"
 Trip Name
 </label>
 
-
 <input
 type="text"
 id="trip-name"
-placeholder="India Regional Visit"
 >
-
 
 
 
@@ -308,13 +272,10 @@ placeholder="India Regional Visit"
 Destination
 </label>
 
-
 <input
 type="text"
 id="trip-destination"
-placeholder="India"
 >
-
 
 
 
@@ -322,13 +283,10 @@ placeholder="India"
 Dates
 </label>
 
-
 <input
 type="text"
 id="trip-dates"
-placeholder="5 - 10 August 2026"
 >
-
 
 
 
@@ -336,11 +294,9 @@ placeholder="5 - 10 August 2026"
 Status
 </label>
 
-
 <input
 type="text"
 id="trip-status"
-placeholder="Upcoming"
 >
 
 
@@ -353,57 +309,44 @@ Flight Details
 </h3>
 
 
-
 <label>
 Airline
 </label>
 
-
 <input
 type="text"
 id="flight-airline"
-placeholder="Kenya Airways"
 >
-
 
 
 <label>
 Flight Number
 </label>
 
-
 <input
 type="text"
 id="flight-number"
-placeholder="KQ"
 >
-
 
 
 <label>
 Route
 </label>
 
-
 <input
 type="text"
 id="flight-route"
-placeholder="Nairobi - India"
 >
-
 
 
 <label>
 Departure
 </label>
 
-
 <input
 type="text"
 id="flight-departure"
-placeholder="5 August 2026"
 >
-
 
 
 
@@ -415,45 +358,111 @@ Hotel Details
 </h3>
 
 
-
 <label>
 Hotel Name
 </label>
 
-
 <input
 type="text"
 id="hotel-name"
-placeholder="Hotel Name"
 >
-
-
 
 
 <label>
 Check In
 </label>
 
-
 <input
 type="text"
 id="hotel-checkin"
-placeholder="5 August 2026"
 >
-
-
 
 
 <label>
 Check Out
 </label>
 
-
 <input
 type="text"
 id="hotel-checkout"
-placeholder="10 August 2026"
 >
+
+
+
+
+
+<h3>
+Schedule Builder
+</h3>
+
+
+<label>
+Date
+</label>
+
+<input
+type="text"
+id="schedule-date"
+placeholder="21 July 2026"
+>
+
+
+
+<label>
+Time
+</label>
+
+<input
+type="text"
+id="schedule-time"
+placeholder="09:00"
+>
+
+
+
+<label>
+Event
+</label>
+
+<input
+type="text"
+id="schedule-event"
+placeholder="Business Meeting"
+>
+
+
+
+<label>
+Location
+</label>
+
+<input
+type="text"
+id="schedule-location"
+placeholder="Kampala"
+>
+
+
+
+
+<button id="add-schedule">
+
+Add Schedule Item
+
+</button>
+
+
+
+<div id="schedule-preview">
+
+<p>
+No schedule items added.
+</p>
+
+</div>
+
+
+
 
 
 
@@ -465,8 +474,10 @@ Generate Trip JSON
 </button>
 
 
-
 </div>
+
+
+
 
 
 
@@ -500,7 +511,6 @@ Document links.
 
 <h2>
 Export
-
 </h2>
 
 
