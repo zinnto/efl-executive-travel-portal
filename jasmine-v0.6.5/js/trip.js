@@ -14,25 +14,20 @@ fetch(`data/trips/${tripID}.json`)
 
 .then(response => {
 
-
     if (!response.ok) {
 
         throw new Error("Trip not found");
 
     }
 
-
     return response.json();
-
 
 })
 
 
 .then(data => {
 
-
     displayTrip(data);
-
 
 })
 
@@ -74,8 +69,25 @@ ${error.message}
 function displayTrip(data){
 
 
-
 container.innerHTML = `
+
+
+
+<div class="dashboard-card">
+
+
+<button onclick="backToExecutive('${data.executive.id}')">
+
+← Back to Profile
+
+</button>
+
+
+</div>
+
+
+
+
 
 
 
@@ -128,26 +140,46 @@ Status:
 
 
 <p>
-<strong>Airline:</strong>
+
+<strong>
+Airline:
+</strong>
+
 ${data.flight.airline}
+
 </p>
 
 
 <p>
-<strong>Flight:</strong>
+
+<strong>
+Flight:
+</strong>
+
 ${data.flight.flightNumber}
+
 </p>
 
 
 <p>
-<strong>Route:</strong>
+
+<strong>
+Route:
+</strong>
+
 ${data.flight.route}
+
 </p>
 
 
 <p>
-<strong>Departure:</strong>
+
+<strong>
+Departure:
+</strong>
+
 ${data.flight.departure}
+
 </p>
 
 
@@ -168,20 +200,31 @@ ${data.flight.departure}
 
 
 <p>
-<strong>Hotel:</strong>
+
+<strong>
+Hotel:
+</strong>
+
 ${data.hotel.name}
+
 </p>
 
 
 <p>
+
 Check-in:
+
 ${data.hotel.checkIn}
+
 </p>
 
 
 <p>
+
 Check-out:
+
 ${data.hotel.checkOut}
+
 </p>
 
 
@@ -205,6 +248,7 @@ ${data.hotel.checkOut}
 ${
 data.schedule.map(item => `
 
+
 <p>
 
 <strong>
@@ -224,6 +268,7 @@ ${item.event}
 ${item.location}
 
 </p>
+
 
 `).join("")
 }
@@ -258,12 +303,16 @@ data.documents.map(doc => `
 ${doc.status === "Ready" ? "✅" : "⏳"}
 
 <strong>
+
 ${doc.name}
+
 </strong>
+
 
 <br>
 
 ${doc.type || "Document"}
+
 
 <br>
 
@@ -271,6 +320,7 @@ Status:
 ${doc.status}
 
 </p>
+
 
 
 ${
@@ -283,7 +333,9 @@ doc.url
 <a href="${doc.url}" target="_blank">
 
 <button>
+
 View Document
+
 </button>
 
 </a>
@@ -304,7 +356,6 @@ View Document
 }
 
 
-
 </div>
 
 
@@ -321,6 +372,7 @@ View Document
 </h3>
 
 
+
 ${
 data.contacts.length
 
@@ -328,10 +380,13 @@ data.contacts.length
 
 data.contacts.map(contact => `
 
+
 <p>
 
 <strong>
+
 ${contact.name}
+
 </strong>
 
 <br>
@@ -359,5 +414,18 @@ ${contact.type}
 `;
 
 
+
+}
+
+
+
+
+
+
+
+function backToExecutive(id){
+
+window.location.href =
+`executive.html?id=${id}`;
 
 }
