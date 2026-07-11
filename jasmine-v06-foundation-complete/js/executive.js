@@ -21,8 +21,7 @@ fetch("data/executives.json")
 
 
     if (!executive) {
-console.log("TRIP OBJECT:", trip);
-console.log("TRIP ID:", trip.trip.id);
+
         container.innerHTML =
         "Executive not found";
 
@@ -43,10 +42,8 @@ console.log("TRIP ID:", trip.trip.id);
 .then(profile => {
 
 
-
     const tripID =
     profile.currentTrip;
-
 
 
     return fetch(
@@ -69,6 +66,7 @@ console.log("TRIP ID:", trip.trip.id);
 })
 
 
+
 .catch(error => {
 
 
@@ -80,7 +78,7 @@ container.innerHTML = `
 <div class="dashboard-card">
 
 <h3>
-Error Loading Profile
+Unable to load profile
 </h3>
 
 <p>
@@ -98,15 +96,15 @@ ${error.message}
 
 
 
-function displayProfile(profile, trip){
 
+function displayProfile(profile, trip){
 
 
 container.innerHTML = `
 
 
 
-<div class="dashboard-card">
+<div class="dashboard-card executive-header">
 
 
 <h2>
@@ -133,11 +131,12 @@ ${profile.profile.company}
 
 
 
+
 <div class="dashboard-card">
 
 
 <h3>
-✈ Current Travel
+🌍 Current Journey
 </h3>
 
 
@@ -152,13 +151,19 @@ ${trip.trip.destination}
 
 <p>
 
-${trip.trip.dates}
+${trip.trip.name}
 
 <br>
 
-Status:
+${trip.trip.dates}
 
-${trip.trip.status}
+</p>
+
+
+
+<p>
+
+🟢 ${trip.trip.status}
 
 </p>
 
@@ -166,13 +171,14 @@ ${trip.trip.status}
 
 <button onclick="openTrip('${trip.trip.id}')">
 
-Open Itinerary
+View Travel Details
 
 </button>
 
 
-
 </div>
+
+
 
 
 
@@ -182,11 +188,15 @@ Open Itinerary
 
 
 <h3>
-Upcoming Trips
+Upcoming Journeys
 </h3>
 
 
+
 ${
+profile.upcomingTrips.length
+
+?
 
 profile.upcomingTrips.map(item => `
 
@@ -196,11 +206,18 @@ ${item}
 
 `).join("")
 
+:
+
+"<p>No upcoming journeys</p>"
+
 }
 
 
 
 </div>
+
+
+
 
 
 
@@ -210,11 +227,15 @@ ${item}
 
 
 <h3>
-Travel History
+Recent Travel
 </h3>
 
 
+
 ${
+profile.travelHistory.length
+
+?
 
 profile.travelHistory.map(item => `
 
@@ -224,6 +245,10 @@ ${item}
 
 `).join("")
 
+:
+
+"<p>No travel history</p>"
+
 }
 
 
@@ -231,11 +256,13 @@ ${item}
 </div>
 
 
+
 `;
 
 
 
 }
+
 
 
 
