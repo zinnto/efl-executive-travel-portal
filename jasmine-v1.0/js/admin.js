@@ -1,7 +1,7 @@
 /*
 Jasmine v1.0
 admin.js
-Controller Build 0.7
+Controller Build 0.8
 */
 
 
@@ -11,8 +11,6 @@ console.log("Jasmine Admin Loaded");
 let executives = [];
 let trips = [];
 let activeTrip = null;
-
-
 
 
 /*
@@ -39,13 +37,9 @@ const target =
 this.dataset.page;
 
 
-
 navButtons.forEach(btn=>{
-
 btn.classList.remove("active");
-
 });
-
 
 
 this.classList.add("active");
@@ -53,22 +47,16 @@ this.classList.add("active");
 
 
 sections.forEach(section=>{
-
 section.classList.add("hidden");
-
 });
-
 
 
 const page =
 document.getElementById(target);
 
 
-
 if(page){
-
 page.classList.remove("hidden");
-
 }
 
 
@@ -76,7 +64,6 @@ page.classList.remove("hidden");
 
 
 });
-
 
 
 
@@ -96,12 +83,10 @@ executives =
 [...Jasmine.getExecutives()];
 
 
-
 loadExecutives();
 
 
 loadTripDropdowns();
-
 
 
 }
@@ -185,14 +170,13 @@ document.getElementById(
 
 
 if(!list){
-
 return;
-
 }
 
 
 
-list.innerHTML = executives.map(executive=>`
+list.innerHTML =
+executives.map(executive=>`
 
 
 <div class="executive-card">
@@ -227,7 +211,6 @@ ${executive.company}
 
 
 
-
 function updateExecutiveCount(){
 
 
@@ -239,10 +222,8 @@ document.getElementById(
 
 
 if(count){
-
 count.innerText =
 executives.length;
-
 }
 
 
@@ -264,9 +245,7 @@ document.getElementById(
 
 
 if(!select){
-
 return;
-
 }
 
 
@@ -286,7 +265,6 @@ select.innerHTML +=
 ${executive.name}
 </option>
 `;
-
 
 });
 
@@ -312,7 +290,6 @@ document.getElementById(
 );
 
 
-
 const executiveForm =
 document.getElementById(
 "executive-form"
@@ -335,8 +312,6 @@ executiveForm.classList.toggle(
 
 
 }
-
-
 
 
 
@@ -395,26 +370,21 @@ document.getElementById(
 ).value,
 
 
-status:
-"Active"
+status:"Active"
 
 
 };
 
 
-
 executives.push(executive);
-
 
 
 loadExecutives();
 
 
-
 executiveForm.classList.add(
 "hidden"
 );
-
 
 
 };
@@ -452,6 +422,8 @@ document.getElementById(
 
 
 
+
+
 if(country){
 
 
@@ -472,12 +444,10 @@ ${item.name}
 </option>
 `;
 
-
 });
 
 
 }
-
 
 
 
@@ -503,7 +473,6 @@ ${item}
 </option>
 `;
 
-
 });
 
 
@@ -511,8 +480,6 @@ ${item}
 
 
 }
-
-
 
 
 
@@ -559,7 +526,6 @@ ${item}
 </option>
 `;
 
-
 });
 
 
@@ -587,7 +553,6 @@ document.getElementById(
 );
 
 
-
 const tripForm =
 document.getElementById(
 "trip-form"
@@ -610,7 +575,6 @@ tripForm.classList.toggle(
 
 
 }
-
 
 
 
@@ -682,7 +646,10 @@ document.getElementById(
 ).value,
 
 
-flight:null
+flight:null,
+
+
+hotel:null
 
 
 };
@@ -692,15 +659,12 @@ flight:null
 trips.push(trip);
 
 
-
 renderTrips();
-
 
 
 tripForm.classList.add(
 "hidden"
 );
-
 
 
 };
@@ -726,9 +690,7 @@ document.getElementById(
 
 
 if(!list){
-
 return;
-
 }
 
 
@@ -766,7 +728,6 @@ ${trip.return}
 
 
 
-
 document.querySelectorAll("[data-trip]")
 .forEach(card=>{
 
@@ -779,7 +740,6 @@ trips.find(
 item =>
 item.id === this.dataset.trip
 );
-
 
 
 openTripWorkspace(activeTrip);
@@ -800,6 +760,7 @@ openTripWorkspace(activeTrip);
 
 
 
+
 function openTripWorkspace(trip){
 
 
@@ -807,7 +768,6 @@ const workspace =
 document.getElementById(
 "trip-workspace"
 );
-
 
 
 const summary =
@@ -863,6 +823,7 @@ ${trip.purpose}
 
 renderFlight();
 
+renderHotel();
 
 
 }
@@ -893,7 +854,6 @@ if(saveFlight){
 saveFlight.onclick=function(){
 
 
-
 if(!activeTrip){
 
 alert(
@@ -903,8 +863,6 @@ alert(
 return;
 
 }
-
-
 
 
 
@@ -953,7 +911,6 @@ document.getElementById(
 ).value
 
 
-
 };
 
 
@@ -961,13 +918,10 @@ document.getElementById(
 renderFlight();
 
 
-
 };
 
 
 }
-
-
 
 
 
@@ -984,15 +938,12 @@ document.getElementById(
 
 
 if(!summary || !activeTrip){
-
 return;
-
 }
 
 
 
 if(!activeTrip.flight){
-
 
 summary.innerHTML =
 "<p>No flight added yet.</p>";
@@ -1000,7 +951,6 @@ summary.innerHTML =
 return;
 
 }
-
 
 
 
@@ -1023,7 +973,7 @@ ${f.number}
 
 <p>
 ${f.departureAirport}
- →
+→
 ${f.arrivalAirport}
 </p>
 
@@ -1034,15 +984,164 @@ ${f.booking}
 </p>
 
 
+</div>
+
+
+`;
+
+
+}
+
+
+
+
+
+
+
+
+
+/*
+HOTEL
+*/
+
+
+const saveHotel =
+document.getElementById(
+"save-hotel"
+);
+
+
+
+if(saveHotel){
+
+
+saveHotel.onclick=function(){
+
+
+
+if(!activeTrip){
+
+alert(
+"Please select a trip first."
+);
+
+return;
+
+}
+
+
+
+activeTrip.hotel={
+
+
+name:
+document.getElementById(
+"hotel-name"
+).value,
+
+
+city:
+document.getElementById(
+"hotel-city"
+).value,
+
+
+checkin:
+document.getElementById(
+"hotel-checkin"
+).value,
+
+
+checkout:
+document.getElementById(
+"hotel-checkout"
+).value,
+
+
+booking:
+document.getElementById(
+"hotel-booking"
+).value
+
+
+};
+
+
+
+renderHotel();
+
+
+};
+
+
+}
+
+
+
+
+
+
+
+function renderHotel(){
+
+
+const summary =
+document.getElementById(
+"hotel-summary"
+);
+
+
+
+if(!summary || !activeTrip){
+return;
+}
+
+
+
+if(!activeTrip.hotel){
+
+
+summary.innerHTML =
+"<p>No hotel added yet.</p>";
+
+return;
+
+
+}
+
+
+
+const h =
+activeTrip.hotel;
+
+
+
+summary.innerHTML = `
+
+
+<div class="executive-card">
+
+
+<h3>
+${h.name}
+</h3>
+
+
 <p>
-Departure:
-${f.departureTime}
+${h.city}
 </p>
 
 
 <p>
-Arrival:
-${f.arrivalTime}
+${h.checkin}
+-
+${h.checkout}
+</p>
+
+
+<p>
+Booking:
+${h.booking}
 </p>
 
 
@@ -1052,9 +1151,7 @@ ${f.arrivalTime}
 `;
 
 
-
 }
-
 
 
 
