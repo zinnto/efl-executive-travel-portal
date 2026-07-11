@@ -1,0 +1,100 @@
+{
+  "executive": {
+
+    "id": "prageeth",
+
+    "name": "Prageeth Seneviratne",
+
+    "title": "Head of Ocean Freight - East Africa"
+
+  },
+
+
+  "trip": {
+
+    "id": "prageeth-uganda-2026",
+
+    "name": "Uganda Business Visit",
+
+    "destination": "Uganda",
+
+    "dates": "20 - 27 July 2026",
+
+    "status": "Upcoming"
+
+  },
+
+
+  "flight": {
+
+    "airline": "Kenya Airways",
+
+    "flightNumber": "Pending",
+
+    "route": "Nairobi - Kampala",
+
+    "departure": "20 July 2026"
+
+  },
+
+
+  "hotel": {
+
+    "name": "Hotel Details Pending",
+
+    "checkIn": "20 July 2026",
+
+    "checkOut": "27 July 2026"
+
+  },
+
+
+  "schedule": [
+
+    {
+
+      "date": "21 July 2026",
+
+      "time": "09:00",
+
+      "event": "Regional Finance Meeting",
+
+      "location": "Kampala"
+
+    }
+
+  ],
+
+
+  "documents": [
+
+    {
+
+      "name": "Flight Ticket",
+
+      "type": "PDF",
+
+      "status": "Pending",
+
+      "url": ""
+
+    },
+
+    {
+
+      "name": "Hotel Voucher",
+
+      "type": "PDF",
+
+      "status": "Pending",
+
+      "url": ""
+
+    }
+
+  ],
+
+
+  "contacts": []
+
+}
