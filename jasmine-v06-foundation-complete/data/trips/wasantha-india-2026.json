@@ -22,6 +22,12 @@
 
 },
 
+  {
+"name":"Flight Ticket",
+"type":"PDF",
+"status":"Ready",
+"url":"your-onedrive-link"
+}
 
   "flight": {
 
