@@ -16,13 +16,11 @@ PAGE NAVIGATION
 
 
 const navButtons =
-
 document.querySelectorAll(".nav-button");
 
 
 
 const sections =
-
 document.querySelectorAll(".page-section");
 
 
@@ -32,16 +30,11 @@ document.querySelectorAll(".page-section");
 navButtons.forEach(button => {
 
 
-
 button.addEventListener("click", function(){
 
 
-
 const target =
-
 this.dataset.page;
-
-
 
 
 
@@ -57,22 +50,15 @@ this.classList.add("active");
 
 
 
-
-
 sections.forEach(section => {
 
-
 section.classList.add("hidden");
-
 
 });
 
 
 
-
-
 const selected =
-
 document.getElementById(target);
 
 
@@ -86,7 +72,6 @@ selected.classList.remove("hidden");
 
 
 });
-
 
 
 });
@@ -104,20 +89,16 @@ LOAD EXECUTIVES
 */
 
 
-async function loadExecutives(){
+function loadExecutives(){
 
 
 
 const executives =
-
 Jasmine.getExecutives();
 
 
 
-
-
 const list =
-
 document.getElementById(
 "executive-list"
 );
@@ -125,7 +106,6 @@ document.getElementById(
 
 
 const count =
-
 document.getElementById(
 "executive-count"
 );
@@ -158,7 +138,6 @@ return;
 if(executives.length === 0){
 
 
-
 list.innerHTML =
 
 `
@@ -177,7 +156,6 @@ return;
 
 
 
-
 list.innerHTML =
 
 
@@ -189,43 +167,29 @@ executives.map(executive => `
 
 
 <h3>
-
 ${executive.name}
-
 </h3>
 
 
-
 <p>
-
 ${executive.title}
-
 </p>
-
 
 
 <p>
-
 ${executive.company}
-
 </p>
-
 
 
 <span>
-
 ${executive.status}
-
 </span>
-
 
 
 </div>
 
 
 `).join("");
-
-
 
 
 
@@ -239,21 +203,22 @@ ${executive.status}
 
 
 
-
 /*
-WAIT FOR JASMINE ENGINE
+WAIT FOR DATA ENGINE
 */
 
 
-function waitForJasmine(){
+function waitForJasmineData(){
 
 
 
 if(
 
-Jasmine.data.executives.length
+Jasmine &&
 
->=0
+Jasmine.data &&
+
+Jasmine.data.executives.length > 0
 
 ){
 
@@ -268,7 +233,7 @@ else{
 
 setTimeout(
 
-waitForJasmine,
+waitForJasmineData,
 
 200
 
@@ -285,4 +250,4 @@ waitForJasmine,
 
 
 
-waitForJasmine();
+waitForJasmineData();
