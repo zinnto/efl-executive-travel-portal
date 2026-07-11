@@ -1,7 +1,7 @@
 /*
 Jasmine v1.0
 admin.js
-Controller Build 0.6
+Controller Build 0.7
 */
 
 
@@ -10,6 +10,8 @@ console.log("Jasmine Admin Loaded");
 
 let executives = [];
 let trips = [];
+let activeTrip = null;
+
 
 
 
@@ -27,10 +29,10 @@ document.querySelectorAll(".page-section");
 
 
 
-navButtons.forEach(button => {
+navButtons.forEach(button=>{
 
 
-button.onclick = function(){
+button.onclick=function(){
 
 
 const target =
@@ -38,7 +40,7 @@ this.dataset.page;
 
 
 
-navButtons.forEach(btn => {
+navButtons.forEach(btn=>{
 
 btn.classList.remove("active");
 
@@ -50,7 +52,7 @@ this.classList.add("active");
 
 
 
-sections.forEach(section => {
+sections.forEach(section=>{
 
 section.classList.add("hidden");
 
@@ -70,11 +72,12 @@ page.classList.remove("hidden");
 }
 
 
-
 };
 
 
 });
+
+
 
 
 
@@ -93,14 +96,15 @@ executives =
 [...Jasmine.getExecutives()];
 
 
+
 loadExecutives();
 
 
 loadTripDropdowns();
 
 
-}
 
+}
 
 
 
@@ -145,6 +149,8 @@ waitForJasmine,
 
 
 
+
+
 /*
 EXECUTIVES
 */
@@ -167,6 +173,7 @@ populateExecutiveDropdown();
 
 
 
+
 function renderExecutives(){
 
 
@@ -185,8 +192,7 @@ return;
 
 
 
-list.innerHTML =
-executives.map(executive => `
+list.innerHTML = executives.map(executive=>`
 
 
 <div class="executive-card">
@@ -246,6 +252,7 @@ executives.length;
 
 
 
+
 function populateExecutiveDropdown(){
 
 
@@ -285,6 +292,7 @@ ${executive.name}
 
 
 }
+
 
 
 
@@ -333,6 +341,7 @@ executiveForm.classList.toggle(
 
 
 
+
 const saveExecutive =
 document.getElementById(
 "save-executive"
@@ -346,11 +355,12 @@ if(saveExecutive){
 saveExecutive.onclick=function(){
 
 
-const executive = {
+const executive={
 
 
 id:
-"exec"+String(
+"exec"+
+String(
 executives.length+1
 ).padStart(3,"0"),
 
@@ -385,7 +395,8 @@ document.getElementById(
 ).value,
 
 
-status:"Active"
+status:
+"Active"
 
 
 };
@@ -395,12 +406,15 @@ status:"Active"
 executives.push(executive);
 
 
+
 loadExecutives();
+
 
 
 executiveForm.classList.add(
 "hidden"
 );
+
 
 
 };
@@ -438,8 +452,6 @@ document.getElementById(
 
 
 
-
-
 if(country){
 
 
@@ -465,7 +477,6 @@ ${item.name}
 
 
 }
-
 
 
 
@@ -499,8 +510,9 @@ ${item}
 }
 
 
-
 }
+
+
 
 
 
@@ -565,7 +577,7 @@ ${item}
 
 
 /*
-CREATE TRIP
+TRIPS
 */
 
 
@@ -573,6 +585,7 @@ const newTrip =
 document.getElementById(
 "new-trip"
 );
+
 
 
 const tripForm =
@@ -603,7 +616,6 @@ tripForm.classList.toggle(
 
 
 
-
 const saveTrip =
 document.getElementById(
 "save-trip"
@@ -617,11 +629,13 @@ if(saveTrip){
 saveTrip.onclick=function(){
 
 
-const trip = {
+
+const trip={
 
 
 id:
-"trip"+String(
+"trip"+
+String(
 trips.length+1
 ).padStart(3,"0"),
 
@@ -665,7 +679,10 @@ document.getElementById(
 purpose:
 document.getElementById(
 "trip-purpose"
-).value
+).value,
+
+
+flight:null
 
 
 };
@@ -675,7 +692,9 @@ document.getElementById(
 trips.push(trip);
 
 
+
 renderTrips();
+
 
 
 tripForm.classList.add(
@@ -683,11 +702,11 @@ tripForm.classList.add(
 );
 
 
+
 };
 
 
 }
-
 
 
 
@@ -703,6 +722,14 @@ const list =
 document.getElementById(
 "trip-list"
 );
+
+
+
+if(!list){
+
+return;
+
+}
 
 
 
@@ -747,7 +774,7 @@ document.querySelectorAll("[data-trip]")
 card.onclick=function(){
 
 
-const trip =
+activeTrip =
 trips.find(
 item =>
 item.id === this.dataset.trip
@@ -755,7 +782,7 @@ item.id === this.dataset.trip
 
 
 
-openTripWorkspace(trip);
+openTripWorkspace(activeTrip);
 
 
 };
@@ -765,7 +792,6 @@ openTripWorkspace(trip);
 
 
 }
-
 
 
 
@@ -806,12 +832,14 @@ ${trip.city}, ${trip.country}
 
 
 <p>
-Executive: ${trip.executive}
+Executive:
+${trip.executive}
 </p>
 
 
 <p>
-Airline: ${trip.airline}
+Airline:
+${trip.airline}
 </p>
 
 
@@ -827,6 +855,198 @@ ${trip.return}
 Purpose:
 ${trip.purpose}
 </p>
+
+
+`;
+
+
+
+renderFlight();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+/*
+FLIGHTS
+*/
+
+
+const saveFlight =
+document.getElementById(
+"save-flight"
+);
+
+
+
+if(saveFlight){
+
+
+saveFlight.onclick=function(){
+
+
+
+if(!activeTrip){
+
+alert(
+"Please select a trip first."
+);
+
+return;
+
+}
+
+
+
+
+
+activeTrip.flight={
+
+
+airline:
+document.getElementById(
+"flight-airline"
+).value,
+
+
+number:
+document.getElementById(
+"flight-number"
+).value,
+
+
+departureAirport:
+document.getElementById(
+"flight-departure-airport"
+).value,
+
+
+arrivalAirport:
+document.getElementById(
+"flight-arrival-airport"
+).value,
+
+
+departureTime:
+document.getElementById(
+"flight-departure-time"
+).value,
+
+
+arrivalTime:
+document.getElementById(
+"flight-arrival-time"
+).value,
+
+
+booking:
+document.getElementById(
+"flight-booking"
+).value
+
+
+
+};
+
+
+
+renderFlight();
+
+
+
+};
+
+
+}
+
+
+
+
+
+
+
+function renderFlight(){
+
+
+const summary =
+document.getElementById(
+"flight-summary"
+);
+
+
+
+if(!summary || !activeTrip){
+
+return;
+
+}
+
+
+
+if(!activeTrip.flight){
+
+
+summary.innerHTML =
+"<p>No flight added yet.</p>";
+
+return;
+
+}
+
+
+
+
+const f =
+activeTrip.flight;
+
+
+
+summary.innerHTML = `
+
+
+<div class="executive-card">
+
+
+<h3>
+${f.airline}
+${f.number}
+</h3>
+
+
+<p>
+${f.departureAirport}
+ →
+${f.arrivalAirport}
+</p>
+
+
+<p>
+Booking:
+${f.booking}
+</p>
+
+
+<p>
+Departure:
+${f.departureTime}
+</p>
+
+
+<p>
+Arrival:
+${f.arrivalTime}
+</p>
+
+
+</div>
 
 
 `;
