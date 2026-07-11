@@ -1,7 +1,7 @@
 /*
 Jasmine v1.0
 admin.js
-Controller Build 0.9
+Controller Build 1.0
 */
 
 
@@ -11,7 +11,6 @@ console.log("Jasmine Admin Loaded");
 let executives = [];
 let trips = [];
 let activeTrip = null;
-
 
 
 
@@ -39,11 +38,11 @@ const target =
 this.dataset.page;
 
 
-
 navButtons.forEach(btn=>{
-btn.classList.remove("active");
-});
 
+btn.classList.remove("active");
+
+});
 
 
 this.classList.add("active");
@@ -51,13 +50,16 @@ this.classList.add("active");
 
 
 sections.forEach(section=>{
+
 section.classList.add("hidden");
+
 });
 
 
 
 const page =
 document.getElementById(target);
+
 
 
 if(page){
@@ -78,8 +80,9 @@ page.classList.remove("hidden");
 
 
 
+
 /*
-START
+INITIALISE
 */
 
 
@@ -142,6 +145,7 @@ waitForJasmine,
 
 
 
+
 /*
 EXECUTIVES
 */
@@ -164,6 +168,7 @@ populateExecutiveDropdown();
 
 
 
+
 function renderExecutives(){
 
 
@@ -175,9 +180,7 @@ document.getElementById(
 
 
 if(!list){
-
 return;
-
 }
 
 
@@ -188,21 +191,17 @@ executives.map(executive=>`
 
 <div class="executive-card">
 
-
 <h3>
 ${executive.name}
 </h3>
-
 
 <p>
 ${executive.title}
 </p>
 
-
 <p>
 ${executive.company}
 </p>
-
 
 </div>
 
@@ -236,7 +235,6 @@ executives.length;
 
 
 }
-
 
 
 
@@ -289,6 +287,7 @@ ${executive.name}
 
 
 
+
 /*
 ADD EXECUTIVE
 */
@@ -329,6 +328,7 @@ executiveForm.classList.toggle(
 
 
 
+
 const saveExecutive =
 document.getElementById(
 "save-executive"
@@ -340,7 +340,6 @@ if(saveExecutive){
 
 
 saveExecutive.onclick=function(){
-
 
 
 const executive={
@@ -389,7 +388,6 @@ status:"Active"
 };
 
 
-
 executives.push(executive);
 
 
@@ -399,7 +397,6 @@ loadExecutives();
 executiveForm.classList.add(
 "hidden"
 );
-
 
 
 };
@@ -434,8 +431,6 @@ const airline =
 document.getElementById(
 "trip-airline"
 );
-
-
 
 
 
@@ -566,7 +561,6 @@ document.getElementById(
 );
 
 
-
 const tripForm =
 document.getElementById(
 "trip-form"
@@ -596,6 +590,7 @@ tripForm.classList.toggle(
 
 
 
+
 const saveTrip =
 document.getElementById(
 "save-trip"
@@ -607,6 +602,7 @@ if(saveTrip){
 
 
 saveTrip.onclick=function(){
+
 
 
 const trip={
@@ -685,10 +681,12 @@ tripForm.classList.add(
 );
 
 
+
 };
 
 
 }
+
 
 
 
@@ -732,18 +730,10 @@ ${trip.airline}
 </p>
 
 
-<p>
-${trip.departure}
--
-${trip.return}
-</p>
-
-
 </div>
 
 
 `).join("");
-
 
 
 
@@ -780,30 +770,26 @@ openTripWorkspace(activeTrip);
 
 
 
-
 function openTripWorkspace(trip){
 
 
-const workspace =
-document.getElementById(
+activeTrip = trip;
+
+
+
+document
+.getElementById(
 "trip-workspace"
-);
-
-
-const summary =
-document.getElementById(
-"trip-summary"
-);
-
-
-
-workspace.classList.remove(
+)
+.classList.remove(
 "hidden"
 );
 
 
 
-summary.innerHTML = `
+document.getElementById(
+"trip-summary"
+).innerHTML = `
 
 
 <h3>
@@ -814,20 +800,6 @@ ${trip.city}, ${trip.country}
 <p>
 Executive:
 ${trip.executive}
-</p>
-
-
-<p>
-Airline:
-${trip.airline}
-</p>
-
-
-<p>
-Dates:
-${trip.departure}
--
-${trip.return}
 </p>
 
 
@@ -847,6 +819,8 @@ renderHotel();
 
 renderDocuments();
 
+renderReadiness();
+
 
 }
 
@@ -859,24 +833,21 @@ renderDocuments();
 
 
 /*
-FLIGHTS
+READINESS
 */
 
 
-const saveFlight =
+function renderReadiness(){
+
+
+const box =
 document.getElementById(
-"save-flight"
+"readiness-summary"
 );
 
 
 
-if(saveFlight){
-
-
-saveFlight.onclick=function(){
-
-
-if(!activeTrip){
+if(!box || !activeTrip){
 
 return;
 
@@ -884,52 +855,121 @@ return;
 
 
 
-activeTrip.flight={
+let score = 0;
 
-
-airline:
-document.getElementById(
-"flight-airline"
-).value,
-
-
-number:
-document.getElementById(
-"flight-number"
-).value,
-
-
-departureAirport:
-document.getElementById(
-"flight-departure-airport"
-).value,
-
-
-arrivalAirport:
-document.getElementById(
-"flight-arrival-airport"
-).value,
-
-
-booking:
-document.getElementById(
-"flight-booking"
-).value
-
-
-};
+let items = [];
 
 
 
-renderFlight();
+
+if(activeTrip.flight){
+
+score += 25;
+
+items.push(
+"✔ Flight details added"
+);
+
+}
+
+else{
+
+items.push(
+"⚠ Flight missing"
+);
+
+}
 
 
-};
+
+
+if(activeTrip.hotel){
+
+score += 25;
+
+items.push(
+"✔ Hotel details added"
+);
+
+}
+
+else{
+
+items.push(
+"⚠ Hotel missing"
+);
+
+}
+
+
+
+
+
+if(
+activeTrip.documents &&
+activeTrip.documents.length > 0
+){
+
+score += 50;
+
+items.push(
+"✔ Documents uploaded"
+);
+
+}
+
+else{
+
+items.push(
+"⚠ Documents missing"
+);
+
+}
+
+
+
+
+
+box.innerHTML = `
+
+
+<div class="executive-card">
+
+
+<h3>
+${score}% Ready
+</h3>
+
+
+${items.map(item=>`
+
+<p>
+${item}
+</p>
+
+`).join("")}
+
+
+</div>
+
+
+`;
+
 
 
 }
 
 
+
+
+
+
+
+
+
+/*
+RENDER HELPERS
+*/
 
 
 function renderFlight(){
@@ -950,135 +990,33 @@ return;
 
 
 
-if(!activeTrip.flight){
-
 box.innerHTML =
-"<p>No flight added yet.</p>";
+activeTrip.flight ?
 
-return;
-
-}
-
-
-
-const f =
-activeTrip.flight;
-
-
-
-box.innerHTML = `
-
-
+`
 <div class="executive-card">
 
-
 <h3>
-${f.airline} ${f.number}
+${activeTrip.flight.airline}
+${activeTrip.flight.number}
 </h3>
 
-
 <p>
-${f.departureAirport}
+${activeTrip.flight.departureAirport}
 →
-${f.arrivalAirport}
+${activeTrip.flight.arrivalAirport}
 </p>
-
-
-<p>
-Booking:
-${f.booking}
-</p>
-
 
 </div>
+`
 
+:
 
-`;
+"<p>No flight added yet.</p>";
+
 
 
 }
-
-
-
-
-
-
-
-
-
-/*
-HOTELS
-*/
-
-
-const saveHotel =
-document.getElementById(
-"save-hotel"
-);
-
-
-
-if(saveHotel){
-
-
-saveHotel.onclick=function(){
-
-
-if(!activeTrip){
-
-return;
-
-}
-
-
-
-activeTrip.hotel={
-
-
-name:
-document.getElementById(
-"hotel-name"
-).value,
-
-
-city:
-document.getElementById(
-"hotel-city"
-).value,
-
-
-checkin:
-document.getElementById(
-"hotel-checkin"
-).value,
-
-
-checkout:
-document.getElementById(
-"hotel-checkout"
-).value,
-
-
-booking:
-document.getElementById(
-"hotel-booking"
-).value
-
-
-};
-
-
-
-renderHotel();
-
-
-};
-
-
-}
-
-
-
 
 
 
@@ -1101,140 +1039,30 @@ return;
 
 
 
-if(!activeTrip.hotel){
-
 box.innerHTML =
-"<p>No hotel added yet.</p>";
+activeTrip.hotel ?
 
-return;
-
-}
-
-
-
-const h =
-activeTrip.hotel;
-
-
-
-box.innerHTML = `
-
-
+`
 <div class="executive-card">
 
-
 <h3>
-${h.name}
+${activeTrip.hotel.name}
 </h3>
 
-
 <p>
-${h.city}
+${activeTrip.hotel.city}
 </p>
-
-
-<p>
-${h.checkin}
--
-${h.checkout}
-</p>
-
-
-<p>
-Booking:
-${h.booking}
-</p>
-
 
 </div>
+`
 
+:
 
-`;
+"<p>No hotel added yet.</p>";
 
 
 
 }
-
-
-
-
-
-
-
-
-
-/*
-DOCUMENTS
-*/
-
-
-const saveDocument =
-document.getElementById(
-"save-document"
-);
-
-
-
-if(saveDocument){
-
-
-saveDocument.onclick=function(){
-
-
-if(!activeTrip){
-
-return;
-
-}
-
-
-
-const documentItem={
-
-
-type:
-document.getElementById(
-"document-type"
-).value,
-
-
-name:
-document.getElementById(
-"document-name"
-).value,
-
-
-link:
-document.getElementById(
-"document-link"
-).value,
-
-
-status:
-document.getElementById(
-"document-status"
-).value
-
-
-};
-
-
-
-activeTrip.documents.push(
-documentItem
-);
-
-
-
-renderDocuments();
-
-
-};
-
-
-}
-
-
 
 
 
@@ -1257,57 +1085,193 @@ return;
 
 
 
-if(activeTrip.documents.length===0){
-
-
 box.innerHTML =
-"<p>No documents added yet.</p>";
-
-return;
-
-
-}
-
-
-
-box.innerHTML =
-
+activeTrip.documents.length ?
 
 activeTrip.documents.map(doc=>`
 
-
 <div class="executive-card">
-
 
 <h3>
 ${doc.name}
 </h3>
 
-
 <p>
-${doc.type}
-</p>
-
-
-<p>
-Status:
 ${doc.status}
 </p>
 
-
-<a href="${doc.link}" target="_blank">
-Open Document
-</a>
-
-
 </div>
 
+`).join("")
 
-`).join("");
+:
+
+"<p>No documents added yet.</p>";
 
 
 
 }
+
+
+
+
+
+
+
+
+/*
+FLIGHT SAVE
+*/
+
+
+document
+.getElementById(
+"save-flight"
+)
+?.addEventListener(
+"click",
+()=>{
+
+
+if(!activeTrip)return;
+
+
+
+activeTrip.flight={
+
+airline:
+document.getElementById("flight-airline").value,
+
+number:
+document.getElementById("flight-number").value,
+
+departureAirport:
+document.getElementById("flight-departure-airport").value,
+
+arrivalAirport:
+document.getElementById("flight-arrival-airport").value,
+
+booking:
+document.getElementById("flight-booking").value
+
+};
+
+
+
+renderFlight();
+
+renderReadiness();
+
+
+});
+
+
+
+
+
+
+
+
+
+/*
+HOTEL SAVE
+*/
+
+
+document
+.getElementById(
+"save-hotel"
+)
+?.addEventListener(
+"click",
+()=>{
+
+
+if(!activeTrip)return;
+
+
+
+activeTrip.hotel={
+
+
+name:
+document.getElementById("hotel-name").value,
+
+
+city:
+document.getElementById("hotel-city").value,
+
+
+booking:
+document.getElementById("hotel-booking").value
+
+
+};
+
+
+
+renderHotel();
+
+renderReadiness();
+
+
+});
+
+
+
+
+
+
+
+
+
+/*
+DOCUMENT SAVE
+*/
+
+
+document
+.getElementById(
+"save-document"
+)
+?.addEventListener(
+"click",
+()=>{
+
+
+if(!activeTrip)return;
+
+
+
+activeTrip.documents.push({
+
+
+type:
+document.getElementById("document-type").value,
+
+
+name:
+document.getElementById("document-name").value,
+
+
+link:
+document.getElementById("document-link").value,
+
+
+status:
+document.getElementById("document-status").value
+
+
+});
+
+
+
+renderDocuments();
+
+renderReadiness();
+
+
+});
 
 
 
