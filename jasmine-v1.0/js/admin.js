@@ -1,7 +1,7 @@
 /*
 Jasmine v1.0
 admin.js
-Controller Build 0.5
+Controller Build 0.6
 */
 
 
@@ -10,8 +10,6 @@ console.log("Jasmine Admin Loaded");
 
 let executives = [];
 let trips = [];
-
-
 
 
 
@@ -45,6 +43,7 @@ navButtons.forEach(btn => {
 btn.classList.remove("active");
 
 });
+
 
 
 this.classList.add("active");
@@ -82,34 +81,20 @@ page.classList.remove("hidden");
 
 
 
-
-
 /*
-INITIAL LOAD
+START
 */
 
 
-function initialiseJasmine(){
+function startJasmine(){
 
 
-if(
-
-Jasmine.data.executives.length === 0
-
-){
-
-setTimeout(
-initialiseJasmine,
-300
-);
-
-return;
-
-}
-
+executives =
+[...Jasmine.getExecutives()];
 
 
 loadExecutives();
+
 
 loadTripDropdowns();
 
@@ -118,16 +103,24 @@ loadTripDropdowns();
 
 
 
+
 function waitForJasmine(){
 
 
 if(
+
 window.Jasmine &&
-Jasmine.data
+
+Jasmine.data &&
+
+Jasmine.data.executives &&
+
+Jasmine.data.executives.length > 0
+
 ){
 
 
-initialiseJasmine();
+startJasmine();
 
 
 }
@@ -150,17 +143,14 @@ waitForJasmine,
 
 
 
+
+
 /*
 EXECUTIVES
 */
 
 
 function loadExecutives(){
-
-
-executives =
-[...Jasmine.getExecutives()];
-
 
 
 renderExecutives();
@@ -173,7 +163,6 @@ populateExecutiveDropdown();
 
 
 }
-
 
 
 
@@ -196,21 +185,8 @@ return;
 
 
 
-if(executives.length === 0){
-
-
 list.innerHTML =
-"<p>No executives found.</p>";
-
-
-return;
-
-}
-
-
-
-
-list.innerHTML = executives.map(executive => `
+executives.map(executive => `
 
 
 <div class="executive-card">
@@ -244,6 +220,8 @@ ${executive.company}
 
 
 
+
+
 function updateExecutiveCount(){
 
 
@@ -260,7 +238,6 @@ count.innerText =
 executives.length;
 
 }
-
 
 
 }
@@ -316,7 +293,6 @@ ${executive.name}
 
 
 
-
 /*
 ADD EXECUTIVE
 */
@@ -326,6 +302,7 @@ const newExecutive =
 document.getElementById(
 "new-executive"
 );
+
 
 
 const executiveForm =
@@ -338,7 +315,7 @@ document.getElementById(
 if(newExecutive){
 
 
-newExecutive.onclick = function(){
+newExecutive.onclick=function(){
 
 
 executiveForm.classList.toggle(
@@ -356,7 +333,6 @@ executiveForm.classList.toggle(
 
 
 
-
 const saveExecutive =
 document.getElementById(
 "save-executive"
@@ -367,17 +343,15 @@ document.getElementById(
 if(saveExecutive){
 
 
-saveExecutive.onclick = function(){
-
+saveExecutive.onclick=function(){
 
 
 const executive = {
 
 
 id:
-"exec" +
-String(
-executives.length + 1
+"exec"+String(
+executives.length+1
 ).padStart(3,"0"),
 
 
@@ -411,37 +385,17 @@ document.getElementById(
 ).value,
 
 
-status:
-"Active"
+status:"Active"
 
 
 };
 
 
 
-if(!executive.name){
-
-alert(
-"Executive name required"
-);
-
-return;
-
-}
-
-
-
 executives.push(executive);
 
 
-
-renderExecutives();
-
-
-updateExecutiveCount();
-
-
-populateExecutiveDropdown();
+loadExecutives();
 
 
 executiveForm.classList.add(
@@ -470,14 +424,14 @@ TRIP DROPDOWNS
 function loadTripDropdowns(){
 
 
-const countrySelect =
+const country =
 document.getElementById(
 "trip-country"
 );
 
 
 
-const airlineSelect =
+const airline =
 document.getElementById(
 "trip-airline"
 );
@@ -486,23 +440,23 @@ document.getElementById(
 
 
 
-if(countrySelect){
+if(country){
 
 
-countrySelect.innerHTML =
+country.innerHTML =
 "<option>Select Country</option>";
 
 
 
 Jasmine.getCountries()
-.forEach(country=>{
+.forEach(item=>{
 
 
-countrySelect.innerHTML +=
+country.innerHTML +=
 
 `
 <option>
-${country.name}
+${item.name}
 </option>
 `;
 
@@ -518,23 +472,23 @@ ${country.name}
 
 
 
-if(airlineSelect){
+if(airline){
 
 
-airlineSelect.innerHTML =
+airline.innerHTML =
 "<option>Select Airline</option>";
 
 
 
 Jasmine.getAirlines()
-.forEach(airline=>{
+.forEach(item=>{
 
 
-airlineSelect.innerHTML +=
+airline.innerHTML +=
 
 `
 <option>
-${airline}
+${item}
 </option>
 `;
 
@@ -547,8 +501,6 @@ ${airline}
 
 
 }
-
-
 
 
 
@@ -569,14 +521,14 @@ if(countrySelect){
 countrySelect.onchange=function(){
 
 
-const citySelect =
+const city =
 document.getElementById(
 "trip-city"
 );
 
 
 
-citySelect.innerHTML =
+city.innerHTML =
 "<option>Select City</option>";
 
 
@@ -584,20 +536,19 @@ citySelect.innerHTML =
 Jasmine.getCities(
 this.value
 )
-.forEach(city=>{
+.forEach(item=>{
 
 
-citySelect.innerHTML +=
+city.innerHTML +=
 
 `
 <option>
-${city}
+${item}
 </option>
 `;
 
 
 });
-
 
 
 };
@@ -614,7 +565,7 @@ ${city}
 
 
 /*
-TRIP CREATION
+CREATE TRIP
 */
 
 
@@ -622,7 +573,6 @@ const newTrip =
 document.getElementById(
 "new-trip"
 );
-
 
 
 const tripForm =
@@ -667,13 +617,11 @@ if(saveTrip){
 saveTrip.onclick=function(){
 
 
-
-const trip={
+const trip = {
 
 
 id:
-"trip" +
-String(
+"trip"+String(
 trips.length+1
 ).padStart(3,"0"),
 
@@ -727,9 +675,7 @@ document.getElementById(
 trips.push(trip);
 
 
-
 renderTrips();
-
 
 
 tripForm.classList.add(
@@ -737,11 +683,13 @@ tripForm.classList.add(
 );
 
 
-
 };
 
 
 }
+
+
+
 
 
 
@@ -758,50 +706,135 @@ document.getElementById(
 
 
 
-if(!list){
-
-return;
-
-}
-
-
-
-if(trips.length===0){
-
-list.innerHTML =
-"<p>No trips created yet.</p>";
-
-return;
-
-}
-
-
-
-
 list.innerHTML =
 trips.map(trip=>`
 
-<div class="executive-card">
+
+<div class="executive-card"
+data-trip="${trip.id}">
+
 
 <h3>
 ${trip.city}, ${trip.country}
 </h3>
 
+
 <p>
 ${trip.airline}
 </p>
 
+
 <p>
-${trip.departure} - ${trip.return}
+${trip.departure}
+-
+${trip.return}
 </p>
 
+
 </div>
+
 
 `).join("");
 
 
 
+
+
+document.querySelectorAll("[data-trip]")
+.forEach(card=>{
+
+
+card.onclick=function(){
+
+
+const trip =
+trips.find(
+item =>
+item.id === this.dataset.trip
+);
+
+
+
+openTripWorkspace(trip);
+
+
+};
+
+
+});
+
+
 }
+
+
+
+
+
+
+
+
+
+function openTripWorkspace(trip){
+
+
+const workspace =
+document.getElementById(
+"trip-workspace"
+);
+
+
+
+const summary =
+document.getElementById(
+"trip-summary"
+);
+
+
+
+workspace.classList.remove(
+"hidden"
+);
+
+
+
+summary.innerHTML = `
+
+
+<h3>
+${trip.city}, ${trip.country}
+</h3>
+
+
+<p>
+Executive: ${trip.executive}
+</p>
+
+
+<p>
+Airline: ${trip.airline}
+</p>
+
+
+<p>
+Dates:
+${trip.departure}
+-
+${trip.return}
+</p>
+
+
+<p>
+Purpose:
+${trip.purpose}
+</p>
+
+
+`;
+
+
+
+}
+
 
 
 
