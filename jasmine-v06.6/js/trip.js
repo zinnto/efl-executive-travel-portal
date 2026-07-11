@@ -252,7 +252,9 @@ data.schedule.map(item => `
 <p>
 
 <strong>
+
 ${item.date}
+
 </strong>
 
 <br>
@@ -353,6 +355,72 @@ View Document
 
 
 `).join("")
+}
+
+
+</div>
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h3>
+✅ Travel Readiness
+</h3>
+
+
+
+${
+data.readiness
+
+?
+
+data.readiness.map(item => `
+
+
+<p>
+
+${
+item.status === "Complete"
+
+?
+
+"✅"
+
+:
+
+"⏳"
+
+}
+
+
+<strong>
+
+${item.item}
+
+</strong>
+
+
+<br>
+
+Status:
+${item.status}
+
+
+</p>
+
+
+`).join("")
+
+:
+
+"<p>No readiness checklist added</p>"
+
 }
 
 
