@@ -1,7 +1,7 @@
 /*
 Jasmine v1.0
 admin.js
-Controller Build 0.8
+Controller Build 0.9
 */
 
 
@@ -11,6 +11,8 @@ console.log("Jasmine Admin Loaded");
 let executives = [];
 let trips = [];
 let activeTrip = null;
+
+
 
 
 /*
@@ -37,9 +39,11 @@ const target =
 this.dataset.page;
 
 
+
 navButtons.forEach(btn=>{
 btn.classList.remove("active");
 });
+
 
 
 this.classList.add("active");
@@ -51,12 +55,15 @@ section.classList.add("hidden");
 });
 
 
+
 const page =
 document.getElementById(target);
 
 
 if(page){
+
 page.classList.remove("hidden");
+
 }
 
 
@@ -135,7 +142,6 @@ waitForJasmine,
 
 
 
-
 /*
 EXECUTIVES
 */
@@ -158,7 +164,6 @@ populateExecutiveDropdown();
 
 
 
-
 function renderExecutives(){
 
 
@@ -170,7 +175,9 @@ document.getElementById(
 
 
 if(!list){
+
 return;
+
 }
 
 
@@ -210,7 +217,6 @@ ${executive.company}
 
 
 
-
 function updateExecutiveCount(){
 
 
@@ -222,8 +228,10 @@ document.getElementById(
 
 
 if(count){
+
 count.innerText =
 executives.length;
+
 }
 
 
@@ -245,7 +253,9 @@ document.getElementById(
 
 
 if(!select){
+
 return;
+
 }
 
 
@@ -266,11 +276,11 @@ ${executive.name}
 </option>
 `;
 
+
 });
 
 
 }
-
 
 
 
@@ -288,6 +298,7 @@ const newExecutive =
 document.getElementById(
 "new-executive"
 );
+
 
 
 const executiveForm =
@@ -317,6 +328,7 @@ executiveForm.classList.toggle(
 
 
 
+
 const saveExecutive =
 document.getElementById(
 "save-executive"
@@ -328,6 +340,7 @@ if(saveExecutive){
 
 
 saveExecutive.onclick=function(){
+
 
 
 const executive={
@@ -376,6 +389,7 @@ status:"Active"
 };
 
 
+
 executives.push(executive);
 
 
@@ -385,6 +399,7 @@ loadExecutives();
 executiveForm.classList.add(
 "hidden"
 );
+
 
 
 };
@@ -485,8 +500,6 @@ ${item}
 
 
 
-
-
 const countrySelect =
 document.getElementById(
 "trip-country"
@@ -553,6 +566,7 @@ document.getElementById(
 );
 
 
+
 const tripForm =
 document.getElementById(
 "trip-form"
@@ -580,6 +594,8 @@ tripForm.classList.toggle(
 
 
 
+
+
 const saveTrip =
 document.getElementById(
 "save-trip"
@@ -591,7 +607,6 @@ if(saveTrip){
 
 
 saveTrip.onclick=function(){
-
 
 
 const trip={
@@ -649,7 +664,10 @@ document.getElementById(
 flight:null,
 
 
-hotel:null
+hotel:null,
+
+
+documents:[]
 
 
 };
@@ -678,7 +696,6 @@ tripForm.classList.add(
 
 
 
-
 function renderTrips(){
 
 
@@ -690,7 +707,9 @@ document.getElementById(
 
 
 if(!list){
+
 return;
+
 }
 
 
@@ -728,6 +747,7 @@ ${trip.return}
 
 
 
+
 document.querySelectorAll("[data-trip]")
 .forEach(card=>{
 
@@ -742,6 +762,7 @@ item.id === this.dataset.trip
 );
 
 
+
 openTripWorkspace(activeTrip);
 
 
@@ -752,7 +773,6 @@ openTripWorkspace(activeTrip);
 
 
 }
-
 
 
 
@@ -825,6 +845,8 @@ renderFlight();
 
 renderHotel();
 
+renderDocuments();
+
 
 }
 
@@ -855,10 +877,6 @@ saveFlight.onclick=function(){
 
 
 if(!activeTrip){
-
-alert(
-"Please select a trip first."
-);
 
 return;
 
@@ -893,18 +911,6 @@ document.getElementById(
 ).value,
 
 
-departureTime:
-document.getElementById(
-"flight-departure-time"
-).value,
-
-
-arrivalTime:
-document.getElementById(
-"flight-arrival-time"
-).value,
-
-
 booking:
 document.getElementById(
 "flight-booking"
@@ -926,26 +932,27 @@ renderFlight();
 
 
 
-
 function renderFlight(){
 
 
-const summary =
+const box =
 document.getElementById(
 "flight-summary"
 );
 
 
 
-if(!summary || !activeTrip){
+if(!box || !activeTrip){
+
 return;
+
 }
 
 
 
 if(!activeTrip.flight){
 
-summary.innerHTML =
+box.innerHTML =
 "<p>No flight added yet.</p>";
 
 return;
@@ -959,15 +966,14 @@ activeTrip.flight;
 
 
 
-summary.innerHTML = `
+box.innerHTML = `
 
 
 <div class="executive-card">
 
 
 <h3>
-${f.airline}
-${f.number}
+${f.airline} ${f.number}
 </h3>
 
 
@@ -1001,7 +1007,7 @@ ${f.booking}
 
 
 /*
-HOTEL
+HOTELS
 */
 
 
@@ -1018,12 +1024,7 @@ if(saveHotel){
 saveHotel.onclick=function(){
 
 
-
 if(!activeTrip){
-
-alert(
-"Please select a trip first."
-);
 
 return;
 
@@ -1085,27 +1086,27 @@ renderHotel();
 function renderHotel(){
 
 
-const summary =
+const box =
 document.getElementById(
 "hotel-summary"
 );
 
 
 
-if(!summary || !activeTrip){
+if(!box || !activeTrip){
+
 return;
+
 }
 
 
 
 if(!activeTrip.hotel){
 
-
-summary.innerHTML =
+box.innerHTML =
 "<p>No hotel added yet.</p>";
 
 return;
-
 
 }
 
@@ -1116,7 +1117,7 @@ activeTrip.hotel;
 
 
 
-summary.innerHTML = `
+box.innerHTML = `
 
 
 <div class="executive-card">
@@ -1151,7 +1152,164 @@ ${h.booking}
 `;
 
 
+
 }
+
+
+
+
+
+
+
+
+
+/*
+DOCUMENTS
+*/
+
+
+const saveDocument =
+document.getElementById(
+"save-document"
+);
+
+
+
+if(saveDocument){
+
+
+saveDocument.onclick=function(){
+
+
+if(!activeTrip){
+
+return;
+
+}
+
+
+
+const documentItem={
+
+
+type:
+document.getElementById(
+"document-type"
+).value,
+
+
+name:
+document.getElementById(
+"document-name"
+).value,
+
+
+link:
+document.getElementById(
+"document-link"
+).value,
+
+
+status:
+document.getElementById(
+"document-status"
+).value
+
+
+};
+
+
+
+activeTrip.documents.push(
+documentItem
+);
+
+
+
+renderDocuments();
+
+
+};
+
+
+}
+
+
+
+
+
+
+function renderDocuments(){
+
+
+const box =
+document.getElementById(
+"document-summary"
+);
+
+
+
+if(!box || !activeTrip){
+
+return;
+
+}
+
+
+
+if(activeTrip.documents.length===0){
+
+
+box.innerHTML =
+"<p>No documents added yet.</p>";
+
+return;
+
+
+}
+
+
+
+box.innerHTML =
+
+
+activeTrip.documents.map(doc=>`
+
+
+<div class="executive-card">
+
+
+<h3>
+${doc.name}
+</h3>
+
+
+<p>
+${doc.type}
+</p>
+
+
+<p>
+Status:
+${doc.status}
+</p>
+
+
+<a href="${doc.link}" target="_blank">
+Open Document
+</a>
+
+
+</div>
+
+
+`).join("");
+
+
+
+}
+
+
 
 
 
