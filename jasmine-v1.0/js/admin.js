@@ -895,6 +895,76 @@ populateTripData();
 
 else{
 
+ function openTripWorkspace(trip){
+
+
+const workspace =
+document.getElementById(
+"trip-workspace"
+);
+
+
+
+const summary =
+document.getElementById(
+"trip-summary"
+);
+
+
+
+if(!workspace || !summary){
+
+return;
+
+}
+
+
+
+workspace.classList.remove(
+"hidden"
+);
+
+
+
+summary.innerHTML = `
+
+
+<h3>
+${trip.city}, ${trip.country}
+</h3>
+
+
+<p>
+Executive:
+${trip.executive}
+</p>
+
+
+<p>
+Airline:
+${trip.airline}
+</p>
+
+
+<p>
+Travel Dates:
+${trip.departure}
+-
+${trip.return}
+</p>
+
+
+<p>
+Purpose:
+${trip.purpose}
+</p>
+
+
+`;
+
+
+
+} 
 
 setTimeout(
 waitForJasmine,
