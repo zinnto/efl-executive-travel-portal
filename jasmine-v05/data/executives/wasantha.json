@@ -10,39 +10,19 @@
   },
 
 
-  "currentTrip": {
-
-    "id": "wasantha-india-2026",
-
-    "destination": "India",
-
-    "dates": "5 - 10 August 2026",
-
-    "status": "Upcoming"
-
-  },
+  "currentTrip": "wasantha-india-2026",
 
 
   "upcomingTrips": [
 
-    {
-      "destination": "India",
-
-      "date": "5 August 2026"
-
-    }
+    "wasantha-india-2026"
 
   ],
 
 
   "travelHistory": [
 
-    {
-      "destination": "Uganda",
-
-      "date": "July 2026"
-
-    }
+    "uganda-2026"
 
   ]
 
