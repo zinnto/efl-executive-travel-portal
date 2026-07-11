@@ -79,7 +79,6 @@ container.innerHTML = `
 
 
 
-
 <div class="dashboard-card">
 
 
@@ -128,53 +127,31 @@ Status:
 </h3>
 
 
-
 <p>
-
-<strong>
-Airline:
-</strong>
-
+<strong>Airline:</strong>
 ${data.flight.airline}
-
 </p>
 
 
 <p>
-
-<strong>
-Flight:
-</strong>
-
+<strong>Flight:</strong>
 ${data.flight.flightNumber}
-
 </p>
 
 
 <p>
-
-<strong>
-Route:
-</strong>
-
+<strong>Route:</strong>
 ${data.flight.route}
-
 </p>
 
 
 <p>
-
-<strong>
-Departure:
-</strong>
-
+<strong>Departure:</strong>
 ${data.flight.departure}
-
 </p>
 
 
 </div>
-
 
 
 
@@ -190,35 +167,22 @@ ${data.flight.departure}
 </h3>
 
 
-
 <p>
-
-<strong>
-Hotel:
-</strong>
-
+<strong>Hotel:</strong>
 ${data.hotel.name}
-
 </p>
 
 
 <p>
-
 Check-in:
-
 ${data.hotel.checkIn}
-
 </p>
 
 
 <p>
-
 Check-out:
-
 ${data.hotel.checkOut}
-
 </p>
-
 
 
 </div>
@@ -239,16 +203,12 @@ ${data.hotel.checkOut}
 
 
 ${
-
 data.schedule.map(item => `
-
 
 <p>
 
 <strong>
-
 ${item.date}
-
 </strong>
 
 <br>
@@ -265,14 +225,11 @@ ${item.location}
 
 </p>
 
-
 `).join("")
-
 }
 
 
 </div>
-
 
 
 
@@ -290,8 +247,10 @@ ${item.location}
 
 
 ${
-
 data.documents.map(doc => `
+
+
+<div class="document-item">
 
 
 <p>
@@ -299,27 +258,54 @@ data.documents.map(doc => `
 ${doc.status === "Ready" ? "✅" : "⏳"}
 
 <strong>
-
 ${doc.name}
-
 </strong>
-
 
 <br>
 
-${doc.status}
+${doc.type || "Document"}
 
+<br>
+
+Status:
+${doc.status}
 
 </p>
 
 
-`).join("")
+${
+doc.url
+
+?
+
+`
+
+<a href="${doc.url}" target="_blank">
+
+<button>
+View Document
+</button>
+
+</a>
+
+`
+
+:
+
+""
 
 }
 
 
 </div>
 
+
+`).join("")
+}
+
+
+
+</div>
 
 
 
@@ -335,22 +321,17 @@ ${doc.status}
 </h3>
 
 
-
 ${
-
 data.contacts.length
 
 ?
 
 data.contacts.map(contact => `
 
-
 <p>
 
 <strong>
-
 ${contact.name}
-
 </strong>
 
 <br>
