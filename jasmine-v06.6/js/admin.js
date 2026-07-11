@@ -1,10 +1,11 @@
 console.log("Jasmine Admin App Loaded");
 
 
-
 let existingExecutives = [];
 
 let scheduleItems = [];
+
+let documentItems = [];
 
 
 
@@ -22,15 +23,17 @@ document.querySelectorAll(".menu-btn");
 
 const panels = {
 
-"Dashboard":"dashboard-panel",
 
-"Executives":"executives-panel",
+Dashboard:"dashboard-panel",
 
-"Trips":"trips-panel",
+Executives:"executives-panel",
 
-"Documents":"documents-panel",
+Trips:"trips-panel",
 
-"Settings":"settings-panel"
+Documents:"documents-panel",
+
+Settings:"settings-panel"
+
 
 };
 
@@ -38,6 +41,7 @@ const panels = {
 
 
 menuButtons.forEach(button => {
+
 
 
 button.addEventListener("click",function(){
@@ -49,7 +53,6 @@ menuButtons.forEach(btn => {
 btn.classList.remove("active");
 
 });
-
 
 
 this.classList.add("active");
@@ -95,7 +98,6 @@ selected.style.display="block";
 });
 
 
-
 });
 
 
@@ -107,13 +109,12 @@ selected.style.display="block";
 
 
 /*
-LOAD EXECUTIVES
+EXECUTIVES
 */
 
 
 const executiveList =
 document.getElementById("executive-list");
-
 
 
 const executiveDropdown =
@@ -125,70 +126,43 @@ document.getElementById("trip-executive");
 function loadExecutives(){
 
 
-
 fetch("data/executives.json")
 
 
-.then(response => {
+.then(response=>response.json())
 
 
-if(!response.ok){
-
-throw new Error(
-
-"Executive data not found"
-
-);
-
-}
-
-
-return response.json();
-
-
-})
-
-
-.then(data => {
+.then(data=>{
 
 
 existingExecutives =
-
 data.executives || [];
-
 
 
 displayExecutives();
 
 
-
 populateExecutiveDropdown();
-
 
 
 })
 
 
-.catch(error => {
-
+.catch(error=>{
 
 
 if(executiveList){
 
 executiveList.innerHTML =
-
-`<p>${error.message}</p>`;
+error.message;
 
 }
-
 
 
 });
 
 
-
 }
-
 
 
 
@@ -207,29 +181,21 @@ return;
 }
 
 
-
 executiveList.innerHTML =
 
 
-existingExecutives.map(executive => `
+existingExecutives.map(item=>`
 
 
 <div class="dashboard-card">
 
-
 <h3>
-
-${executive.name}
-
+${item.name}
 </h3>
 
-
 <p>
-
-${executive.title}
-
+${item.title}
 </p>
-
 
 </div>
 
@@ -239,7 +205,6 @@ ${executive.title}
 
 
 }
-
 
 
 
@@ -257,40 +222,28 @@ return;
 }
 
 
-
-existingExecutives.forEach(executive => {
-
+existingExecutives.forEach(item=>{
 
 
 const option =
 document.createElement("option");
 
 
-
 option.value =
-executive.id;
-
+item.id;
 
 
 option.textContent =
-executive.name;
-
+item.name;
 
 
 executiveDropdown.appendChild(option);
 
 
-
 });
 
 
-
 }
-
-
-
-
-
 
 
 
@@ -305,7 +258,7 @@ loadExecutives();
 
 
 /*
-SCHEDULE BUILDER
+SCHEDULE
 */
 
 
@@ -313,46 +266,33 @@ const addScheduleButton =
 document.getElementById("add-schedule");
 
 
-
 const schedulePreview =
 document.getElementById("schedule-preview");
-
-
 
 
 
 if(addScheduleButton){
 
 
-
-addScheduleButton.addEventListener(
-
-"click",
-
-function(){
+addScheduleButton.onclick=function(){
 
 
-
-const item = {
+const item={
 
 
 date:
-
 document.getElementById("schedule-date").value,
 
 
 time:
-
 document.getElementById("schedule-time").value,
 
 
 event:
-
 document.getElementById("schedule-event").value,
 
 
 location:
-
 document.getElementById("schedule-location").value
 
 
@@ -360,38 +300,22 @@ document.getElementById("schedule-location").value
 
 
 
-
-
 if(!item.date || !item.event){
 
-
-alert(
-
-"Please enter date and event."
-
-);
-
+alert("Date and event required.");
 
 return;
 
-
 }
-
-
 
 
 scheduleItems.push(item);
 
 
-
-displaySchedule();
-
+showSchedule();
 
 
-}
-
-);
-
+};
 
 
 }
@@ -402,10 +326,7 @@ displaySchedule();
 
 
 
-
-
-function displaySchedule(){
-
+function showSchedule(){
 
 
 if(!schedulePreview){
@@ -416,33 +337,26 @@ return;
 
 
 
-
 schedulePreview.innerHTML =
 
 
-
-scheduleItems.map(item => `
+scheduleItems.map(item=>`
 
 
 <div class="dashboard-card">
 
 
 <strong>
-
 ${item.date}
-
 </strong>
-
 
 <br>
 
 ${item.time}
 
-
 <br>
 
 ${item.event}
-
 
 <br>
 
@@ -467,7 +381,167 @@ ${item.location}
 
 
 /*
-TRIP GENERATOR
+DOCUMENT MANAGER
+*/
+
+
+const addDocumentButton =
+
+document.getElementById("add-document");
+
+
+
+const documentPreview =
+
+document.getElementById("document-preview");
+
+
+
+
+
+
+if(addDocumentButton){
+
+
+addDocumentButton.onclick=function(){
+
+
+
+const documentItem = {
+
+
+
+"type":
+
+document.getElementById("document-type").value,
+
+
+
+"name":
+
+document.getElementById("document-name").value,
+
+
+
+"status":
+
+document.getElementById("document-status").value,
+
+
+
+"url":
+
+document.getElementById("document-url").value
+
+
+
+};
+
+
+
+
+
+
+if(!documentItem.name){
+
+
+alert("Please enter document name.");
+
+
+return;
+
+
+}
+
+
+
+documentItems.push(documentItem);
+
+
+
+showDocuments();
+
+
+
+};
+
+
+
+}
+
+
+
+
+
+
+
+function showDocuments(){
+
+
+if(!documentPreview){
+
+return;
+
+}
+
+
+
+documentPreview.innerHTML =
+
+
+
+documentItems.map(doc=>`
+
+
+<div class="dashboard-card">
+
+
+<h3>
+${doc.name}
+</h3>
+
+
+<p>
+${doc.type}
+</p>
+
+
+<p>
+Status:
+${doc.status}
+</p>
+
+
+${
+doc.url
+?
+`<a href="${doc.url}" target="_blank">
+Open Document
+</a>`
+:
+""
+}
+
+
+</div>
+
+
+`).join("");
+
+
+
+}
+
+
+
+
+
+
+
+
+
+/*
+TRIP GENERATION
 */
 
 
@@ -479,15 +553,11 @@ document.getElementById("generate-trip");
 
 
 
+
 if(generateTripButton){
 
 
-
-generateTripButton.addEventListener(
-
-"click",
-
-function(){
+generateTripButton.onclick=function(){
 
 
 
@@ -497,20 +567,11 @@ document.getElementById("trip-id").value.trim();
 
 
 
-
-
 if(!tripID){
 
-
-alert(
-
-"Please enter Trip ID."
-
-);
-
+alert("Trip ID required.");
 
 return;
-
 
 }
 
@@ -518,48 +579,43 @@ return;
 
 
 
-
-const tripData = {
-
+const tripData={
 
 
-"executive": {
+executive:{
 
 
-"id":
+id:
 
-document.getElementById("trip-executive").value,
+document.getElementById("trip-executive").value
 
 
 },
 
 
 
-
-"trip": {
-
-
-"id":
-
-tripID,
+trip:{
 
 
-"name":
+id:tripID,
+
+
+name:
 
 document.getElementById("trip-name").value,
 
 
-"destination":
+destination:
 
 document.getElementById("trip-destination").value,
 
 
-"dates":
+dates:
 
 formatDates(),
 
 
-"status":
+status:
 
 document.getElementById("trip-status").value
 
@@ -568,26 +624,25 @@ document.getElementById("trip-status").value
 
 
 
+flight:{
 
-"flight": {
 
-
-"airline":
+airline:
 
 document.getElementById("flight-airline").value,
 
 
-"flightNumber":
+flightNumber:
 
 document.getElementById("flight-number").value,
 
 
-"route":
+route:
 
 document.getElementById("flight-route").value,
 
 
-"departure":
+departure:
 
 document.getElementById("flight-time").value
 
@@ -596,21 +651,20 @@ document.getElementById("flight-time").value
 
 
 
+hotel:{
 
-"hotel": {
 
-
-"name":
+name:
 
 document.getElementById("hotel-name").value,
 
 
-"checkIn":
+checkIn:
 
 document.getElementById("hotel-checkin").value,
 
 
-"checkOut":
+checkOut:
 
 document.getElementById("hotel-checkout").value
 
@@ -619,57 +673,43 @@ document.getElementById("hotel-checkout").value
 
 
 
-
-"schedule":
+schedule:
 
 scheduleItems,
 
 
 
-"documents":[],
+documents:
+
+documentItems,
 
 
 
-"contacts":[],
+contacts:[],
 
 
 
-"readiness":[
-
+readiness:[
 
 {
-
-"item":"Flight Ticket",
-
-"status":"Pending"
-
+item:"Flight Ticket",
+status:"Pending"
 },
 
-
 {
-
-"item":"Hotel",
-
-"status":"Pending"
-
+item:"Hotel",
+status:"Pending"
 },
 
-
 {
-
-"item":"Documents",
-
-"status":"Pending"
-
+item:"Documents",
+status:"Pending"
 }
-
 
 ]
 
 
-
 };
-
 
 
 
@@ -685,13 +725,11 @@ tripID+".json"
 
 
 
-}
-
-);
-
+};
 
 
 }
+
 
 
 
@@ -704,37 +742,22 @@ tripID+".json"
 function formatDates(){
 
 
-const departure =
+return (
 
-document.getElementById("departure-date").value;
+document.getElementById("departure-date").value
 
++
 
+" - "
 
-const returnDate =
++
 
-document.getElementById("return-date").value;
+document.getElementById("return-date").value
 
-
-
-if(!departure && !returnDate){
-
-return "";
-
-}
-
-
-
-return departure +
-
-" - " +
-
-returnDate;
-
+);
 
 
 }
-
-
 
 
 
@@ -745,14 +768,10 @@ returnDate;
 function downloadJSON(data,filename){
 
 
+const blob =
+new Blob(
 
-const blob = new Blob(
-
-[
-
-JSON.stringify(data,null,2)
-
-],
+[JSON.stringify(data,null,2)],
 
 {
 
@@ -764,43 +783,27 @@ type:"application/json"
 
 
 
-const link = document.createElement("a");
-
+const link =
+document.createElement("a");
 
 
 link.href =
-
 URL.createObjectURL(blob);
 
 
 
-link.download = filename;
+link.download =
+filename;
 
 
 
 document.body.appendChild(link);
 
 
-
 link.click();
 
 
-
 document.body.removeChild(link);
-
-
-
-URL.revokeObjectURL(link.href);
-
-
-
-alert(
-
-filename +
-
-" generated successfully."
-
-);
 
 
 
