@@ -8,7 +8,7 @@
   },
 
 
- "trip": {
+  "trip": {
 
     "id": "wasantha-india-2026",
 
@@ -20,14 +20,8 @@
 
     "status": "Upcoming"
 
-},
+  },
 
-  {
-"name":"Flight Ticket",
-"type":"PDF",
-"status":"Ready",
-"url":"your-onedrive-link"
-}
 
   "flight": {
 
@@ -76,7 +70,11 @@
 
       "name": "Flight Ticket",
 
-      "status": "Ready"
+      "type": "PDF",
+
+      "status": "Ready",
+
+      "url": ""
 
     },
 
@@ -84,7 +82,23 @@
 
       "name": "Hotel Voucher",
 
-      "status": "Pending"
+      "type": "PDF",
+
+      "status": "Pending",
+
+      "url": ""
+
+    },
+
+    {
+
+      "name": "Meeting Agenda",
+
+      "type": "PDF",
+
+      "status": "Pending",
+
+      "url": ""
 
     }
 
