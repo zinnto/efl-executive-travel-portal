@@ -7,18 +7,9 @@ const container = document.getElementById("executive-profile");
 
 fetch("data/executives.json")
 
-.then(response => {
-
-    if (!response.ok) {
-        throw new Error("Could not load executives.json");
-    }
-
-    return response.json();
-
-})
+.then(response => response.json())
 
 .then(data => {
-
 
     const executive = data.executives.find(
         item => item.id === executiveID
@@ -34,151 +25,113 @@ fetch("data/executives.json")
     }
 
 
-
     return fetch(executive.file);
 
 
 })
 
-.then(response => {
+.then(response => response.json())
 
-
-    if (!response.ok) {
-
-        throw new Error("Could not load executive profile file");
-
-    }
-
-
-    return response.json();
-
-
-})
 
 .then(profile => {
 
-    console.log("Current Trip:", profile.currentTrip);
 
-    container.innerHTML = ``
+    container.innerHTML = `
 
+    <div class="dashboard-card">
 
-<div class="dashboard-card">
+        <h2>
+        ${profile.profile.name}
+        </h2>
 
-<h2>
-${profile.profile.name}
-</h2>
+        <p>
+        ${profile.profile.title}
+        <br>
+        ${profile.profile.company}
+        </p>
 
-
-<p>
-${profile.profile.title}
-<br>
-${profile.profile.company}
-</p>
-
-
-</div>
+    </div>
 
 
 
-<div class="dashboard-card">
+    <div class="dashboard-card">
 
-<h3>
-✈ Current Travel
-</h3>
-
-
-<h2>
-${profile.currentTrip.destination}
-</h2>
+        <h3>
+        ✈ Current Travel
+        </h3>
 
 
-<p>
-
-${profile.currentTrip.dates}
-
-<br>
-
-Status:
-${profile.currentTrip.status}
-
-</p>
+        <h2>
+        ${profile.currentTrip.destination}
+        </h2>
 
 
-<button onclick="openTrip('${profile.currentTrip.id}')">
+        <p>
+        ${profile.currentTrip.dates}
+        <br>
+        Status:
+        ${profile.currentTrip.status}
+        </p>
 
-Open Itinerary
 
-</button>
+        <button onclick="openTrip('${profile.currentTrip.id}')">
+
+        Open Itinerary
+
+        </button>
 
 
-</div>
+    </div>
 
 
 
-<div class="dashboard-card">
+    <div class="dashboard-card">
 
-<h3>
-Upcoming Trips
-</h3>
-
-
-${
-profile.upcomingTrips.map(trip => `
-
-<p>
-
-<strong>
-${trip.destination}
-</strong>
-
-<br>
-
-${trip.date}
-
-</p>
+        <h3>
+        Upcoming Trips
+        </h3>
 
 
-`).join("")
-}
+        ${
+        profile.upcomingTrips.map(trip => `
+
+            <p>
+            <strong>${trip.destination}</strong>
+            <br>
+            ${trip.date}
+            </p>
+
+        `).join("")
+        }
 
 
-</div>
+    </div>
 
 
 
+    <div class="dashboard-card">
 
-<div class="dashboard-card">
-
-<h3>
-Travel History
-</h3>
-
-
-${
-profile.travelHistory.map(trip => `
-
-<p>
-
-<strong>
-${trip.destination}
-</strong>
-
-<br>
-
-${trip.date}
-
-</p>
+        <h3>
+        Travel History
+        </h3>
 
 
-`).join("")
-}
+        ${
+        profile.travelHistory.map(trip => `
+
+            <p>
+            <strong>${trip.destination}</strong>
+            <br>
+            ${trip.date}
+            </p>
+
+        `).join("")
+        }
 
 
-</div>
+    </div>
 
-
-`;
-
+    `;
 
 
 })
@@ -186,36 +139,30 @@ ${trip.date}
 
 .catch(error => {
 
+    console.error(error);
 
-console.error(error);
+    container.innerHTML = `
 
+    <div class="dashboard-card">
 
-container.innerHTML = `
+        <h3>
+        Error Loading Profile
+        </h3>
 
-<div class="dashboard-card">
+        <p>
+        ${error.message}
+        </p>
 
-<h3>
-Error Loading Profile
-</h3>
+    </div>
 
-<p>
-${error.message}
-</p>
-
-</div>
-
-`;
-
-
+    `;
 
 });
 
 
 
-
 function openTrip(id) {
 
-window.location.href =
-`trip.html?id=${id}`;
+    window.location.href = `trip.html?id=${id}`;
 
 }
