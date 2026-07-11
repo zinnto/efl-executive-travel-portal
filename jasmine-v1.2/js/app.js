@@ -218,6 +218,79 @@ getWorkspaceStatus(){
 
 },
 
+exportJSON(storageKey, filename){
+
+    const data = this.loadLocal(storageKey);
+
+    if(data === null){
+
+        alert("No data found to export.");
+
+        return;
+
+    }
+
+    const exportObject = {};
+
+    // Match the original JSON structure
+    switch(storageKey){
+
+        case STORAGE_KEYS.trips:
+            exportObject.trips = data;
+            break;
+
+        case STORAGE_KEYS.executives:
+            exportObject.executives = data;
+            break;
+
+        case STORAGE_KEYS.settings:
+            exportObject.settings = data;
+            break;
+
+        case STORAGE_KEYS.hotels:
+            exportObject.hotels = data;
+            break;
+
+        case STORAGE_KEYS.airlines:
+            exportObject.airlines = data;
+            break;
+
+        case STORAGE_KEYS.countries:
+            exportObject.countries = data;
+            break;
+
+        default:
+            Object.assign(exportObject, data);
+
+    }
+
+    const blob = new Blob(
+
+        [JSON.stringify(exportObject, null, 2)],
+
+        { type: "application/json" }
+
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = filename;
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+
+    this.markWorkspaceExported();
+
+},
 
 
 

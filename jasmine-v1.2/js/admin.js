@@ -109,6 +109,23 @@ function startJasmine(){
 
 Jasmine.onReady(startJasmine);
 
+const exportTripsBtn = document.getElementById("exportTripsBtn");
+
+if(exportTripsBtn){
+
+    exportTripsBtn.addEventListener("click", () => {
+
+        Jasmine.exportJSON(
+
+            STORAGE_KEYS.trips,
+
+            "trips.json"
+
+        );
+
+    });
+
+}
 
 
 /*
