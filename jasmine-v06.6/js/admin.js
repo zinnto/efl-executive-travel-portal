@@ -2,24 +2,152 @@ console.log("Jasmine Admin Loaded");
 
 
 
-const buttons = document.querySelectorAll("button");
+const generateButton =
+document.getElementById("generate-executive");
 
 
 
-buttons.forEach(button => {
+
+generateButton.addEventListener("click", function(){
 
 
-button.addEventListener("click", function(){
+
+const id =
+document.getElementById("executive-id").value.trim();
 
 
-alert(
 
-"This module is being prepared."
+const name =
+document.getElementById("executive-name").value.trim();
+
+
+
+const title =
+document.getElementById("executive-title").value.trim();
+
+
+
+const company =
+document.getElementById("executive-company").value.trim();
+
+
+
+
+
+if(!id || !name || !title || !company){
+
+
+alert("Please complete all fields.");
+
+return;
+
+
+}
+
+
+
+
+
+const executiveData = {
+
+
+"profile": {
+
+
+"name": name,
+
+
+"title": title,
+
+
+"company": company
+
+
+},
+
+
+"trips": {
+
+
+"current": [],
+
+
+"upcoming": [],
+
+
+"history": []
+
+
+}
+
+
+};
+
+
+
+
+
+
+const fileContent =
+
+JSON.stringify(
+
+executiveData,
+
+null,
+
+2
 
 );
 
 
-});
+
+
+
+
+const blob = new Blob(
+
+[fileContent],
+
+{
+
+type:"application/json"
+
+}
+
+);
+
+
+
+
+
+const link = document.createElement("a");
+
+
+link.href =
+URL.createObjectURL(blob);
+
+
+
+link.download =
+id + ".json";
+
+
+
+link.click();
+
+
+
+URL.revokeObjectURL(link.href);
+
+
+
+alert(
+
+"Executive JSON created successfully."
+
+);
+
 
 
 });
