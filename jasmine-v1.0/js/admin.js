@@ -30,7 +30,9 @@ document.querySelectorAll(".page-section");
 navButtons.forEach(button => {
 
 
+
 button.addEventListener("click", function(){
+
 
 
 const target =
@@ -85,16 +87,43 @@ selected.classList.remove("hidden");
 
 
 /*
-LOAD EXECUTIVES
+EXECUTIVES
 */
+
+
+let executives = [];
+
+
+
 
 
 function loadExecutives(){
 
 
 
-const executives =
-Jasmine.getExecutives();
+executives =
+[...Jasmine.getExecutives()];
+
+
+
+renderExecutives();
+
+
+
+updateDashboard();
+
+
+
+}
+
+
+
+
+
+
+
+
+function renderExecutives(){
 
 
 
@@ -102,25 +131,6 @@ const list =
 document.getElementById(
 "executive-list"
 );
-
-
-
-const count =
-document.getElementById(
-"executive-count"
-);
-
-
-
-
-
-if(count){
-
-count.innerText =
-executives.length;
-
-}
-
 
 
 
@@ -134,7 +144,6 @@ return;
 
 
 
-
 if(executives.length === 0){
 
 
@@ -144,6 +153,7 @@ list.innerHTML =
 <p>
 No executives found.
 </p>
+
 `;
 
 return;
@@ -167,23 +177,32 @@ executives.map(executive => `
 
 
 <h3>
+
 ${executive.name}
+
 </h3>
 
 
 <p>
+
 ${executive.title}
+
 </p>
 
 
 <p>
+
 ${executive.company}
+
 </p>
 
 
-<span>
-${executive.status}
-</span>
+<p>
+
+${executive.email || ""}
+
+</p>
+
 
 
 </div>
@@ -203,12 +222,258 @@ ${executive.status}
 
 
 
+function updateDashboard(){
+
+
+
+const count =
+document.getElementById(
+"executive-count"
+);
+
+
+
+if(count){
+
+count.innerText =
+executives.length;
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
 /*
-WAIT FOR DATA ENGINE
+ADD EXECUTIVE FORM
 */
 
 
-function waitForJasmineData(){
+const newExecutiveButton =
+
+document.getElementById(
+"new-executive"
+);
+
+
+
+
+const executiveForm =
+
+document.getElementById(
+"executive-form"
+);
+
+
+
+
+
+
+
+if(newExecutiveButton){
+
+
+
+newExecutiveButton.addEventListener(
+"click",
+function(){
+
+
+executiveForm.classList.toggle(
+"hidden"
+);
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
+const saveExecutiveButton =
+
+document.getElementById(
+"save-executive"
+);
+
+
+
+
+
+
+if(saveExecutiveButton){
+
+
+
+saveExecutiveButton.addEventListener(
+"click",
+function(){
+
+
+
+const newExecutive = {
+
+
+id:
+
+"exec" +
+
+String(
+
+executives.length + 1
+
+).padStart(3,"0"),
+
+
+
+
+name:
+
+document.getElementById(
+"executive-name"
+).value,
+
+
+
+title:
+
+document.getElementById(
+"executive-title"
+).value,
+
+
+
+company:
+
+document.getElementById(
+"executive-company"
+).value,
+
+
+
+email:
+
+document.getElementById(
+"executive-email"
+).value,
+
+
+
+phone:
+
+document.getElementById(
+"executive-phone"
+).value,
+
+
+
+status:
+"Active"
+
+
+};
+
+
+
+
+
+
+if(!newExecutive.name){
+
+
+alert(
+"Please enter executive name."
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+executives.push(newExecutive);
+
+
+
+renderExecutives();
+
+
+
+updateDashboard();
+
+
+
+
+
+
+document.getElementById(
+"executive-name"
+).value="";
+
+document.getElementById(
+"executive-title"
+).value="";
+
+document.getElementById(
+"executive-company"
+).value="";
+
+document.getElementById(
+"executive-email"
+).value="";
+
+document.getElementById(
+"executive-phone"
+).value="";
+
+
+
+
+
+alert(
+"Executive added successfully."
+);
+
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
+/*
+WAIT FOR ENGINE
+*/
+
+
+function waitForJasmine(){
 
 
 
@@ -218,7 +483,7 @@ Jasmine &&
 
 Jasmine.data &&
 
-Jasmine.data.executives.length > 0
+Jasmine.data.executives
 
 ){
 
@@ -233,7 +498,7 @@ else{
 
 setTimeout(
 
-waitForJasmineData,
+waitForJasmine,
 
 200
 
@@ -250,4 +515,4 @@ waitForJasmineData,
 
 
 
-waitForJasmineData();
+waitForJasmine();
