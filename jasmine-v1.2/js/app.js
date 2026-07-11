@@ -77,9 +77,7 @@ const Jasmine = {
 
     },
 
-
-    ready: false,
-	workspace: {
+workspace: {
 
     modified: false,
 
@@ -87,7 +85,9 @@ const Jasmine = {
 
     githubConfirmed: false,
 
-    changes: {}
+    changes: {},
+
+    activity: []
 
 },
 
@@ -182,13 +182,32 @@ saveWorkspace(){
 
 },
 
-markWorkspaceModified(storageKey){
+markWorkspaceModified(storageKey, action = "Updated", details = ""){
 
     this.workspace.modified = true;
 
     this.workspace.githubConfirmed = false;
 
     this.workspace.changes[storageKey] = true;
+
+    this.workspace.activity.unshift({
+
+        time: new Date().toLocaleString(),
+
+        dataset: storageKey,
+
+        action,
+
+        details
+
+    });
+
+    // Keep only the most recent 100 actions
+    if(this.workspace.activity.length > 100){
+
+        this.workspace.activity.length = 100;
+
+    }
 
     this.saveWorkspace();
 
@@ -198,7 +217,19 @@ markWorkspaceExported(){
 
     this.workspace.modified = false;
 
-    this.workspace.lastExport = new Date().toISOString();
+    this.workspace.lastExport = new Date().toLocaleString();
+
+    this.workspace.activity.unshift({
+
+        time: this.workspace.lastExport,
+
+        dataset: "Workspace",
+
+        action: "Exported",
+
+        details: "JSON exported"
+
+    });
 
     this.saveWorkspace();
 
@@ -215,6 +246,11 @@ confirmGithubUpdated(){
 getWorkspaceStatus(){
 
     return structuredClone(this.workspace);
+
+},
+getWorkspaceActivity(){
+
+    return [...this.workspace.activity];
 
 },
 
