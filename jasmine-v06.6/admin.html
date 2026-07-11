@@ -25,15 +25,13 @@ Jasmine Admin
 
 
 
-<!-- SIDEBAR -->
-
 <aside class="sidebar">
 
 
 <div class="sidebar-brand">
 
 
-<img 
+<img
 src="assets/logo.png"
 class="logo"
 alt="Logo"
@@ -60,42 +58,31 @@ Admin Portal
 
 
 <button class="menu-btn active">
-
 Dashboard
-
 </button>
 
 
 <button class="menu-btn">
-
 Executives
-
 </button>
 
 
 <button class="menu-btn">
-
 Trips
-
 </button>
 
 
 <button class="menu-btn">
-
 Documents
-
 </button>
 
 
 <button class="menu-btn">
-
 Settings
-
 </button>
 
 
 </nav>
-
 
 
 </aside>
@@ -106,7 +93,6 @@ Settings
 
 
 
-<!-- MAIN AREA -->
 
 <main class="admin-main">
 
@@ -134,6 +120,7 @@ Manage executives, trips and documents
 
 
 
+
 <section id="dashboard-panel"
 class="admin-panel">
 
@@ -148,13 +135,11 @@ Welcome back
 
 
 <p>
-Your travel management dashboard.
+Your executive travel command centre.
 </p>
 
 
 </div>
-
-
 
 
 
@@ -206,7 +191,6 @@ Pending Actions
 </div>
 
 
-
 </section>
 
 
@@ -220,7 +204,6 @@ Pending Actions
 <section id="executives-panel"
 class="admin-panel"
 style="display:none;">
-
 
 
 <div class="dashboard-card">
@@ -241,7 +224,6 @@ Loading executives...
 </div>
 
 
-
 </section>
 
 
@@ -258,6 +240,8 @@ style="display:none;">
 
 
 
+
+
 <div class="dashboard-card">
 
 
@@ -266,12 +250,499 @@ Create New Trip
 </h2>
 
 
+<label>
+Executive
+</label>
+
+
+<select id="trip-executive">
+
+<option>
+Select Executive
+</option>
+
+</select>
+
+
+
+
+
+<label>
+Trip Name
+</label>
+
+
+<input
+id="trip-name"
+placeholder="India Regional Visit"
+>
+
+
+
+
+
+<label>
+Destination
+</label>
+
+
+<select id="trip-destination">
+
+
+<option>
+Select Destination
+</option>
+
+
+<option>
+Kenya - Nairobi
+</option>
+
+
+<option>
+Uganda - Kampala
+</option>
+
+
+<option>
+Tanzania - Dar es Salaam
+</option>
+
+
+<option>
+Rwanda - Kigali
+</option>
+
+
+<option>
+India - Mumbai
+</option>
+
+
+<option>
+India - Delhi
+</option>
+
+
+<option>
+Sri Lanka - Colombo
+</option>
+
+
+<option>
+UAE - Dubai
+</option>
+
+
+<option>
+Other
+</option>
+
+
+</select>
+
+
+
+
+
+
+
+<label>
+Departure Date
+</label>
+
+
+<input
+type="date"
+id="departure-date"
+>
+
+
+
+
+
+<label>
+Return Date
+</label>
+
+
+<input
+type="date"
+id="return-date"
+>
+
+
+
+
+
+<label>
+Status
+</label>
+
+
+<select id="trip-status">
+
+
+<option>
+Draft
+</option>
+
+
+<option>
+Pending Confirmation
+</option>
+
+
+<option selected>
+Confirmed
+</option>
+
+
+<option>
+Completed
+</option>
+
+
+<option>
+Cancelled
+</option>
+
+
+</select>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h2>
+Flight Details
+</h2>
+
+
+
+<label>
+Airline
+</label>
+
+
+<select id="flight-airline">
+
+
+<option>
+Select Airline
+</option>
+
+
+<option>
+Kenya Airways
+</option>
+
+
+<option>
+Emirates
+</option>
+
+
+<option>
+Qatar Airways
+</option>
+
+
+<option>
+Ethiopian Airlines
+</option>
+
+
+<option>
+RwandAir
+</option>
+
+
+<option>
+Turkish Airlines
+</option>
+
+
+<option>
+British Airways
+</option>
+
+
+<option>
+Air India
+</option>
+
+
+<option>
+SriLankan Airlines
+</option>
+
+
+<option>
+Other
+</option>
+
+
+</select>
+
+
+
+
+
+<label>
+Flight Number
+</label>
+
+
+<input
+id="flight-number"
+placeholder="KQ"
+>
+
+
+
+
+
+<label>
+Route
+</label>
+
+
+<input
+id="flight-route"
+placeholder="Nairobi - Mumbai"
+>
+
+
+
+
+
+<label>
+Departure Time
+</label>
+
+
+<input
+type="time"
+id="flight-time"
+>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h2>
+Accommodation
+</h2>
+
+
+
+<label>
+Hotel Name
+</label>
+
+
+<input
+id="hotel-name"
+placeholder="Hotel Name"
+>
+
+
+
+
+
+<label>
+Check In
+</label>
+
+
+<input
+type="date"
+id="hotel-checkin"
+>
+
+
+
+
+
+<label>
+Check Out
+</label>
+
+
+<input
+type="date"
+id="hotel-checkout"
+>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h2>
+Schedule
+</h2>
+
+
+
+<label>
+Date
+</label>
+
+
+<input
+type="date"
+id="schedule-date"
+>
+
+
+
+<label>
+Time
+</label>
+
+
+<input
+type="time"
+id="schedule-time"
+>
+
+
+
+
+<label>
+Event
+</label>
+
+
+<input
+id="schedule-event"
+placeholder="Business Meeting"
+>
+
+
+
+
+<label>
+Location
+</label>
+
+
+<input
+id="schedule-location"
+placeholder="Kampala"
+>
+
+
+
+
+<button id="add-schedule">
+
++ Add Event
+
+</button>
+
+
+
+
+<div id="schedule-preview">
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<h2>
+Documents
+</h2>
+
+
 <p>
-Trip builder will load here.
+Document links will be added here.
 </p>
 
 
 </div>
+
+
+
+
+
+
+
+
+
+<div class="dashboard-card">
+
+
+<label>
+Trip ID
+</label>
+
+
+<input
+id="trip-id"
+placeholder="wasantha-india-2026"
+>
+
+
+<button id="generate-trip">
+
+Generate Trip JSON
+
+</button>
+
+
+</div>
+
+
 
 
 
@@ -290,7 +761,6 @@ class="admin-panel"
 style="display:none;">
 
 
-
 <div class="dashboard-card">
 
 
@@ -300,12 +770,11 @@ Documents
 
 
 <p>
-Document management will load here.
+Document management coming next.
 </p>
 
 
 </div>
-
 
 
 </section>
@@ -317,10 +786,10 @@ Document management will load here.
 
 
 
+
 <section id="settings-panel"
 class="admin-panel"
 style="display:none;">
-
 
 
 <div class="dashboard-card">
@@ -339,8 +808,8 @@ Jasmine configuration.
 </div>
 
 
-
 </section>
+
 
 
 
@@ -351,8 +820,8 @@ Jasmine configuration.
 </main>
 
 
-
 </div>
+
 
 
 
