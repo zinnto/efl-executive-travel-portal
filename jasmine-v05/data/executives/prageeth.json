@@ -12,6 +12,8 @@
 
   "currentTrip": {
 
+    "id": "prageeth-uganda-2026",
+
     "destination": "Uganda",
 
     "dates": "20 - 27 July 2026",
@@ -33,6 +35,15 @@
   ],
 
 
-  "travelHistory": []
+  "travelHistory": [
+
+    {
+      "destination": "Previous Business Travel",
+
+      "date": "2026"
+
+    }
+
+  ]
 
 }
