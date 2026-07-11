@@ -1,7 +1,7 @@
 /*
 Jasmine v1.0
 admin.js
-Stable Build
+Controller Build 0.5
 */
 
 
@@ -13,43 +13,67 @@ let trips = [];
 
 
 
+
+
 /*
 NAVIGATION
 */
 
 
-const navButtons = document.querySelectorAll(".nav-button");
-const sections = document.querySelectorAll(".page-section");
+const navButtons =
+document.querySelectorAll(".nav-button");
+
+
+const sections =
+document.querySelectorAll(".page-section");
+
 
 
 navButtons.forEach(button => {
 
-    button.addEventListener("click", () => {
 
-        const page = button.dataset.page;
-
-
-        navButtons.forEach(btn => {
-            btn.classList.remove("active");
-        });
+button.onclick = function(){
 
 
-        button.classList.add("active");
+const target =
+this.dataset.page;
 
 
-        sections.forEach(section => {
-            section.classList.add("hidden");
-        });
+
+navButtons.forEach(btn => {
+
+btn.classList.remove("active");
+
+});
 
 
-        const selected = document.getElementById(page);
+this.classList.add("active");
 
 
-        if(selected){
-            selected.classList.remove("hidden");
-        }
 
-    });
+sections.forEach(section => {
+
+section.classList.add("hidden");
+
+});
+
+
+
+const page =
+document.getElementById(target);
+
+
+
+if(page){
+
+page.classList.remove("hidden");
+
+}
+
+
+
+};
+
 
 });
 
@@ -57,24 +81,21 @@ navButtons.forEach(button => {
 
 
 
+
+
+
 /*
-WAIT FOR DATA
+INITIAL LOAD
 */
 
 
-function startJasmine(){
+function initialiseJasmine(){
 
 
-    executives = [...Jasmine.getExecutives()];
+loadExecutives();
 
 
-    loadExecutiveList();
-
-    updateExecutiveCount();
-
-    populateExecutiveDropdown();
-
-    populateTripOptions();
+loadTripDropdowns();
 
 
 }
@@ -84,20 +105,27 @@ function startJasmine(){
 function waitForJasmine(){
 
 
-    if(
-        window.Jasmine &&
-        Jasmine.data &&
-        Jasmine.data.executives.length > 0
-    ){
+if(
+window.Jasmine &&
+Jasmine.data
+){
 
-        startJasmine();
 
-    }
-    else{
+initialiseJasmine();
 
-        setTimeout(waitForJasmine,300);
 
-    }
+}
+
+else{
+
+
+setTimeout(
+waitForJasmine,
+300
+);
+
+
+}
 
 
 }
@@ -111,45 +139,86 @@ EXECUTIVES
 */
 
 
-function loadExecutiveList(){
+function loadExecutives(){
 
 
-    const container =
-    document.getElementById("executive-list");
-
-
-    if(!container){
-        return;
-    }
+executives =
+[...Jasmine.getExecutives()];
 
 
 
-    if(executives.length === 0){
-
-        container.innerHTML =
-        "<p>No executives found.</p>";
-
-        return;
-
-    }
+renderExecutives();
 
 
+updateExecutiveCount();
 
-    container.innerHTML = executives.map(executive => `
 
-        <div class="executive-card">
+populateExecutiveDropdown();
 
-            <h3>${executive.name}</h3>
 
-            <p>${executive.title}</p>
+}
 
-            <p>${executive.company}</p>
 
-            <p>${executive.status}</p>
 
-        </div>
 
-    `).join("");
+
+function renderExecutives(){
+
+
+const list =
+document.getElementById(
+"executive-list"
+);
+
+
+
+if(!list){
+
+return;
+
+}
+
+
+
+if(executives.length === 0){
+
+
+list.innerHTML =
+"<p>No executives found.</p>";
+
+
+return;
+
+}
+
+
+
+
+list.innerHTML = executives.map(executive => `
+
+
+<div class="executive-card">
+
+
+<h3>
+${executive.name}
+</h3>
+
+
+<p>
+${executive.title}
+</p>
+
+
+<p>
+${executive.company}
+</p>
+
+
+</div>
+
+
+`).join("");
 
 
 
@@ -162,19 +231,68 @@ function loadExecutiveList(){
 function updateExecutiveCount(){
 
 
-    const count =
-    document.getElementById("executive-count");
+const count =
+document.getElementById(
+"executive-count"
+);
 
 
-    if(count){
 
-        count.innerText =
-        executives.length;
+if(count){
 
-    }
+count.innerText =
+executives.length;
+
+}
+
 
 
 }
+
+
+
+
+
+function populateExecutiveDropdown(){
+
+
+const select =
+document.getElementById(
+"trip-executive"
+);
+
+
+
+if(!select){
+
+return;
+
+}
+
+
+
+select.innerHTML =
+"<option>Select Executive</option>";
+
+
+
+executives.forEach(executive=>{
+
+
+select.innerHTML +=
+
+`
+<option value="${executive.id}">
+${executive.name}
+</option>
+`;
+
+
+});
+
+
+}
+
 
 
 
@@ -189,25 +307,34 @@ ADD EXECUTIVE
 
 
 const newExecutive =
-document.getElementById("new-executive");
+document.getElementById(
+"new-executive"
+);
 
 
 const executiveForm =
-document.getElementById("executive-form");
+document.getElementById(
+"executive-form"
+);
 
 
 
 if(newExecutive){
 
 
-    newExecutive.onclick = () => {
+newExecutive.onclick = function(){
 
-        executiveForm.classList.toggle("hidden");
 
-    };
+executiveForm.classList.toggle(
+"hidden"
+);
+
+
+};
 
 
 }
+
 
 
 
@@ -215,82 +342,102 @@ if(newExecutive){
 
 
 const saveExecutive =
-document.getElementById("save-executive");
+document.getElementById(
+"save-executive"
+);
 
 
 
 if(saveExecutive){
 
 
-saveExecutive.onclick = () => {
+saveExecutive.onclick = function(){
 
 
 
-    const executive = {
+const executive = {
 
 
-        id:
-        "exec" +
-        String(executives.length + 1).padStart(3,"0"),
+id:
+"exec" +
+String(
+executives.length + 1
+).padStart(3,"0"),
 
 
-        name:
-        document.getElementById("executive-name").value,
+name:
+document.getElementById(
+"executive-name"
+).value,
 
 
-        title:
-        document.getElementById("executive-title").value,
+title:
+document.getElementById(
+"executive-title"
+).value,
 
 
-        company:
-        document.getElementById("executive-company").value,
+company:
+document.getElementById(
+"executive-company"
+).value,
 
 
-        email:
-        document.getElementById("executive-email").value,
+email:
+document.getElementById(
+"executive-email"
+).value,
 
 
-        phone:
-        document.getElementById("executive-phone").value,
+phone:
+document.getElementById(
+"executive-phone"
+).value,
 
 
-        status:
-        "Active"
-
-
-    };
-
-
-
-    if(!executive.name){
-
-        alert("Executive name required");
-
-        return;
-
-    }
-
-
-
-    executives.push(executive);
-
-
-    loadExecutiveList();
-
-    updateExecutiveCount();
-
-    populateExecutiveDropdown();
-
-
-
-    executiveForm.classList.add("hidden");
+status:
+"Active"
 
 
 };
 
 
 
+if(!executive.name){
+
+alert(
+"Executive name required"
+);
+
+return;
+
 }
+
+
+
+executives.push(executive);
+
+
+
+renderExecutives();
+
+
+updateExecutiveCount();
+
+
+populateExecutiveDropdown();
+
+
+executiveForm.classList.add(
+"hidden"
+);
+
+
+};
+
+
+}
+
 
 
 
@@ -300,82 +447,54 @@ saveExecutive.onclick = () => {
 
 
 /*
-TRIPS
+TRIP DROPDOWNS
 */
 
 
-function populateTripOptions(){
+function loadTripDropdowns(){
 
 
-    const executiveDropdown =
-    document.getElementById("trip-executive");
-
-
-    const countryDropdown =
-    document.getElementById("trip-country");
-
-
-    const airlineDropdown =
-    document.getElementById("trip-airline");
+const countrySelect =
+document.getElementById(
+"trip-country"
+);
 
 
 
-
-
-    if(executiveDropdown){
-
-
-        executiveDropdown.innerHTML =
-        "<option>Select Executive</option>";
-
-
-
-        executives.forEach(executive => {
-
-
-            executiveDropdown.innerHTML +=
-
-            `
-            <option value="${executive.id}">
-            ${executive.name}
-            </option>
-            `;
-
-
-        });
-
-
-    }
+const airlineSelect =
+document.getElementById(
+"trip-airline"
+);
 
 
 
 
 
-
-    if(countryDropdown){
-
-
-        countryDropdown.innerHTML =
-        "<option>Select Country</option>";
+if(countrySelect){
 
 
-
-        Jasmine.getCountries().forEach(country => {
-
-
-            countryDropdown.innerHTML +=
-
-            `
-            <option>
-            ${country.name}
-            </option>
-            `;
+countrySelect.innerHTML =
+"<option>Select Country</option>";
 
 
-        });
+
+Jasmine.getCountries()
+.forEach(country=>{
 
 
-    }
+countrySelect.innerHTML +=
+
+`
+<option>
+${country.name}
+</option>
+`;
+
+
+});
+
+
+}
 
 
 
@@ -383,34 +502,36 @@ function populateTripOptions(){
 
 
 
-    if(airlineDropdown){
+if(airlineSelect){
 
 
-        airlineDropdown.innerHTML =
-        "<option>Select Airline</option>";
+airlineSelect.innerHTML =
+"<option>Select Airline</option>";
 
 
 
-        Jasmine.getAirlines().forEach(airline => {
+Jasmine.getAirlines()
+.forEach(airline=>{
 
 
-            airlineDropdown.innerHTML +=
+airlineSelect.innerHTML +=
 
-            `
-            <option>
-            ${airline}
-            </option>
-            `;
-
-
-        });
+`
+<option>
+${airline}
+</option>
+`;
 
 
-    }
+});
+
+
+}
 
 
 
 }
+
 
 
 
@@ -420,39 +541,46 @@ function populateTripOptions(){
 
 
 const countrySelect =
-document.getElementById("trip-country");
+document.getElementById(
+"trip-country"
+);
 
 
 
 if(countrySelect){
 
 
-countrySelect.onchange = () => {
+countrySelect.onchange=function(){
 
 
-    const citySelect =
-    document.getElementById("trip-city");
-
-
-    citySelect.innerHTML =
-    "<option>Select City</option>";
+const citySelect =
+document.getElementById(
+"trip-city"
+);
 
 
 
-    Jasmine.getCities(countrySelect.value)
-    .forEach(city => {
+citySelect.innerHTML =
+"<option>Select City</option>";
 
 
-        citySelect.innerHTML +=
 
-        `
-        <option>
-        ${city}
-        </option>
-        `;
+Jasmine.getCities(
+this.value
+)
+.forEach(city=>{
 
 
-    });
+citySelect.innerHTML +=
+
+`
+<option>
+${city}
+</option>
+`;
+
+
+});
 
 
 
@@ -468,30 +596,41 @@ countrySelect.onchange = () => {
 
 
 
+
+/*
+TRIP CREATION
+*/
+
+
 const newTrip =
-document.getElementById("new-trip");
+document.getElementById(
+"new-trip"
+);
 
 
 
 const tripForm =
-document.getElementById("trip-form");
+document.getElementById(
+"trip-form"
+);
 
 
 
 if(newTrip){
 
 
-newTrip.onclick = () => {
+newTrip.onclick=function(){
 
 
-    tripForm.classList.toggle("hidden");
+tripForm.classList.toggle(
+"hidden"
+);
 
 
 };
 
 
 }
-
 
 
 
@@ -500,72 +639,93 @@ newTrip.onclick = () => {
 
 
 const saveTrip =
-document.getElementById("save-trip");
+document.getElementById(
+"save-trip"
+);
 
 
 
 if(saveTrip){
 
 
-saveTrip.onclick = () => {
-
-
-    const trip = {
-
-
-        id:
-        "trip" +
-        String(trips.length + 1).padStart(3,"0"),
-
-
-        executive:
-        document.getElementById("trip-executive").value,
-
-
-        country:
-        document.getElementById("trip-country").value,
-
-
-        city:
-        document.getElementById("trip-city").value,
-
-
-        airline:
-        document.getElementById("trip-airline").value,
-
-
-        departure:
-        document.getElementById("trip-departure").value,
-
-
-        return:
-        document.getElementById("trip-return").value,
-
-
-        purpose:
-        document.getElementById("trip-purpose").value
-
-
-    };
+saveTrip.onclick=function(){
 
 
 
-    trips.push(trip);
+const trip={
 
 
-    renderTrips();
+id:
+"trip" +
+String(
+trips.length+1
+).padStart(3,"0"),
 
 
-    tripForm.classList.add("hidden");
+executive:
+document.getElementById(
+"trip-executive"
+).value,
+
+
+country:
+document.getElementById(
+"trip-country"
+).value,
+
+
+city:
+document.getElementById(
+"trip-city"
+).value,
+
+
+airline:
+document.getElementById(
+"trip-airline"
+).value,
+
+
+departure:
+document.getElementById(
+"trip-departure"
+).value,
+
+
+return:
+document.getElementById(
+"trip-return"
+).value,
+
+
+purpose:
+document.getElementById(
+"trip-purpose"
+).value
 
 
 };
 
 
 
+trips.push(trip);
+
+
+
+renderTrips();
+
+
+
+tripForm.classList.add(
+"hidden"
+);
+
+
+
+};
+
+
 }
-
-
 
 
 
@@ -575,60 +735,53 @@ saveTrip.onclick = () => {
 function renderTrips(){
 
 
-    const list =
-    document.getElementById("trip-list");
-
-
-    if(!list){
-        return;
-    }
+const list =
+document.getElementById(
+"trip-list"
+);
 
 
 
-    if(trips.length === 0){
+if(!list){
 
-        list.innerHTML =
-        "<p>No trips created yet.</p>";
+return;
 
-        return;
-
-    }
+}
 
 
 
+if(trips.length===0){
 
-    list.innerHTML = trips.map(trip => `
+list.innerHTML =
+"<p>No trips created yet.</p>";
 
+return;
 
-        <div class="executive-card">
-
-
-            <h3>
-            ${trip.city}, ${trip.country}
-            </h3>
+}
 
 
-            <p>
-            Executive: ${trip.executive}
-            </p>
 
 
-            <p>
-            ${trip.airline}
-            </p>
+list.innerHTML =
+trips.map(trip=>`
 
+<div class="executive-card">
 
-            <p>
-            ${trip.departure}
-            -
-            ${trip.return}
-            </p>
+<h3>
+${trip.city}, ${trip.country}
+</h3>
 
+<p>
+${trip.airline}
+</p>
 
-        </div>
+<p>
+${trip.departure} - ${trip.return}
+</p>
 
+</div>
 
-    `).join("");
+`).join("");
 
 
 
