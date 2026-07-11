@@ -1,22 +1,24 @@
 {
   "executives": [
     {
-      "id": "wasantha",
+      "id": "exec001",
       "name": "Wasantha Ranasinghe",
       "title": "Director - East Africa",
-      "file": "data/executives/wasantha.json"
+      "company": "EFL Global",
+      "email": "",
+      "phone": "",
+      "assistant": "Zenat",
+      "status": "Active"
     },
     {
-      "id": "prageeth",
+      "id": "exec002",
       "name": "Prageeth Seneviratne",
       "title": "Head of Ocean Freight - East Africa",
-      "file": "data/executives/prageeth.json"
-    },
-    {
-      "id": "kavinda",
-      "name": "Kavinda Atapattu",
-      "title": "Country Manager",
-      "file": "data/executives/kavinda.json"
+      "company": "EFL Global",
+      "email": "",
+      "phone": "",
+      "assistant": "Zenat",
+      "status": "Active"
     }
   ]
 }
