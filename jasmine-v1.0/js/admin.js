@@ -92,8 +92,24 @@ INITIAL LOAD
 function initialiseJasmine(){
 
 
-loadExecutives();
+if(
 
+Jasmine.data.executives.length === 0
+
+){
+
+setTimeout(
+initialiseJasmine,
+300
+);
+
+return;
+
+}
+
+
+
+loadExecutives();
 
 loadTripDropdowns();
 
