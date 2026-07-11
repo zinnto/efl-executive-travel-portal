@@ -387,8 +387,6 @@ Trip Manager
 
 
 
-
-
 <div id="trip-list">
 
 
@@ -400,9 +398,7 @@ No trips created yet.
 </div>
 
 
-
 </div>
-
 
 
 
@@ -419,24 +415,11 @@ Create New Trip
 </h2>
 
 
-
-
-
 <label>
 Executive
 </label>
 
-
-<select id="trip-executive">
-
-<option>
-Select Executive
-</option>
-
-</select>
-
-
-
+<select id="trip-executive"></select>
 
 
 
@@ -445,17 +428,7 @@ Select Executive
 Country
 </label>
 
-
-<select id="trip-country">
-
-<option>
-Select Country
-</option>
-
-</select>
-
-
-
+<select id="trip-country"></select>
 
 
 
@@ -464,17 +437,7 @@ Select Country
 City
 </label>
 
-
-<select id="trip-city">
-
-<option>
-Select City
-</option>
-
-</select>
-
-
-
+<select id="trip-city"></select>
 
 
 
@@ -483,17 +446,7 @@ Select City
 Airline
 </label>
 
-
-<select id="trip-airline">
-
-<option>
-Select Airline
-</option>
-
-</select>
-
-
-
+<select id="trip-airline"></select>
 
 
 
@@ -502,22 +455,16 @@ Select Airline
 Departure Date
 </label>
 
-
-<input
+<input 
 type="date"
 id="trip-departure"
 >
 
 
 
-
-
-
-
 <label>
 Return Date
 </label>
-
 
 <input
 type="date"
@@ -527,21 +474,14 @@ id="trip-return"
 
 
 
-
-
-
 <label>
 Trip Purpose
 </label>
 
-
 <input
 id="trip-purpose"
-placeholder="Regional meeting"
+placeholder="Business meeting"
 >
-
-
-
 
 
 
@@ -558,7 +498,106 @@ Save Trip
 
 
 
+
+
+
+
+
+
+
+<div id="trip-workspace"
+class="card hidden">
+
+
+<h2>
+Trip Details
+</h2>
+
+
+
+<div id="trip-summary">
+
+
+</div>
+
+
+
+
+
+<hr>
+
+
+
+<h3>
+Flight Details
+</h3>
+
+
+<p>
+Coming next
+</p>
+
+
+
+
+
+<h3>
+Hotel Details
+</h3>
+
+
+<p>
+Coming next
+</p>
+
+
+
+
+
+<h3>
+Schedule
+</h3>
+
+
+<p>
+Coming next
+</p>
+
+
+
+
+
+<h3>
+Documents
+</h3>
+
+
+<p>
+Coming next
+</p>
+
+
+
+
+
+<h3>
+Readiness
+</h3>
+
+
+<p>
+Coming next
+</p>
+
+
+
+</div>
+
+
+
 </section>
+
+	
 
 
 
