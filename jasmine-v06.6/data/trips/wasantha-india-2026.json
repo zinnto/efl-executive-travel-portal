@@ -95,6 +95,43 @@
   ],
 
 
+  "readiness": [
+
+    {
+
+      "item": "Flight Ticket",
+
+      "status": "Complete"
+
+    },
+
+    {
+
+      "item": "Hotel",
+
+      "status": "Pending"
+
+    },
+
+    {
+
+      "item": "Documents",
+
+      "status": "Pending"
+
+    },
+
+    {
+
+      "item": "Schedule",
+
+      "status": "Complete"
+
+    }
+
+  ],
+
+
   "contacts": [
 
     {
