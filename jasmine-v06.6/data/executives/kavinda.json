@@ -10,20 +10,16 @@
   },
 
 
-  "currentTrip": {
+  "trips": {
 
-    "destination": "India",
-
-    "dates": "August 2026",
-
-    "status": "Planning"
-
-  },
+    "current": [],
 
 
-  "upcomingTrips": [],
+    "upcoming": [],
 
 
-  "travelHistory": []
+    "history": []
+
+  }
 
 }
