@@ -99,6 +99,73 @@ ${error.message}
 
 
 
+function createTripCard(trip, status){
+
+
+return `
+
+
+<div class="trip-card">
+
+
+<h3>
+
+🌍 ${trip.destination}
+
+</h3>
+
+
+
+<p>
+
+<strong>
+
+${trip.name}
+
+</strong>
+
+</p>
+
+
+
+<p>
+
+${trip.dates}
+
+</p>
+
+
+
+<p>
+
+${status}
+
+</p>
+
+
+
+<button onclick="openTrip('${trip.id}')">
+
+View Travel Details
+
+</button>
+
+
+
+</div>
+
+
+`;
+
+}
+
+
+
+
+
+
+
+
 function displayExecutive(profile){
 
 
@@ -166,37 +233,14 @@ currentTrips.length
 
 ?
 
-currentTrips.map(trip => `
+currentTrips.map(trip =>
 
+createTripCard(
+trip,
+"🟢 Current"
+)
 
-<p>
-
-<strong>
-
-${trip.destination}
-
-</strong>
-
-<br>
-
-${trip.name}
-
-<br>
-
-${trip.dates}
-
-</p>
-
-
-<button onclick="openTrip('${trip.id}')">
-
-View Travel Details
-
-</button>
-
-
-`).join("")
-
+).join("")
 
 :
 
@@ -228,37 +272,14 @@ upcomingTrips.length
 
 ?
 
-upcomingTrips.map(trip => `
+upcomingTrips.map(trip =>
 
+createTripCard(
+trip,
+"🔵 Upcoming"
+)
 
-<p>
-
-<strong>
-
-${trip.destination}
-
-</strong>
-
-<br>
-
-${trip.name}
-
-<br>
-
-${trip.dates}
-
-</p>
-
-
-<button onclick="openTrip('${trip.id}')">
-
-View Travel Details
-
-</button>
-
-
-`).join("")
-
+).join("")
 
 :
 
@@ -290,37 +311,14 @@ historyTrips.length
 
 ?
 
-historyTrips.map(trip => `
+historyTrips.map(trip =>
 
+createTripCard(
+trip,
+"⚪ Completed"
+)
 
-<p>
-
-<strong>
-
-${trip.destination}
-
-</strong>
-
-<br>
-
-${trip.name}
-
-<br>
-
-${trip.dates}
-
-</p>
-
-
-<button onclick="openTrip('${trip.id}')">
-
-View Travel Details
-
-</button>
-
-
-`).join("")
-
+).join("")
 
 :
 
@@ -336,12 +334,13 @@ View Travel Details
 
 
 
-
 `;
 
 
 
 }
+
+
 
 
 
