@@ -57,10 +57,9 @@ fetch("data/executives.json")
 
 .then(profile => {
 
-console.log(profile);
-console.log(profile.currentTrip);
+    console.log("Current Trip:", profile.currentTrip);
 
-container.innerHTML = `
+    container.innerHTML = ``
 
 
 <div class="dashboard-card">
