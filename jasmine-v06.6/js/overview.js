@@ -2,30 +2,15 @@ const container =
 document.getElementById("overview-container");
 
 
-
 fetch("data/executives.json")
 
-.then(response => {
-
-    if (!response.ok) {
-
-        throw new Error("Could not load executives");
-
-    }
-
-    return response.json();
-
-})
-
+.then(response => response.json())
 
 .then(data => {
 
-
-    loadExecutives(data.executives);
-
+loadExecutives(data.executives);
 
 })
-
 
 .catch(error => {
 
@@ -52,6 +37,10 @@ ${error.message}
 
 
 
+let attentionItems = [];
+
+
+
 
 
 
@@ -70,11 +59,11 @@ return fetch(executive.file)
 
 return {
 
-    id: executive.id,
+id: executive.id,
 
-    profile: profile.profile,
+profile: profile.profile,
 
-    trips: profile.trips
+trips: profile.trips
 
 };
 
@@ -83,8 +72,6 @@ return {
 
 
 });
-
-
 
 
 
@@ -107,29 +94,23 @@ displayOverview(results);
 
 
 
+function calculateReadiness(items){
 
-function calculateReadiness(readiness){
 
-
-if (!readiness || readiness.length === 0){
+if(!items || items.length === 0){
 
 return 0;
 
 }
 
 
-
-const completed = readiness.filter(item =>
-
-item.status === "Complete"
-
-).length;
-
+const completed =
+items.filter(item => item.status === "Complete").length;
 
 
 return Math.round(
 
-(completed / readiness.length) * 100
+(completed / items.length) * 100
 
 );
 
@@ -142,32 +123,31 @@ return Math.round(
 
 
 
+function progressBar(percent){
 
 
-function loadTrip(tripID){
+return `
 
 
-return fetch(`data/trips/${tripID}.json`)
-
-.then(response => {
+<div class="progress-container">
 
 
-if(!response.ok){
+<div 
+class="progress-bar"
+style="width:${percent}%">
 
-throw new Error("Trip data not found");
-
-}
-
-
-return response.json();
+</div>
 
 
-});
+</div>
 
+
+`;
 
 }
 
 
+ 
 
 
 
@@ -183,17 +163,11 @@ const cards = executives.map(executive => {
 
 
 const currentTrip =
+executive.trips.current[0];
 
-executive.trips.current.length
 
-?
-
-executive.trips.current[0]
-
-:
-
-null;
-
+const upcoming =
+executive.trips.upcoming;
 
 
 
@@ -202,9 +176,7 @@ if(!currentTrip){
 
 return `
 
-
 <div class="dashboard-card executive-card">
-
 
 <h2>
 
@@ -216,10 +188,6 @@ ${executive.profile.name}
 <p>
 
 ${executive.profile.title}
-
-<br>
-
-${executive.profile.company}
 
 </p>
 
@@ -240,8 +208,8 @@ Open Profile
 
 </div>
 
-
 `;
+
 
 
 }
@@ -249,16 +217,41 @@ Open Profile
 
 
 
+return fetch(`data/trips/${currentTrip.id}.json`)
 
-return loadTrip(currentTrip.id)
+.then(response => response.json())
 
 .then(trip => {
 
 
 
-const readiness =
-
+const percentage =
 calculateReadiness(trip.readiness);
+
+
+
+trip.readiness.forEach(item => {
+
+
+if(item.status !== "Complete"){
+
+
+attentionItems.push({
+
+executive:
+executive.profile.name,
+
+item:item.item
+
+
+});
+
+
+}
+
+
+});
+
 
 
 
@@ -280,12 +273,7 @@ ${executive.profile.name}
 
 ${executive.profile.title}
 
-<br>
-
-${executive.profile.company}
-
 </p>
-
 
 
 
@@ -296,21 +284,15 @@ ${executive.profile.company}
 </h3>
 
 
-
 <p>
 
-<strong>
-
 ${currentTrip.name}
-
-</strong>
 
 <br>
 
 ${currentTrip.dates}
 
 </p>
-
 
 
 
@@ -322,30 +304,48 @@ Travel Readiness
 
 <strong>
 
-${readiness}%
+${percentage}%
 
 </strong>
 
 </p>
 
 
+${progressBar(percentage)}
 
-<p>
+
+
+<h4>
+
+Upcoming Trips
+
+</h4>
+
 
 ${
-readiness === 100
+upcoming.length
 
 ?
 
-"✅ Ready"
+upcoming.map(trip => `
+
+<p>
+
+✈ ${trip.destination}
+
+<br>
+
+${trip.dates}
+
+</p>
+
+`).join("")
 
 :
 
-"⏳ Pending Items"
+"<p>No upcoming trips</p>"
 
 }
-
-</p>
 
 
 
@@ -372,6 +372,7 @@ Open Profile
 
 
 
+
 Promise.all(cards)
 
 .then(results => {
@@ -380,12 +381,81 @@ Promise.all(cards)
 container.innerHTML = results.join("");
 
 
+
+showAttention();
+
+
 });
 
 
 
 }
 
+
+
+
+
+
+function showAttention(){
+
+
+if(attentionItems.length === 0){
+
+return;
+
+}
+
+
+
+container.innerHTML += `
+
+
+<div class="dashboard-card">
+
+
+<h2>
+
+⚠ Needs Attention
+
+</h2>
+
+
+
+${
+attentionItems.map(item => `
+
+
+<p>
+
+<strong>
+
+${item.executive}
+
+</strong>
+
+<br>
+
+${item.item}
+
+pending
+
+</p>
+
+
+`).join("")
+
+}
+
+
+
+</div>
+
+
+`;
+
+
+
+}
 
 
 
