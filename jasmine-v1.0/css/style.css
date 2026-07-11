@@ -537,3 +537,30 @@ font-weight:600;
 margin-bottom:6px;
 
 }
+select,
+input {
+
+width:100%;
+
+padding:12px;
+
+border-radius:12px;
+
+border:1px solid #ddd;
+
+margin-bottom:15px;
+
+font-size:15px;
+
+}
+
+
+label {
+
+display:block;
+
+font-weight:600;
+
+margin-bottom:6px;
+
+}
