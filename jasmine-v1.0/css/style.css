@@ -495,3 +495,45 @@ padding:20px;
 
 
 }
+.section-header {
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:20px;
+
+}
+
+
+
+input,
+select {
+
+width:100%;
+
+padding:12px;
+
+border-radius:12px;
+
+border:1px solid #ddd;
+
+margin-bottom:15px;
+
+font-size:15px;
+
+}
+
+
+
+label {
+
+display:block;
+
+font-weight:600;
+
+margin-bottom:6px;
+
+}
