@@ -19,6 +19,16 @@
       "phone": "",
       "assistant": "Zenat",
       "status": "Active"
+    },
+    {
+      "id": "exec003",
+      "name": "Kavinda Atapattu",
+      "title": "Country ManagerEFL Global - Kenya",
+      "company": "",
+      "email": "kavindaa@efl.global",
+      "phone": "0735156546",
+      "assistant": "",
+      "status": "Active"
     }
   ]
 }
