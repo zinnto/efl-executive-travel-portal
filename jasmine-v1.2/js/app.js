@@ -102,7 +102,14 @@ const Jasmine = {
 
         try {
 
-            const response = await fetch(path);
+            // Bypass both the browser's HTTP cache and GitHub Pages' CDN
+            // cache — without this, a fresh publish can take several
+            // minutes to actually show up, and inconsistently between
+            // browsers/devices depending which CDN edge they hit.
+
+            const cacheBustedPath = path + (path.includes("?") ? "&" : "?") + "_=" + Date.now();
+
+            const response = await fetch(cacheBustedPath, { cache: "no-store" });
 
             if(!response.ok){
 
