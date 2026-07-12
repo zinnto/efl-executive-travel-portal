@@ -188,13 +188,21 @@ Active Trips
 
 </div>
 
-<div class="card">
+<div class="card" id="workspaceCard">
 
-    <h3>Workspace</h3>
+    <h3>Workspace Status</h3>
 
-    <button id="exportTripsBtn">
-        Export Trips JSON
-    </button>
+    <div id="workspaceStatus"></div>
+
+    <div class="mt-3">
+        <button id="exportTripsBtn">
+            Export Trips JSON
+        </button>
+
+        <button id="confirmGithubBtn">
+            Confirm GitHub Updated
+        </button>
+    </div>
 
 </div>
 
@@ -537,7 +545,11 @@ tracker will only check the items you select here.
 </div>
 
 
-
+<button
+    id="delete-trip"
+    class="danger-button">
+    Delete Trip
+</button>
 
 <button id="save-trip">
 

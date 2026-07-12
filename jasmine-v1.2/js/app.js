@@ -142,15 +142,19 @@ workspace: {
     },
 
 
-   saveLocal(key, value){
+saveLocal(key, value, track = true){
 
-    try {
+    try{
 
         localStorage.setItem(key, JSON.stringify(value));
 
-        this.markWorkspaceModified(key);
+        if(track){
 
-    } catch(error){
+            this.markWorkspaceModified(key);
+
+        }
+
+    }catch(error){
 
         console.error("Jasmine Storage Error:", error);
 
@@ -251,6 +255,26 @@ getWorkspaceStatus(){
 getWorkspaceActivity(){
 
     return [...this.workspace.activity];
+
+},
+
+getWorkspaceSummary(){
+
+    const changes = this.workspace.changes;
+
+    return {
+
+        modified: this.workspace.modified,
+
+        lastExport: this.workspace.lastExport,
+
+        githubConfirmed: this.workspace.githubConfirmed,
+
+        pending: Object.keys(changes),
+
+        activity: this.workspace.activity.slice(0,5)
+
+    };
 
 },
 
@@ -814,6 +838,31 @@ exportJSON(storageKey, filename){
 
     },
 
+deleteTrip(id){
+
+    const index = this.data.trips.findIndex(trip => trip.id === id);
+
+    if(index === -1){
+
+        return false;
+
+    }
+
+    const deletedTrip = this.data.trips[index];
+
+    this.data.trips.splice(index, 1);
+
+    this.saveLocal(STORAGE_KEYS.trips, this.data.trips);
+
+    this.markWorkspaceModified(
+        STORAGE_KEYS.trips,
+        "Deleted",
+        deletedTrip.destination || deletedTrip.country || id
+    );
+
+    return true;
+
+},
 
     addDocumentToTrip(id, document){
 

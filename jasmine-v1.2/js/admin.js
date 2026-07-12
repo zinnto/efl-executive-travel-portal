@@ -238,6 +238,40 @@ function renderDashboard(){
 
 
 
+
+function renderWorkspaceStatus(){
+
+    const container = document.getElementById("workspaceStatus");
+
+    if(!container) return;
+
+    const ws = Jasmine.getWorkspaceSummary();
+
+    const pending = ws.pending.length
+        ? ws.pending.join(", ")
+        : "None";
+
+    container.innerHTML = `
+
+        <p><strong>Status:</strong>
+        ${ws.modified ? "Modified" : "Clean"}</p>
+
+        <p><strong>Pending:</strong>
+        ${pending}</p>
+
+        <p><strong>Last Export:</strong>
+        ${ws.lastExport ?? "Never"}</p>
+
+        <p><strong>GitHub:</strong>
+        ${ws.githubConfirmed ? "Confirmed" : "Awaiting Confirmation"}</p>
+
+    `;
+
+}
+
+
+
+
 /*
 EXECUTIVES
 */
@@ -450,6 +484,31 @@ function loadTripDropdowns(){
         });
 
     }
+
+}
+
+const deleteBtn = document.getElementById("delete-trip");
+
+if(deleteBtn){
+
+    deleteBtn.onclick = function(){
+
+        if(!confirm("Delete this trip? This cannot be undone.")){
+            return;
+        }
+
+        Jasmine.deleteTrip(activeTrip.id);
+
+        document.getElementById("trip-workspace").classList.add("hidden");
+
+        activeTrip = null;
+
+        renderTrips();
+        renderDashboard();
+
+        showToast("Trip deleted");
+
+    };
 
 }
 
