@@ -104,6 +104,8 @@ function startJasmine(){
 
     loadSettings();
 
+    loadGitHubSettings();
+
 }
 
 
@@ -1161,5 +1163,115 @@ document.getElementById("reload-data")?.addEventListener("click", async () => {
     showToast("Reloaded from published data");
 
     setTimeout(() => location.reload(), 800);
+
+});
+
+
+
+/*
+GITHUB PUBLISHING
+*/
+
+
+function loadGitHubSettings(){
+
+    const config = Jasmine.getGitHubConfig();
+
+    if(!config) return;
+
+    const owner = document.getElementById("github-owner");
+
+    const repo = document.getElementById("github-repo");
+
+    const branch = document.getElementById("github-branch");
+
+    const token = document.getElementById("github-token");
+
+    if(owner) owner.value = config.owner || "";
+
+    if(repo) repo.value = config.repo || "";
+
+    if(branch) branch.value = config.branch || "main";
+
+    if(token) token.value = config.token || "";
+
+}
+
+
+document.getElementById("save-github-settings")?.addEventListener("click", () => {
+
+    const owner = document.getElementById("github-owner").value.trim();
+
+    const repo = document.getElementById("github-repo").value.trim();
+
+    const branch = document.getElementById("github-branch").value.trim() || "main";
+
+    const token = document.getElementById("github-token").value.trim();
+
+
+    if(!owner || !repo || !token){
+
+        showToast("Owner, repo, and token are all required");
+
+        return;
+
+    }
+
+
+    Jasmine.saveGitHubConfig({ owner, repo, branch, token });
+
+    showToast("GitHub settings saved");
+
+});
+
+
+document.getElementById("publish-to-github")?.addEventListener("click", async () => {
+
+    const statusBox = document.getElementById("github-publish-status");
+
+    const button = document.getElementById("publish-to-github");
+
+
+    const confirmed = confirm(
+
+        "This pushes your current executives, trips, and settings straight " +
+
+        "to the live repo, and bumps the data version so every visitor " +
+
+        "refreshes to it automatically. Continue?"
+
+    );
+
+    if(!confirmed) return;
+
+
+    button.disabled = true;
+
+    button.innerText = "Publishing...";
+
+    if(statusBox) statusBox.innerText = "Publishing to GitHub — this can take a few seconds...";
+
+
+    try {
+
+        await Jasmine.publishAllData();
+
+        if(statusBox) statusBox.innerText = "✔ Published. GitHub Pages usually redeploys within a minute or two.";
+
+        showToast("Published to GitHub");
+
+    } catch(error){
+
+        if(statusBox) statusBox.innerText = "⚠ " + error.message;
+
+        showToast("Publish failed — see message below the button");
+
+    } finally {
+
+        button.disabled = false;
+
+        button.innerText = "Publish All Data to GitHub";
+
+    }
 
 });

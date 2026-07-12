@@ -14,6 +14,8 @@ const STORAGE_KEYS = {
 
     executives: "jasmine_executives",
 
+    executivesVersion: "jasmine_executives_version",
+
     trips: "jasmine_trips",
 
     tripsVersion: "jasmine_trips_version",
@@ -21,6 +23,13 @@ const STORAGE_KEYS = {
     settings: "jasmine_settings"
 
 };
+
+
+// Kept separate from STORAGE_KEYS/exportData on purpose — this holds a
+// GitHub token and should never end up in a data export or get synced
+// via the versioning system.
+
+const GITHUB_CONFIG_KEY = "jasmine_github_config";
 
 
 /*
@@ -188,12 +197,27 @@ const Jasmine = {
         }
 
 
-        // Editable data: localStorage is the source of truth once it
-        // exists. First run seeds it from the JSON files.
+        // Editable data respects a published version number (data/version.json).
+        // If it's higher than what this browser last saw, that means new
+        // data was pushed (e.g. via Publish to GitHub) — wipe and reseed
+        // from the current files, even if local data already exists.
+
+        const versionData = await this.loadJSON("data/version.json");
+
+        const shippedVersions = {
+
+            executives: versionData ? (versionData.executives || 0) : 0,
+
+            trips: versionData ? (versionData.trips || 0) : 0
+
+        };
+
+        const storedExecutivesVersion = parseInt(localStorage.getItem(STORAGE_KEYS.executivesVersion) || "0", 10);
+
 
         let executives = this.loadLocal(STORAGE_KEYS.executives);
 
-        if(!executives){
+        if(!executives || shippedVersions.executives !== storedExecutivesVersion){
 
             const seed = await this.loadJSON("data/executives.json");
 
@@ -201,26 +225,19 @@ const Jasmine = {
 
             this.saveLocal(STORAGE_KEYS.executives, executives);
 
+            localStorage.setItem(STORAGE_KEYS.executivesVersion, String(shippedVersions.executives));
+
         }
 
         this.data.executives = executives;
 
-
-        // Trips also respect a published version number (data/version.json).
-        // If it's higher than what this browser last saw, that means a
-        // reset/replacement was pushed (e.g. a blanked trips.json) — wipe
-        // and reseed from the current file, even if local data exists.
-
-        const versionData = await this.loadJSON("data/version.json");
-
-        const shippedTripsVersion = versionData ? (versionData.trips || 0) : 0;
 
         const storedTripsVersion = parseInt(localStorage.getItem(STORAGE_KEYS.tripsVersion) || "0", 10);
 
 
         let trips = this.loadLocal(STORAGE_KEYS.trips);
 
-        if(!trips || shippedTripsVersion !== storedTripsVersion){
+        if(!trips || shippedVersions.trips !== storedTripsVersion){
 
             const seed = await this.loadJSON("data/trips.json");
 
@@ -228,7 +245,7 @@ const Jasmine = {
 
             this.saveLocal(STORAGE_KEYS.trips, trips);
 
-            localStorage.setItem(STORAGE_KEYS.tripsVersion, String(shippedTripsVersion));
+            localStorage.setItem(STORAGE_KEYS.tripsVersion, String(shippedVersions.trips));
 
         }
 
@@ -768,12 +785,214 @@ const Jasmine = {
 
         localStorage.setItem(STORAGE_KEYS.tripsVersion, String(versionData ? (versionData.trips || 0) : 0));
 
+        localStorage.setItem(STORAGE_KEYS.executivesVersion, String(versionData ? (versionData.executives || 0) : 0));
+
 
         const settings = await this.loadJSON("data/settings.json");
 
         this.data.settings = settings || {};
 
         this.saveLocal(STORAGE_KEYS.settings, this.data.settings);
+
+    },
+
+
+
+    /*
+    GITHUB PUBLISHING
+
+    Pushes the current executives/trips/settings straight to the repo
+    via GitHub's Contents API, using a personal access token stored
+    only in this browser's localStorage — it's never bundled into
+    exportData() or sent anywhere but api.github.com. After a
+    successful publish, data/version.json is bumped so every visitor
+    (including anyone opening a shared executive/trip link) picks up
+    the change automatically on their next page load.
+    */
+
+
+    getGitHubConfig(){
+
+        try {
+
+            const raw = localStorage.getItem(GITHUB_CONFIG_KEY);
+
+            return raw ? JSON.parse(raw) : null;
+
+        } catch(error){
+
+            return null;
+
+        }
+
+    },
+
+
+    saveGitHubConfig(config){
+
+        localStorage.setItem(GITHUB_CONFIG_KEY, JSON.stringify(config));
+
+    },
+
+
+    clearGitHubConfig(){
+
+        localStorage.removeItem(GITHUB_CONFIG_KEY);
+
+    },
+
+
+    async publishFileToGitHub(path, dataObj, message){
+
+        const config = this.getGitHubConfig();
+
+        if(!config || !config.owner || !config.repo || !config.token){
+
+            throw new Error("GitHub publishing isn't set up yet — fill in the settings above first.");
+
+        }
+
+
+        const branch = config.branch || "main";
+
+        const apiUrl = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}`;
+
+        const headers = {
+
+            "Authorization": `Bearer ${config.token}`,
+
+            "Accept": "application/vnd.github+json"
+
+        };
+
+
+        // Need the current file's SHA to update it — GitHub's API
+        // rejects an update without it. A 404 just means the file
+        // doesn't exist yet, which is fine; it'll be created.
+
+        let sha = null;
+
+        const existing = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers });
+
+        if(existing.ok){
+
+            const existingData = await existing.json();
+
+            sha = existingData.sha;
+
+        } else if(existing.status !== 404){
+
+            const errorBody = await existing.json().catch(() => ({}));
+
+            throw new Error(errorBody.message || `Couldn't check ${path} (${existing.status})`);
+
+        }
+
+
+        const jsonString = JSON.stringify(dataObj, null, 2);
+
+        // Base64-encode as UTF-8 safely (handles accented city/name characters)
+
+        const encodedContent = btoa(unescape(encodeURIComponent(jsonString)));
+
+
+        const body = { message, content: encodedContent, branch };
+
+        if(sha) body.sha = sha;
+
+
+        const response = await fetch(apiUrl, {
+
+            method: "PUT",
+
+            headers: { ...headers, "Content-Type": "application/json" },
+
+            body: JSON.stringify(body)
+
+        });
+
+
+        if(!response.ok){
+
+            const errorBody = await response.json().catch(() => ({}));
+
+            throw new Error(errorBody.message || `Publishing ${path} failed (${response.status})`);
+
+        }
+
+
+        return await response.json();
+
+    },
+
+
+    async publishAllData(){
+
+        await this.publishFileToGitHub(
+
+            "data/executives.json",
+
+            { executives: this.data.executives },
+
+            "Jasmine: update executives.json"
+
+        );
+
+
+        await this.publishFileToGitHub(
+
+            "data/trips.json",
+
+            { trips: this.data.trips },
+
+            "Jasmine: update trips.json"
+
+        );
+
+
+        await this.publishFileToGitHub(
+
+            "data/settings.json",
+
+            this.data.settings,
+
+            "Jasmine: update settings.json"
+
+        );
+
+
+        // Bump the version file against what's actually live right now,
+        // not just what this browser has cached, so it can't accidentally
+        // go backwards if another device published more recently.
+
+        const liveVersion = await this.loadJSON("data/version.json");
+
+        const newVersion = {
+
+            executives: (liveVersion ? (liveVersion.executives || 0) : 0) + 1,
+
+            trips: (liveVersion ? (liveVersion.trips || 0) : 0) + 1
+
+        };
+
+
+        await this.publishFileToGitHub(
+
+            "data/version.json",
+
+            newVersion,
+
+            "Jasmine: bump data version"
+
+        );
+
+
+        localStorage.setItem(STORAGE_KEYS.executivesVersion, String(newVersion.executives));
+
+        localStorage.setItem(STORAGE_KEYS.tripsVersion, String(newVersion.trips));
+
+
+        return newVersion;
 
     }
 
