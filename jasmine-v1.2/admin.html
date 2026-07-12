@@ -1081,6 +1081,89 @@ Reload Shipped Data
 </div>
 
 
+
+<div class="card">
+
+
+<h2>
+GitHub Publishing
+</h2>
+
+
+<p>
+Publish executives, trips, and settings straight to your repo
+with one click, instead of exporting and committing manually.
+This also bumps the data version automatically, so your
+executives' browsers refresh to the new data as soon as they
+open their profile link — no action needed on their end.
+</p>
+
+
+<div class="attention-item">
+
+<p>
+<strong>Use a scoped token.</strong> Create a
+<a href="https://github.com/settings/personal-access-tokens/new" target="_blank">fine-grained personal access token</a>
+limited to this one repository with <strong>Contents: Read and write</strong>
+permission only — not a token with full account access. It's
+stored in this browser only and is never included in data
+exports. Treat it like a password: only save it on a device
+you trust, and revoke it from GitHub if that ever changes.
+</p>
+
+</div>
+
+
+<label>
+Repository Owner (username or org)
+</label>
+
+<input id="github-owner" placeholder="e.g. zinnto">
+
+
+<label>
+Repository Name
+</label>
+
+<input id="github-repo" placeholder="e.g. efl-executive-travel-portal">
+
+
+<label>
+Branch
+</label>
+
+<input id="github-branch" placeholder="main">
+
+
+<label>
+Personal Access Token
+</label>
+
+<input id="github-token" type="password" placeholder="Paste token — stored in this browser only">
+
+
+<button id="save-github-settings">
+
+Save GitHub Settings
+
+</button>
+
+
+<button id="publish-to-github" style="background:#1a7f37; margin-left:10px;">
+
+Publish All Data to GitHub
+
+</button>
+
+
+<p id="github-publish-status" style="margin-top:14px; font-size:14px;">
+
+</p>
+
+
+</div>
+
+
 </section>
 
 
