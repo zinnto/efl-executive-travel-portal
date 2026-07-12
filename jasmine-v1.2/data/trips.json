@@ -29,6 +29,27 @@
       "documents": [],
       "schedule": [],
       "contacts": []
+    },
+    {
+      "id": "trip002",
+      "executive": "exec001",
+      "country": "United States",
+      "city": "New York",
+      "airline": "British Airways",
+      "departure": "2026-07-16",
+      "return": "2026-07-17",
+      "purpose": "JULY TRIP",
+      "checklist": [
+        "flight",
+        "hotel",
+        "Flight Ticket",
+        "Hotel Confirmation"
+      ],
+      "flight": null,
+      "hotel": null,
+      "documents": [],
+      "schedule": [],
+      "contacts": []
     }
   ]
 }
