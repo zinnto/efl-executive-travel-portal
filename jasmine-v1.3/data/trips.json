@@ -143,8 +143,8 @@
         },
         {
           "type": "Hotel Confirmation",
-          "name": "Seattle Hotel Voucher",
-          "link": "https://drive.google.com/file/d/14gyWYPSRAdJLTQDWH68NYQxu58klqzhK/view?usp=drive_link",
+          "name": "Hotel Confirmation",
+          "link": "https://drive.google.com/file/d/1RRWRHTE_-4rRypmWoSb1vjDx7fNWvGmt/view?usp=drive_link",
           "status": "Verified"
         }
       ],
@@ -157,8 +157,8 @@
       "country": "United States",
       "city": "Los Angeles",
       "airline": "Other",
-      "departure": "2026-07-17",
-      "return": "2026-07-20",
+      "departure": "2026-07-20",
+      "return": "2026-07-23",
       "purpose": "JULY TRIP",
       "checklist": [
         "flight",
@@ -205,8 +205,8 @@
       "country": "United States",
       "city": "New York",
       "airline": "Other",
-      "departure": "2026-07-17",
-      "return": "2026-07-20",
+      "departure": "2026-07-23",
+      "return": "2026-07-26",
       "purpose": "JULY TRIP",
       "checklist": [
         "flight",
@@ -262,11 +262,11 @@
       ],
       "flight": {
         "airline": "BRITISH AIRWAYS",
-        "number": "BA 188 ",
-        "departureAirport": "LAX Los Angeles, CA,US",
-        "arrivalAirport": "EWR Newark, NJ/NewYork, NY, US",
+        "number": "BA 188",
+        "departureAirport": "Newark Liberty International (nj)",
+        "arrivalAirport": "Heathrow(London) - Terminal 5",
         "departureTime": "2026-07-29T21:25",
-        "arrivalTime": "2026-07-31T06:50",
+        "arrivalTime": "2026-07-30T09:30",
         "booking": "ZJT4JH"
       },
       "hotel": null,
