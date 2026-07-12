@@ -19,14 +19,39 @@
       "flight": {
         "airline": "BRITISH AIRWAYS",
         "number": "BA0062",
-        "departureAirport": "Nairobi - Terminal 1A",
-        "arrivalAirport": "Heathrow(London) - Terminal 5",
+        "departureAirport": "Nairobi Terminal 1A",
+        "arrivalAirport": "Heathrow (London) Terminal 5",
         "departureTime": "2026-07-14T09:35",
-        "arrivalTime": "2026-07-14T15:55",
+        "arrivalTime": "2026-07-14T16:55",
         "booking": "ZGKGHM"
       },
-      "hotel": null,
-      "documents": [],
+      "hotel": {
+        "name": "Thistle London Heathrow Terminal 5",
+        "city": "Bath Road, Longford, West Drayton, GB",
+        "checkIn": "2026-07-15",
+        "checkOut": "2026-07-16",
+        "booking": "Confirmation number : 9102130299057"
+      },
+      "documents": [
+        {
+          "type": "Insurance",
+          "name": "APRIL INSURANCE",
+          "link": "https://drive.google.com/file/d/1o1XtoBIvLtvpNq67l8pfNSUsgbxwiUUJ/view?usp=drive_link",
+          "status": "Verified"
+        },
+        {
+          "type": "Hotel Confirmation",
+          "name": "HOTEL CONFIRMATION",
+          "link": "https://drive.google.com/file/d/1PsnlMx5e7JQ-qI9dQHTy5OyZ-THee5aA/view?usp=drive_link",
+          "status": "Verified"
+        },
+        {
+          "type": "Flight Ticket",
+          "name": "FLIGHT TICKET",
+          "link": "https://drive.google.com/file/d/1aXiTr3SEUOTYJ9SzOzfqhbhyaBbzE7yo/view?usp=drive_link",
+          "status": "Verified"
+        }
+      ],
       "schedule": [],
       "contacts": []
     },
@@ -34,7 +59,7 @@
       "id": "trip002",
       "executive": "exec001",
       "country": "United States",
-      "city": "New York",
+      "city": "Seattle",
       "airline": "British Airways",
       "departure": "2026-07-16",
       "return": "2026-07-17",
@@ -42,8 +67,93 @@
       "checklist": [
         "flight",
         "hotel",
+        "schedule",
         "Flight Ticket",
         "Hotel Confirmation"
+      ],
+      "flight": null,
+      "hotel": null,
+      "documents": [],
+      "schedule": [],
+      "contacts": []
+    },
+    {
+      "id": "trip003",
+      "executive": "exec001",
+      "country": "Canada",
+      "city": "Edmonton",
+      "airline": "Other",
+      "departure": "2026-07-17",
+      "return": "2026-07-20",
+      "purpose": "JULY TRIP",
+      "checklist": [
+        "flight",
+        "hotel",
+        "Flight Ticket",
+        "Hotel Confirmation"
+      ],
+      "flight": null,
+      "hotel": null,
+      "documents": [],
+      "schedule": [],
+      "contacts": []
+    },
+    {
+      "id": "trip004",
+      "executive": "exec001",
+      "country": "United States",
+      "city": "Los Angeles",
+      "airline": "Other",
+      "departure": "2026-07-17",
+      "return": "2026-07-20",
+      "purpose": "JULY TRIP",
+      "checklist": [
+        "flight",
+        "hotel",
+        "schedule",
+        "Flight Ticket",
+        "Hotel Confirmation"
+      ],
+      "flight": null,
+      "hotel": null,
+      "documents": [],
+      "schedule": [],
+      "contacts": []
+    },
+    {
+      "id": "trip005",
+      "executive": "exec001",
+      "country": "United States",
+      "city": "New York",
+      "airline": "Other",
+      "departure": "2026-07-17",
+      "return": "2026-07-20",
+      "purpose": "JULY TRIP",
+      "checklist": [
+        "flight",
+        "hotel",
+        "schedule",
+        "Flight Ticket",
+        "Hotel Confirmation"
+      ],
+      "flight": null,
+      "hotel": null,
+      "documents": [],
+      "schedule": [],
+      "contacts": []
+    },
+    {
+      "id": "trip006",
+      "executive": "exec001",
+      "country": "Kenya",
+      "city": "Nairobi",
+      "airline": "British Airways",
+      "departure": "2026-07-29",
+      "return": "2026-07-31",
+      "purpose": "JULY TRIP",
+      "checklist": [
+        "flight",
+        "Flight Ticket"
       ],
       "flight": null,
       "hotel": null,
