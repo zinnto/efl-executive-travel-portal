@@ -1,3 +1,34 @@
 {
-  "trips": 0
+  "trips": [
+    {
+      "id": "trip001",
+      "executive": "exec001",
+      "country": "United Kingdom",
+      "city": "London",
+      "airline": "British Airways",
+      "departure": "2026-07-14",
+      "return": "2026-07-16",
+      "purpose": "JULY TRIP",
+      "checklist": [
+        "flight",
+        "hotel",
+        "Flight Ticket",
+        "Hotel Confirmation",
+        "Insurance"
+      ],
+      "flight": {
+        "airline": "BRITISH AIRWAYS",
+        "number": "BA0062",
+        "departureAirport": "Nairobi - Terminal 1A",
+        "arrivalAirport": "Heathrow(London) - Terminal 5",
+        "departureTime": "2026-07-14T09:35",
+        "arrivalTime": "2026-07-14T15:55",
+        "booking": "ZGKGHM"
+      },
+      "hotel": null,
+      "documents": [],
+      "schedule": [],
+      "contacts": []
+    }
+  ]
 }
