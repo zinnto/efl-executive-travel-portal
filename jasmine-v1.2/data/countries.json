@@ -158,7 +158,7 @@
     { "name": "Bahamas", "cities": ["Nassau", "Freeport"] },
     { "name": "Barbados", "cities": ["Bridgetown", "Speightstown"] },
     { "name": "Belize", "cities": ["Belmopan", "Belize City"] },
-    { "name": "Canada", "cities": ["Ottawa", "Toronto", "Vancouver", "Montreal"] },
+    { "name": "Canada", "cities": ["Ottawa", "Toronto", "Vancouver", "Edmonton", "Montreal"] },
     { "name": "Costa Rica", "cities": ["San José", "Alajuela"] },
     { "name": "Cuba", "cities": ["Havana", "Santiago de Cuba"] },
     { "name": "Dominica", "cities": ["Roseau", "Portsmouth"] },
