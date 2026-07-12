@@ -188,23 +188,7 @@ Active Trips
 
 </div>
 
-<div class="card" id="workspaceCard">
 
-    <h3>Workspace Status</h3>
-
-    <div id="workspaceStatus"></div>
-
-    <div class="mt-3">
-        <button id="exportTripsBtn">
-            Export Trips JSON
-        </button>
-
-        <button id="confirmGithubBtn">
-            Confirm GitHub Updated
-        </button>
-    </div>
-
-</div>
 
 <div class="card">
 
@@ -545,11 +529,7 @@ tracker will only check the items you select here.
 </div>
 
 
-<button
-    id="delete-trip"
-    class="danger-button">
-    Delete Trip
-</button>
+
 
 <button id="save-trip">
 
@@ -585,6 +565,12 @@ Trip Details
 
 </div>
 
+
+<button id="delete-trip" style="background:#c0392b;">
+
+Cancel / Remove Trip
+
+</button>
 
 
 
@@ -909,6 +895,42 @@ Save Document
 
 
 <h3>
+Contacts
+</h3>
+
+
+<div id="contact-details">
+
+<label>
+Contact Name
+</label>
+
+<input id="contact-name" placeholder="e.g. Hotel Concierge">
+
+<label>
+Contact Type
+</label>
+
+<input id="contact-type" placeholder="e.g. Hotel, Driver, Emergency, Office">
+
+<button id="save-contact">
+
+Save Contact
+
+</button>
+
+</div>
+
+
+<div id="contact-summary">
+
+
+</div>
+
+
+
+
+<h3>
 Readiness
 </h3>
 
@@ -999,6 +1021,56 @@ Default Assistant Name
 <button id="save-settings">
 
 Save Settings
+
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>
+Publish & Sync
+</h2>
+
+
+<p>
+Jasmine is a static site — data lives in this browser only, not
+on a server. Executives and trips added here won't be visible
+to anyone visiting the site in a different browser or device
+until you publish them.
+</p>
+
+
+<p>
+<strong>Export Data</strong> downloads the current executives,
+trips, and settings as JSON files. Replace the matching files
+in <code>data/</code> in the repo with these and redeploy to
+make this the data everyone sees on their first visit.
+</p>
+
+
+<button id="export-data">
+
+Export Data
+
+</button>
+
+
+<p style="margin-top:20px;">
+<strong>Reload Shipped Data</strong> discards whatever is
+currently saved in this browser and re-loads whatever is
+published in the live <code>data/</code> files. Use this to
+pull down changes published from elsewhere.
+</p>
+
+
+<button id="reload-data" style="background:#c0392b;">
+
+Reload Shipped Data
 
 </button>
 
