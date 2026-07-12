@@ -16,10 +16,12 @@ const STORAGE_KEYS = {
 
     trips: "jasmine_trips",
 
+    tripsVersion: "jasmine_trips_version",
+
     settings: "jasmine_settings"
 
 };
-const WORKSPACE_KEY = "jasmine_workspace";
+
 
 /*
 Master list of everything a trip's readiness can be tracked
@@ -77,19 +79,8 @@ const Jasmine = {
 
     },
 
-workspace: {
 
-    modified: false,
-
-    lastExport: null,
-
-    githubConfirmed: false,
-
-    changes: {},
-
-    activity: []
-
-},
+    ready: false,
 
 
 
@@ -142,215 +133,19 @@ workspace: {
     },
 
 
-saveLocal(key, value, track = true){
+    saveLocal(key, value){
 
-    try{
+        try {
 
-        localStorage.setItem(key, JSON.stringify(value));
+            localStorage.setItem(key, JSON.stringify(value));
 
-        if(track){
+        } catch(error){
 
-            this.markWorkspaceModified(key);
+            console.error("Jasmine Storage Error:", error);
 
         }
 
-    }catch(error){
-
-        console.error("Jasmine Storage Error:", error);
-
-    }
-
-},
-
-loadWorkspace(){
-
-    const saved = this.loadLocal(WORKSPACE_KEY);
-
-    if(saved){
-
-        this.workspace = saved;
-
-    }
-
-},
-
-saveWorkspace(){
-
-    localStorage.setItem(
-
-        WORKSPACE_KEY,
-
-        JSON.stringify(this.workspace)
-
-    );
-
-},
-
-markWorkspaceModified(storageKey, action = "Updated", details = ""){
-
-    this.workspace.modified = true;
-
-    this.workspace.githubConfirmed = false;
-
-    this.workspace.changes[storageKey] = true;
-
-    this.workspace.activity.unshift({
-
-        time: new Date().toLocaleString(),
-
-        dataset: storageKey,
-
-        action,
-
-        details
-
-    });
-
-    // Keep only the most recent 100 actions
-    if(this.workspace.activity.length > 100){
-
-        this.workspace.activity.length = 100;
-
-    }
-
-    this.saveWorkspace();
-
-},
-
-markWorkspaceExported(){
-
-    this.workspace.modified = false;
-
-    this.workspace.lastExport = new Date().toLocaleString();
-
-    this.workspace.activity.unshift({
-
-        time: this.workspace.lastExport,
-
-        dataset: "Workspace",
-
-        action: "Exported",
-
-        details: "JSON exported"
-
-    });
-
-    this.saveWorkspace();
-
-},
-
-confirmGithubUpdated(){
-
-    this.workspace.githubConfirmed = true;
-
-    this.saveWorkspace();
-
-},
-
-getWorkspaceStatus(){
-
-    return structuredClone(this.workspace);
-
-},
-getWorkspaceActivity(){
-
-    return [...this.workspace.activity];
-
-},
-
-getWorkspaceSummary(){
-
-    const changes = this.workspace.changes;
-
-    return {
-
-        modified: this.workspace.modified,
-
-        lastExport: this.workspace.lastExport,
-
-        githubConfirmed: this.workspace.githubConfirmed,
-
-        pending: Object.keys(changes),
-
-        activity: this.workspace.activity.slice(0,5)
-
-    };
-
-},
-
-exportJSON(storageKey, filename){
-
-    const data = this.loadLocal(storageKey);
-
-    if(data === null){
-
-        alert("No data found to export.");
-
-        return;
-
-    }
-
-    const exportObject = {};
-
-    // Match the original JSON structure
-    switch(storageKey){
-
-        case STORAGE_KEYS.trips:
-            exportObject.trips = data;
-            break;
-
-        case STORAGE_KEYS.executives:
-            exportObject.executives = data;
-            break;
-
-        case STORAGE_KEYS.settings:
-            exportObject.settings = data;
-            break;
-
-        case STORAGE_KEYS.hotels:
-            exportObject.hotels = data;
-            break;
-
-        case STORAGE_KEYS.airlines:
-            exportObject.airlines = data;
-            break;
-
-        case STORAGE_KEYS.countries:
-            exportObject.countries = data;
-            break;
-
-        default:
-            Object.assign(exportObject, data);
-
-    }
-
-    const blob = new Blob(
-
-        [JSON.stringify(exportObject, null, 2)],
-
-        { type: "application/json" }
-
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-
-    a.href = url;
-
-    a.download = filename;
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    document.body.removeChild(a);
-
-    URL.revokeObjectURL(url);
-
-    this.markWorkspaceExported();
-
-},
+    },
 
 
 
@@ -362,7 +157,6 @@ exportJSON(storageKey, filename){
     async init(){
 
         console.log("Initializing Jasmine v1.0...");
-		this.loadWorkspace();
 
 
         // Reference data: always loaded fresh from JSON, not user-editable.
@@ -412,15 +206,29 @@ exportJSON(storageKey, filename){
         this.data.executives = executives;
 
 
+        // Trips also respect a published version number (data/version.json).
+        // If it's higher than what this browser last saw, that means a
+        // reset/replacement was pushed (e.g. a blanked trips.json) — wipe
+        // and reseed from the current file, even if local data exists.
+
+        const versionData = await this.loadJSON("data/version.json");
+
+        const shippedTripsVersion = versionData ? (versionData.trips || 0) : 0;
+
+        const storedTripsVersion = parseInt(localStorage.getItem(STORAGE_KEYS.tripsVersion) || "0", 10);
+
+
         let trips = this.loadLocal(STORAGE_KEYS.trips);
 
-        if(!trips){
+        if(!trips || shippedTripsVersion !== storedTripsVersion){
 
             const seed = await this.loadJSON("data/trips.json");
 
             trips = seed ? (seed.trips || []) : [];
 
             this.saveLocal(STORAGE_KEYS.trips, trips);
+
+            localStorage.setItem(STORAGE_KEYS.tripsVersion, String(shippedTripsVersion));
 
         }
 
@@ -838,31 +646,6 @@ exportJSON(storageKey, filename){
 
     },
 
-deleteTrip(id){
-
-    const index = this.data.trips.findIndex(trip => trip.id === id);
-
-    if(index === -1){
-
-        return false;
-
-    }
-
-    const deletedTrip = this.data.trips[index];
-
-    this.data.trips.splice(index, 1);
-
-    this.saveLocal(STORAGE_KEYS.trips, this.data.trips);
-
-    this.markWorkspaceModified(
-        STORAGE_KEYS.trips,
-        "Deleted",
-        deletedTrip.destination || deletedTrip.country || id
-    );
-
-    return true;
-
-},
 
     addDocumentToTrip(id, document){
 
@@ -881,6 +664,32 @@ deleteTrip(id){
     },
 
 
+    addContactToTrip(id, contact){
+
+        const trip = this.data.trips.find(item => item.id === id);
+
+        if(!trip) return null;
+
+        if(!trip.contacts) trip.contacts = [];
+
+        trip.contacts.push(contact);
+
+        this.saveLocal(STORAGE_KEYS.trips, this.data.trips);
+
+        return this.enrichTrip(trip);
+
+    },
+
+
+    deleteTrip(id){
+
+        this.data.trips = this.data.trips.filter(item => item.id !== id);
+
+        this.saveLocal(STORAGE_KEYS.trips, this.data.trips);
+
+    },
+
+
     getPendingCount(){
 
         let pending = 0;
@@ -894,6 +703,65 @@ deleteTrip(id){
         });
 
         return pending;
+
+    },
+
+
+    /*
+    PUBLISHING (for static, backend-less hosting like GitHub Pages)
+
+    Data lives in each visitor's own browser via localStorage —
+    there's no shared database. exportData() hands back the raw
+    editable data so it can be downloaded and committed over the
+    data/*.json files in the repo, making it the new baseline for
+    anyone visiting fresh. reloadFromFiles() discards whatever is
+    in this browser's localStorage and re-seeds from the current
+    data/*.json files, for pulling down data that was published
+    elsewhere.
+    */
+
+
+    exportData(){
+
+        return {
+
+            executives: this.data.executives,
+
+            trips: this.data.trips,
+
+            settings: this.data.settings
+
+        };
+
+    },
+
+
+    async reloadFromFiles(){
+
+        const executives = await this.loadJSON("data/executives.json");
+
+        this.data.executives = executives ? (executives.executives || []) : [];
+
+        this.saveLocal(STORAGE_KEYS.executives, this.data.executives);
+
+
+        const trips = await this.loadJSON("data/trips.json");
+
+        this.data.trips = trips ? (trips.trips || []) : [];
+
+        this.saveLocal(STORAGE_KEYS.trips, this.data.trips);
+
+
+        const versionData = await this.loadJSON("data/version.json");
+
+        localStorage.setItem(STORAGE_KEYS.tripsVersion, String(versionData ? (versionData.trips || 0) : 0));
+
+
+        const settings = await this.loadJSON("data/settings.json");
+
+        this.data.settings = settings || {};
+
+        this.saveLocal(STORAGE_KEYS.settings, this.data.settings);
 
     }
 

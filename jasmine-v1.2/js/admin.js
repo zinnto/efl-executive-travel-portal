@@ -109,23 +109,6 @@ function startJasmine(){
 
 Jasmine.onReady(startJasmine);
 
-const exportTripsBtn = document.getElementById("exportTripsBtn");
-
-if(exportTripsBtn){
-
-    exportTripsBtn.addEventListener("click", () => {
-
-        Jasmine.exportJSON(
-
-            STORAGE_KEYS.trips,
-
-            "trips.json"
-
-        );
-
-    });
-
-}
 
 
 /*
@@ -235,40 +218,6 @@ function renderDashboard(){
     }
 
 }
-
-
-
-
-function renderWorkspaceStatus(){
-
-    const container = document.getElementById("workspaceStatus");
-
-    if(!container) return;
-
-    const ws = Jasmine.getWorkspaceSummary();
-
-    const pending = ws.pending.length
-        ? ws.pending.join(", ")
-        : "None";
-
-    container.innerHTML = `
-
-        <p><strong>Status:</strong>
-        ${ws.modified ? "Modified" : "Clean"}</p>
-
-        <p><strong>Pending:</strong>
-        ${pending}</p>
-
-        <p><strong>Last Export:</strong>
-        ${ws.lastExport ?? "Never"}</p>
-
-        <p><strong>GitHub:</strong>
-        ${ws.githubConfirmed ? "Confirmed" : "Awaiting Confirmation"}</p>
-
-    `;
-
-}
-
 
 
 
@@ -487,31 +436,6 @@ function loadTripDropdowns(){
 
 }
 
-const deleteBtn = document.getElementById("delete-trip");
-
-if(deleteBtn){
-
-    deleteBtn.onclick = function(){
-
-        if(!confirm("Delete this trip? This cannot be undone.")){
-            return;
-        }
-
-        Jasmine.deleteTrip(activeTrip.id);
-
-        document.getElementById("trip-workspace").classList.add("hidden");
-
-        activeTrip = null;
-
-        renderTrips();
-        renderDashboard();
-
-        showToast("Trip deleted");
-
-    };
-
-}
-
 
 const countrySelect = document.getElementById("trip-country");
 
@@ -629,7 +553,12 @@ function renderTrips(){
 
         trips.map(trip => `
 
-            <div class="executive-card" data-trip="${trip.id}">
+            <div class="executive-card" data-trip="${trip.id}" style="position:relative;">
+
+            <button class="trip-remove-btn" data-remove="${trip.id}"
+                style="position:absolute; top:14px; right:14px; background:#c0392b; padding:6px 14px; font-size:12px;">
+                Remove
+            </button>
 
             <h3>${trip.destination}</h3>
 
@@ -653,6 +582,48 @@ function renderTrips(){
         };
 
     });
+
+
+    document.querySelectorAll("[data-remove]").forEach(button => {
+
+        button.onclick = function(event){
+
+            event.stopPropagation();
+
+            removeTrip(this.dataset.remove);
+
+        };
+
+    });
+
+}
+
+
+function removeTrip(tripId){
+
+    const trip = Jasmine.getTripById(tripId);
+
+    if(!trip) return;
+
+    const confirmed = confirm(`Remove the trip to ${trip.destination} for ${trip.executiveName}? This can't be undone.`);
+
+    if(!confirmed) return;
+
+    Jasmine.deleteTrip(tripId);
+
+    if(activeTrip && activeTrip.id === tripId){
+
+        activeTrip = null;
+
+        document.getElementById("trip-workspace").classList.add("hidden");
+
+    }
+
+    renderTrips();
+
+    renderDashboard();
+
+    showToast("Trip removed");
 
 }
 
@@ -685,6 +656,8 @@ function openTripWorkspace(tripId){
     renderHotel();
 
     renderDocuments();
+
+    renderContacts();
 
     renderReadiness();
 
@@ -802,6 +775,42 @@ function renderDocuments(){
         : "<p>No documents added yet.</p>";
 
 }
+
+
+function renderContacts(){
+
+    const box = document.getElementById("contact-summary");
+
+    if(!box || !activeTrip) return;
+
+    const contacts = activeTrip.contacts || [];
+
+    box.innerHTML = contacts.length ?
+
+        contacts.map(contact => `
+
+            <div class="executive-card">
+
+            <h3>${contact.name}</h3>
+
+            <p>${contact.type}</p>
+
+            </div>
+
+        `).join("")
+
+        : "<p>No contacts added yet.</p>";
+
+}
+
+
+document.getElementById("delete-trip")?.addEventListener("click", () => {
+
+    if(!activeTrip) return;
+
+    removeTrip(activeTrip.id);
+
+});
 
 
 
@@ -940,6 +949,48 @@ document.getElementById("save-document")?.addEventListener("click", () => {
 
 
 /*
+CONTACT SAVE
+*/
+
+
+document.getElementById("save-contact")?.addEventListener("click", () => {
+
+    if(!activeTrip) return;
+
+
+    const name = document.getElementById("contact-name").value.trim();
+
+    if(!name){
+
+        showToast("Contact name is required");
+
+        return;
+
+    }
+
+
+    activeTrip = Jasmine.addContactToTrip(activeTrip.id, {
+
+        name,
+
+        type: document.getElementById("contact-type").value
+
+    });
+
+
+    renderContacts();
+
+    document.getElementById("contact-name").value = "";
+
+    document.getElementById("contact-type").value = "";
+
+    showToast("Contact saved");
+
+});
+
+
+
+/*
 CHECKLIST UPDATE
 */
 
@@ -1020,5 +1071,71 @@ document.getElementById("save-settings")?.addEventListener("click", () => {
     });
 
     showToast("Settings saved");
+
+});
+
+
+
+/*
+PUBLISH & SYNC
+*/
+
+
+function downloadJSON(filename, dataObj){
+
+    const blob = new Blob([JSON.stringify(dataObj, null, 2)], { type: "application/json" });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = filename;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+document.getElementById("export-data")?.addEventListener("click", () => {
+
+    const data = Jasmine.exportData();
+
+    downloadJSON("executives.json", { executives: data.executives });
+
+    downloadJSON("trips.json", { trips: data.trips });
+
+    downloadJSON("settings.json", data.settings);
+
+    showToast("Data exported — replace the files in data/ and push");
+
+});
+
+
+document.getElementById("reload-data")?.addEventListener("click", async () => {
+
+    const confirmed = confirm(
+
+        "This discards any unpublished changes in this browser and reloads " +
+
+        "whatever is currently published in data/*.json. Continue?"
+
+    );
+
+    if(!confirmed) return;
+
+
+    await Jasmine.reloadFromFiles();
+
+    showToast("Reloaded from published data");
+
+    setTimeout(() => location.reload(), 800);
 
 });
