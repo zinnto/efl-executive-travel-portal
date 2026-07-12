@@ -242,6 +242,12 @@
           "name": "Hotel Voucher",
           "link": "https://drive.google.com/file/d/1zvw0IYzMnytraPAS-nRE7rFDkhW4Dyxi/view?usp=drive_link",
           "status": "Verified"
+        },
+        {
+          "type": "Hotel Confirmation",
+          "name": "HOTEL 28-29",
+          "link": "https://drive.google.com/file/d/1GO3a7_fp0pSU4zpxM80_uLO9A3wENkFN/view?usp=drive_link",
+          "status": "Verified"
         }
       ],
       "schedule": [],
