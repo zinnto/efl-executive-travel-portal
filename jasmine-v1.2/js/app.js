@@ -308,7 +308,19 @@ const Jasmine = {
 
     getAirlines(){
 
-        return this.data.airlines;
+        // data.airlines is now a list of {name, website} objects —
+        // return just the names for dropdowns, same as before.
+
+        return this.data.airlines.map(airline => airline.name);
+
+    },
+
+
+    getAirlineWebsite(name){
+
+        const airline = this.data.airlines.find(item => item.name === name);
+
+        return airline ? airline.website : "";
 
     },
 

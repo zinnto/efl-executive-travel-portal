@@ -459,6 +459,30 @@ if(countrySelect){
 }
 
 
+const airlineSelect = document.getElementById("trip-airline");
+
+
+if(airlineSelect){
+
+    airlineSelect.onchange = function(){
+
+        const linkBox = document.getElementById("trip-airline-link");
+
+        if(!linkBox) return;
+
+        const website = Jasmine.getAirlineWebsite(this.value);
+
+        linkBox.innerHTML = website ?
+
+            `<a href="${website}" target="_blank">Check ${this.value}'s current routes ↗</a>`
+
+            : "";
+
+    };
+
+}
+
+
 
 /*
 TRIPS
