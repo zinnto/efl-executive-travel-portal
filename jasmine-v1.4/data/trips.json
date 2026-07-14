@@ -286,6 +286,42 @@
       ],
       "schedule": [],
       "contacts": []
+    },
+    {
+      "id": "trip007",
+      "executive": "exec004",
+      "country": "Tanzania",
+      "city": "Arusha",
+      "airline": "Kenya Airways",
+      "departure": "2026-07-14",
+      "return": "2026-07-15",
+      "purpose": "Business",
+      "checklist": [
+        "flight",
+        "hotel",
+        "schedule",
+        "Visa",
+        "Flight Ticket",
+        "Hotel Confirmation"
+      ],
+      "flight": null,
+      "hotel": null,
+      "documents": [
+        {
+          "type": "Flight Ticket",
+          "name": "Flight ticket",
+          "link": "",
+          "status": "Verified"
+        },
+        {
+          "type": "Hotel Confirmation",
+          "name": "Hotel voucher",
+          "link": "",
+          "status": "Verified"
+        }
+      ],
+      "schedule": [],
+      "contacts": []
     }
   ]
 }
