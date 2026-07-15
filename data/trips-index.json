@@ -1,5 +1,5 @@
 {
-  "defaultTripId": "EFL-UG-0726",
+  "defaultTripId": "EFL-001",
   "trips": [
     {
       "tripId": "EFL-UG-0726",
@@ -7,16 +7,16 @@
       "travellerName": "Prageeth Ranasinghe",
       "position": "Regional Finance Manager — East Africa",
       "destination": "Kampala & Entebbe, Uganda",
-      "dates": "20 – 27 Jul 2026",
+      "dates": "20 – 27 July 2026",
       "status": "active"
     },
     {
-      "tripId": "EFL-SG-0812",
-      "file": "data/trips/EFL-SG-0812.json",
-      "travellerName": "Amara Chen",
-      "position": "Chief Financial Officer",
-      "destination": "Singapore",
-      "dates": "12 – 16 Aug 2026",
+      "tripId": "EFL-WASANTHA-BBMC",
+      "file": "data/trips/EFL-WASANTHA-BBMC.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "London - UK",
+      "dates": "14th July 2026",
       "status": "upcoming"
     }
   ]
