@@ -32,13 +32,29 @@ efl-travel-portal/
 ├── documents/                             → Sample PDFs linked from trip files
 │
 └── data/
+    ├── executives-index.json                → Executive directory (profiles, reused across trips)
     ├── trips-index.json                     → Lists every trip (id, file, traveller, stage)
     └── trips/
         ├── EFL-UG-0726.json                     → One trip = one executive = one JSON file
         └── EFL-SG-0812.json
 ```
 
-## 3. How multiple trips/executives work
+## 3. Executives vs. Trips
+
+These are two separate, linked entities:
+
+- **An Executive** (`data/executives-index.json`) is a reusable profile — name,
+  position, department, contact details, travel notes (seat preference,
+  frequent-flyer status, etc). It doesn't change trip to trip.
+- **A Trip** (`data/trips/<id>.json`) is one journey, and can optionally link
+  to an executive via `traveller.execId`. A trip without a linked executive
+  still works fine — the traveller fields are just entered directly.
+
+In the Admin Dashboard, an executive's profile page lists every trip linked
+to them, and has a **"+ New Trip for this Executive"** shortcut that
+pre-fills the new trip's traveller details from the profile.
+
+## 4. How multiple trips/executives work
 
 Every screen in the **portal** is rendered by `script.js` purely from a trip
 JSON file. `data/trips-index.json` is the directory of all trips:
@@ -64,26 +80,48 @@ new `data/trips/<id>.json` file (same shape as the existing ones) and add an
 entry for it in `data/trips-index.json`, then commit & push. **The Admin
 Dashboard generates this file for you** — see below.
 
-## 4. Using the Admin Dashboard
+## 5. Using the Admin Dashboard
 
-Open `admin.html` (or tap **Settings → Manage Trips (Admin)** in the portal).
+Open `admin.html` (or tap **Settings → Manage Trips (Admin)** in the portal). It has four tabs:
 
-- **All Trips** — every trip currently known to this browser, as cards with
-  Edit / Open in Portal / Duplicate / Download / Delete.
-- **+ New Trip** — opens a full form: traveller details, next event, status
-  checklist, itinerary (day-by-day, with events and attachments), flights,
-  hotels, meetings, transport, documents (by category), contacts, maps and
-  expenses. No JSON editing required.
-- **Import JSON** — paste in or upload an existing trip file to edit it.
-- **Save Trip** — writes the trip into this browser's local storage. Because
-  the portal checks local storage before fetching the file on disk, **this
-  makes your edit appear in the portal instantly**, in this browser, without
-  any deploy — perfect for reviewing before you publish.
-- **Download JSON** — downloads the trip as `<tripId>.json`. This is how a
-  change becomes *permanent*: drop the file into `data/trips/`, add/update
-  its entry in `data/trips-index.json`, commit, and push.
-- **Set as Default in Portal** — makes this trip the one shown when the
-  portal opens with no trip already remembered on this device.
+**Dashboard** — summary cards (total trips, executives, active trips, pending
+items), a **Pending Matters** list built from every trip's checklist (click
+any item to jump straight into that trip and fix it), and a preview of your
+most recent trips with quick Edit / Open in Portal actions.
+
+**Trips** — every trip currently known to this browser, as cards with
+Edit / Open in Portal / Duplicate / Download / Delete. **+ New Trip** opens
+a full form: an optional link to an executive profile, traveller details,
+next event, a **checklist** (add/remove/rename any number of items — not
+fixed to "documents / hotels / transport"), itinerary (day-by-day, with
+events and attachments), flights, hotels, meetings, transport, documents
+(by category), contacts, maps and expenses. No JSON editing required.
+**Import JSON** lets you paste in or upload an existing trip file.
+
+**Executives** — the executive directory. Add a profile once (name,
+position, department, contact info, travel notes), then link any number of
+trips to it. Opening an executive's profile shows every trip linked to them,
+lets you jump straight into editing one, open their current trip in the
+portal, or start a new trip pre-filled with their details.
+
+**Settings** — documentation on how the data model and publishing flow
+work, an **Export All (JSON)** button that backs up every trip and executive
+currently saved in this browser into one file, an **Import Bundle** button
+to restore from that file, and a "Clear All Local Admin Edits" reset for
+when local preview data gets out of sync.
+
+**Save** — writes into this browser's local storage. Because the portal
+checks local storage before fetching the file on disk, **this makes your
+edit appear in the portal instantly**, in this browser, without any deploy —
+perfect for reviewing before you publish.
+
+**Download JSON** — downloads the trip or executive as `<id>.json`. This is
+how a change becomes *permanent*: drop trip files into `data/trips/` (and
+update `data/trips-index.json`), or add/update entries in
+`data/executives-index.json`, then commit and push.
+
+**Set as Default in Portal** — makes this trip the one shown when the portal
+opens with no trip already remembered on this device.
 
 > **Why "Save" isn't automatically permanent:** GitHub Pages (like this
 > project) serves static files — there is no database or server the admin
@@ -93,7 +131,7 @@ Open `admin.html` (or tap **Settings → Manage Trips (Admin)** in the portal).
 > backend (e.g. a serverless function + database) — happy to help design
 > that if EFL Global wants to take this further.
 
-## 5. Running it locally
+## 6. Running it locally
 
 Because the app fetches JSON and registers a service worker, it must be
 served over HTTP (not opened as a bare `file://`):
@@ -105,7 +143,7 @@ python3 -m http.server 8080
 # Admin:   http://localhost:8080/admin.html
 ```
 
-## 6. Publishing on GitHub Pages
+## 7. Publishing on GitHub Pages
 
 1. Create a new GitHub repository (e.g. `efl-travel-portal`).
 2. Push this folder's contents to the repository root:
@@ -130,7 +168,7 @@ python3 -m http.server 8080
 > GitHub Pages serves over HTTPS by default, required for the service worker
 > and "Add to Home Screen" install prompt to work.
 
-## 7. Adding it to a phone home screen
+## 8. Adding it to a phone home screen
 
 ### iPhone (Safari)
 1. Open the published portal URL in **Safari**.
@@ -143,13 +181,13 @@ python3 -m http.server 8080
 The in-app **Settings → Add to Home Screen** button triggers this directly
 on supported browsers.
 
-## 8. Offline mode
+## 9. Offline mode
 
 Toggling **Settings → Offline Mode** in the portal tells the service worker
 to cache the current trip's data and every linked document, so the itinerary
 and documents remain viewable without signal.
 
-## 9. Customising branding
+## 10. Customising branding
 
 All brand colors and type live as CSS variables at the top of `style.css`
 (`--navy-900`, `--gold-500`, fonts, radii, shadows) — shared by both the

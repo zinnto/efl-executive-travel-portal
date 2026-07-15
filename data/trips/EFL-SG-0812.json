@@ -2,7 +2,8 @@
   "meta": {
     "tripName": "Singapore Investor Roadshow — August 2026",
     "companyName": "EFL Global",
-    "generatedOn": "2026-07-10"
+    "generatedOn": "2026-07-10",
+    "stage": "active"
   },
   "traveller": {
     "name": "Amara Chen",
@@ -10,7 +11,8 @@
     "photoInitials": "AC",
     "destination": "Singapore",
     "dates": "12 – 16 Aug 2026",
-    "tripId": "EFL-SG-0812"
+    "tripId": "EFL-SG-0812",
+    "execId": "EXEC-AC002"
   },
   "nextEvent": {
     "type": "flight",
@@ -31,15 +33,51 @@
     "transportArranged": false
   },
   "quickAccess": [
-    { "id": "flights", "label": "Flights", "icon": "flight" },
-    { "id": "hotels", "label": "Hotels", "icon": "hotel" },
-    { "id": "itinerary", "label": "Itinerary", "icon": "itinerary" },
-    { "id": "meetings", "label": "Meetings", "icon": "meeting" },
-    { "id": "transport", "label": "Transport", "icon": "transport" },
-    { "id": "documents", "label": "Documents", "icon": "document" },
-    { "id": "maps", "label": "Maps", "icon": "map" },
-    { "id": "contacts", "label": "Contacts", "icon": "contact" },
-    { "id": "expenses", "label": "Expenses", "icon": "expense" }
+    {
+      "id": "flights",
+      "label": "Flights",
+      "icon": "flight"
+    },
+    {
+      "id": "hotels",
+      "label": "Hotels",
+      "icon": "hotel"
+    },
+    {
+      "id": "itinerary",
+      "label": "Itinerary",
+      "icon": "itinerary"
+    },
+    {
+      "id": "meetings",
+      "label": "Meetings",
+      "icon": "meeting"
+    },
+    {
+      "id": "transport",
+      "label": "Transport",
+      "icon": "transport"
+    },
+    {
+      "id": "documents",
+      "label": "Documents",
+      "icon": "document"
+    },
+    {
+      "id": "maps",
+      "label": "Maps",
+      "icon": "map"
+    },
+    {
+      "id": "contacts",
+      "label": "Contacts",
+      "icon": "contact"
+    },
+    {
+      "id": "expenses",
+      "label": "Expenses",
+      "icon": "expense"
+    }
   ],
   "itinerary": [
     {
@@ -160,13 +198,45 @@
     }
   ],
   "maps": [
-    { "category": "Airport", "name": "Singapore Changi Airport", "address": "Singapore", "query": "Singapore Changi Airport" },
-    { "category": "Hotel", "name": "Marina Bay Sands", "address": "10 Bayfront Avenue, Singapore", "query": "Marina Bay Sands Singapore" },
-    { "category": "Meeting", "name": "DBS Asia Central", "address": "Marina Bay, Singapore", "query": "DBS Asia Central Marina Bay" }
+    {
+      "category": "Airport",
+      "name": "Singapore Changi Airport",
+      "address": "Singapore",
+      "query": "Singapore Changi Airport"
+    },
+    {
+      "category": "Hotel",
+      "name": "Marina Bay Sands",
+      "address": "10 Bayfront Avenue, Singapore",
+      "query": "Marina Bay Sands Singapore"
+    },
+    {
+      "category": "Meeting",
+      "name": "DBS Asia Central",
+      "address": "Marina Bay, Singapore",
+      "query": "DBS Asia Central Marina Bay"
+    }
   ],
   "expenses": {
     "currency": "USD",
     "perDiem": 180,
     "items": []
-  }
+  },
+  "checklist": [
+    {
+      "id": "c1",
+      "label": "Documents Ready",
+      "done": true
+    },
+    {
+      "id": "c2",
+      "label": "Hotels Confirmed",
+      "done": true
+    },
+    {
+      "id": "c3",
+      "label": "Transport Arranged",
+      "done": false
+    }
+  ]
 }

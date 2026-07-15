@@ -2,7 +2,8 @@
   "meta": {
     "tripName": "Uganda Regional Review — July 2026",
     "companyName": "EFL Global",
-    "generatedOn": "2026-07-09"
+    "generatedOn": "2026-07-09",
+    "stage": "active"
   },
   "traveller": {
     "name": "Prageeth Ranasinghe",
@@ -10,7 +11,8 @@
     "photoInitials": "PR",
     "destination": "Kampala & Entebbe, Uganda",
     "dates": "20 – 27 July 2026",
-    "tripId": "EFL-UG-0726"
+    "tripId": "EFL-UG-0726",
+    "execId": "EXEC-PR001"
   },
   "nextEvent": {
     "type": "flight",
@@ -31,15 +33,51 @@
     "transportArranged": true
   },
   "quickAccess": [
-    { "id": "flights", "label": "Flights", "icon": "flight" },
-    { "id": "hotels", "label": "Hotels", "icon": "hotel" },
-    { "id": "itinerary", "label": "Itinerary", "icon": "itinerary" },
-    { "id": "meetings", "label": "Meetings", "icon": "meeting" },
-    { "id": "transport", "label": "Transport", "icon": "transport" },
-    { "id": "documents", "label": "Documents", "icon": "document" },
-    { "id": "maps", "label": "Maps", "icon": "map" },
-    { "id": "contacts", "label": "Contacts", "icon": "contact" },
-    { "id": "expenses", "label": "Expenses", "icon": "expense" }
+    {
+      "id": "flights",
+      "label": "Flights",
+      "icon": "flight"
+    },
+    {
+      "id": "hotels",
+      "label": "Hotels",
+      "icon": "hotel"
+    },
+    {
+      "id": "itinerary",
+      "label": "Itinerary",
+      "icon": "itinerary"
+    },
+    {
+      "id": "meetings",
+      "label": "Meetings",
+      "icon": "meeting"
+    },
+    {
+      "id": "transport",
+      "label": "Transport",
+      "icon": "transport"
+    },
+    {
+      "id": "documents",
+      "label": "Documents",
+      "icon": "document"
+    },
+    {
+      "id": "maps",
+      "label": "Maps",
+      "icon": "map"
+    },
+    {
+      "id": "contacts",
+      "label": "Contacts",
+      "icon": "contact"
+    },
+    {
+      "id": "expenses",
+      "label": "Expenses",
+      "icon": "expense"
+    }
   ],
   "itinerary": [
     {
@@ -64,7 +102,12 @@
           "location": "Jomo Kenyatta Intl Airport, Terminal 1A",
           "contact": "Kenya Airways — +254 20 327 4747",
           "notes": "Seat 2A, Business Class. E-boarding pass in Documents.",
-          "attachments": [ { "name": "Boarding Pass — KQ414.pdf", "file": "documents/boarding-pass-kq414.pdf" } ],
+          "attachments": [
+            {
+              "name": "Boarding Pass — KQ414.pdf",
+              "file": "documents/boarding-pass-kq414.pdf"
+            }
+          ],
           "mapQuery": "Jomo Kenyatta International Airport"
         },
         {
@@ -84,7 +127,12 @@
           "location": "Stanbic Bank Uganda, Crested Towers, Kampala",
           "contact": "Sarah Nakato — Country Manager",
           "notes": "Discuss Q3 regional logistics contract. Bring signed MSA copy.",
-          "attachments": [ { "name": "Meeting Brief — Stanbic.pdf", "file": "documents/meeting-brief-stanbic.pdf" } ],
+          "attachments": [
+            {
+              "name": "Meeting Brief — Stanbic.pdf",
+              "file": "documents/meeting-brief-stanbic.pdf"
+            }
+          ],
           "mapQuery": "Crested Towers Kampala"
         },
         {
@@ -121,7 +169,12 @@
           "location": "EFL Global Uganda Office, Nakasero",
           "contact": "David Ochieng — Regional Director",
           "notes": "Full-day session. Finance pack pre-circulated.",
-          "attachments": [ { "name": "Q3 Finance Pack.pdf", "file": "documents/q3-finance-pack.pdf" } ],
+          "attachments": [
+            {
+              "name": "Q3 Finance Pack.pdf",
+              "file": "documents/q3-finance-pack.pdf"
+            }
+          ],
           "mapQuery": "Nakasero Kampala"
         },
         {
@@ -209,25 +262,52 @@
   ],
   "documents": {
     "Flight Documents": [
-      { "name": "Boarding Pass — KQ414 (NBO–EBB)", "file": "documents/boarding-pass-kq414.pdf" },
-      { "name": "Boarding Pass — KQ413 (EBB–NBO)", "file": "documents/boarding-pass-kq413.pdf" }
+      {
+        "name": "Boarding Pass — KQ414 (NBO–EBB)",
+        "file": "documents/boarding-pass-kq414.pdf"
+      },
+      {
+        "name": "Boarding Pass — KQ413 (EBB–NBO)",
+        "file": "documents/boarding-pass-kq413.pdf"
+      }
     ],
     "Hotel Reservations": [
-      { "name": "Kampala Serena — Confirmation", "file": "documents/hotel-confirmation-serena.pdf" }
+      {
+        "name": "Kampala Serena — Confirmation",
+        "file": "documents/hotel-confirmation-serena.pdf"
+      }
     ],
     "Visa & Passport": [
-      { "name": "Uganda e-Visa Approval", "file": "documents/uganda-evisa.pdf" },
-      { "name": "Passport Copy", "file": "documents/passport-copy.pdf" }
+      {
+        "name": "Uganda e-Visa Approval",
+        "file": "documents/uganda-evisa.pdf"
+      },
+      {
+        "name": "Passport Copy",
+        "file": "documents/passport-copy.pdf"
+      }
     ],
     "Insurance": [
-      { "name": "Travel Insurance Certificate", "file": "documents/travel-insurance.pdf" }
+      {
+        "name": "Travel Insurance Certificate",
+        "file": "documents/travel-insurance.pdf"
+      }
     ],
     "Meeting Documents": [
-      { "name": "Meeting Brief — Stanbic Bank", "file": "documents/meeting-brief-stanbic.pdf" },
-      { "name": "Q3 Finance Pack", "file": "documents/q3-finance-pack.pdf" }
+      {
+        "name": "Meeting Brief — Stanbic Bank",
+        "file": "documents/meeting-brief-stanbic.pdf"
+      },
+      {
+        "name": "Q3 Finance Pack",
+        "file": "documents/q3-finance-pack.pdf"
+      }
     ],
     "Expense Documents": [
-      { "name": "Per Diem & Expense Policy", "file": "documents/expense-policy.pdf" }
+      {
+        "name": "Per Diem & Expense Policy",
+        "file": "documents/expense-policy.pdf"
+      }
     ]
   },
   "contacts": [
@@ -289,21 +369,88 @@
     }
   ],
   "maps": [
-    { "category": "Airport", "name": "Jomo Kenyatta International Airport", "address": "Nairobi, Kenya", "query": "Jomo Kenyatta International Airport" },
-    { "category": "Airport", "name": "Entebbe International Airport", "address": "Entebbe, Uganda", "query": "Entebbe International Airport" },
-    { "category": "Hotel", "name": "Kampala Serena Hotel", "address": "Kintu Road, Kampala", "query": "Kampala Serena Hotel" },
-    { "category": "Meeting", "name": "Stanbic Bank HQ, Crested Towers", "address": "Kampala, Uganda", "query": "Crested Towers Kampala" },
-    { "category": "Meeting", "name": "EFL Global Uganda Office", "address": "Nakasero, Kampala", "query": "Nakasero Kampala" },
-    { "category": "Restaurant", "name": "Cassia Kampala", "address": "Kampala, Uganda", "query": "Cassia Kampala" },
-    { "category": "Restaurant", "name": "The Lawns Restaurant", "address": "Kololo, Kampala", "query": "The Lawns Restaurant Kololo" }
+    {
+      "category": "Airport",
+      "name": "Jomo Kenyatta International Airport",
+      "address": "Nairobi, Kenya",
+      "query": "Jomo Kenyatta International Airport"
+    },
+    {
+      "category": "Airport",
+      "name": "Entebbe International Airport",
+      "address": "Entebbe, Uganda",
+      "query": "Entebbe International Airport"
+    },
+    {
+      "category": "Hotel",
+      "name": "Kampala Serena Hotel",
+      "address": "Kintu Road, Kampala",
+      "query": "Kampala Serena Hotel"
+    },
+    {
+      "category": "Meeting",
+      "name": "Stanbic Bank HQ, Crested Towers",
+      "address": "Kampala, Uganda",
+      "query": "Crested Towers Kampala"
+    },
+    {
+      "category": "Meeting",
+      "name": "EFL Global Uganda Office",
+      "address": "Nakasero, Kampala",
+      "query": "Nakasero Kampala"
+    },
+    {
+      "category": "Restaurant",
+      "name": "Cassia Kampala",
+      "address": "Kampala, Uganda",
+      "query": "Cassia Kampala"
+    },
+    {
+      "category": "Restaurant",
+      "name": "The Lawns Restaurant",
+      "address": "Kololo, Kampala",
+      "query": "The Lawns Restaurant Kololo"
+    }
   ],
   "expenses": {
     "currency": "USD",
     "perDiem": 150,
     "items": [
-      { "date": "20 Jul 2026", "category": "Ground Transport", "description": "Airport transfer, Nairobi", "amount": 45 },
-      { "date": "20 Jul 2026", "category": "Meals", "description": "Welcome dinner, Cassia Kampala", "amount": 120 },
-      { "date": "21 Jul 2026", "category": "Meals", "description": "Board dinner, The Lawns", "amount": 95 }
+      {
+        "date": "20 Jul 2026",
+        "category": "Ground Transport",
+        "description": "Airport transfer, Nairobi",
+        "amount": 45
+      },
+      {
+        "date": "20 Jul 2026",
+        "category": "Meals",
+        "description": "Welcome dinner, Cassia Kampala",
+        "amount": 120
+      },
+      {
+        "date": "21 Jul 2026",
+        "category": "Meals",
+        "description": "Board dinner, The Lawns",
+        "amount": 95
+      }
     ]
-  }
+  },
+  "checklist": [
+    {
+      "id": "c1",
+      "label": "Documents Ready",
+      "done": true
+    },
+    {
+      "id": "c2",
+      "label": "Hotels Confirmed",
+      "done": true
+    },
+    {
+      "id": "c3",
+      "label": "Transport Arranged",
+      "done": true
+    }
+  ]
 }

@@ -20,8 +20,33 @@ const LS_REMOVED = 'efl-trips-index-removed';
 const LS_ACTIVE = 'efl-active-trip';
 const tripDataKey = (id) => 'efl-trip-data-' + id;
 
+const LS_EXEC_EXTRA = 'efl-executives-extra';
+const LS_EXEC_REMOVED = 'efl-executives-removed';
+const execDataKey = (id) => 'efl-exec-data-' + id;
+
 let currentTrip = null;
 let currentIsNew = false;
+let currentExec = null;
+let currentExecIsNew = false;
+let currentView = 'dashboard';
+let editorOrigin = 'list'; // which tab to return to when leaving the trip editor: 'list' | 'executives' | 'dashboard'
+let EXEC_CACHE = null; // cached merged executives list, refreshed on demand
+
+const ICONS = {
+  itinerary: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg>',
+  contact: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>',
+  flight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 3.5l7 7-3.5 1.4-3.9-2.5-2.1 2.1 1.6 3-1.4 1.4-3-3.6-3.6-3 1.4-1.4 3 1.6 2.1-2.1-2.5-3.9 1.4-3.5z"/></svg>',
+  document: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg>',
+  bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"/></svg>'
+};
+
+function blankExecutive() {
+  return { execId: '', name: '', position: '', department: '', photoInitials: '', email: '', phone: '', nationality: '', notes: '' };
+}
+function newExecId(name) {
+  return `EXEC-${slugify(name).slice(0, 6) || 'NEW'}${Date.now().toString(36).slice(-3).toUpperCase()}`;
+}
 
 /* ---------------- Utilities ---------------- */
 
@@ -124,6 +149,146 @@ async function loadTripById(id, fileHint) {
   return res.json();
 }
 
+/* ---------------- Executives directory (static + local overlay) ----------------
+   Unlike trips (one file per trip), the executives directory is one small
+   JSON array (data/executives-index.json). Local edits/additions live in
+   localStorage the same way trips do: an override per executive, plus an
+   "extra" list for ones only created in this browser, plus a "removed" list. */
+
+async function loadExecutivesList(forceRefresh) {
+  if (EXEC_CACHE && !forceRefresh) return EXEC_CACHE;
+  let staticList = [];
+  try {
+    const res = await fetch('data/executives-index.json', { cache: 'no-store' });
+    staticList = await res.json();
+  } catch (e) { console.warn('No executives-index.json found', e); }
+
+  const removed = JSON.parse(localStorage.getItem(LS_EXEC_REMOVED) || '[]');
+  const extra = JSON.parse(localStorage.getItem(LS_EXEC_EXTRA) || '[]');
+  const map = {};
+  [...staticList, ...extra].forEach(e => { map[e.execId] = e; });
+  removed.forEach(id => delete map[id]);
+
+  // Apply any live per-executive overrides (edited profiles) on top.
+  const merged = Object.values(map).map(e => {
+    const override = localStorage.getItem(execDataKey(e.execId));
+    return override ? JSON.parse(override) : e;
+  });
+  EXEC_CACHE = merged;
+  return merged;
+}
+
+async function loadExecutiveById(id) {
+  const override = localStorage.getItem(execDataKey(id));
+  if (override) return JSON.parse(override);
+  const list = await loadExecutivesList();
+  const found = list.find(e => e.execId === id);
+  if (!found) throw new Error('Executive not found: ' + id);
+  return found;
+}
+
+function upsertExecutive(exec) {
+  localStorage.setItem(execDataKey(exec.execId), JSON.stringify(exec));
+  const extra = JSON.parse(localStorage.getItem(LS_EXEC_EXTRA) || '[]');
+  const i = extra.findIndex(e => e.execId === exec.execId);
+  if (i >= 0) extra[i] = exec; else extra.push(exec);
+  localStorage.setItem(LS_EXEC_EXTRA, JSON.stringify(extra));
+  const removed = JSON.parse(localStorage.getItem(LS_EXEC_REMOVED) || '[]').filter(id => id !== exec.execId);
+  localStorage.setItem(LS_EXEC_REMOVED, JSON.stringify(removed));
+  EXEC_CACHE = null;
+}
+
+function deleteExecutive(id) {
+  localStorage.removeItem(execDataKey(id));
+  const removed = JSON.parse(localStorage.getItem(LS_EXEC_REMOVED) || '[]');
+  if (!removed.includes(id)) removed.push(id);
+  localStorage.setItem(LS_EXEC_REMOVED, JSON.stringify(removed));
+  let extra = JSON.parse(localStorage.getItem(LS_EXEC_EXTRA) || '[]').filter(e => e.execId !== id);
+  localStorage.setItem(LS_EXEC_EXTRA, JSON.stringify(extra));
+  EXEC_CACHE = null;
+}
+
+/* Trips that belong to a given executive — matched by execId, falling back
+   to a name match for older trips created before this field existed. */
+async function tripsForExecutive(exec) {
+  const idx = await loadTripsIndex();
+  const out = [];
+  for (const entry of idx.trips) {
+    try {
+      const t = await loadTripById(entry.tripId, entry.file);
+      const matches = t.traveller.execId ? t.traveller.execId === exec.execId : t.traveller.name === exec.name;
+      if (matches) out.push(t);
+    } catch (e) { /* skip trips whose file is missing */ }
+  }
+  return out;
+}
+
+/* ---------------- View: Dashboard ---------------- */
+
+async function renderDashboard() {
+  const statGrid = document.getElementById('dashStatGrid');
+  const pendingWrap = document.getElementById('dashPending');
+  const previewWrap = document.getElementById('dashTripsPreview');
+  statGrid.innerHTML = '<div class="empty-hint">Loading…</div>';
+  pendingWrap.innerHTML = '';
+  previewWrap.innerHTML = '';
+
+  const [idx, execs] = await Promise.all([loadTripsIndex(), loadExecutivesList(true)]);
+  const trips = (await Promise.all(idx.trips.map(async (entry) => {
+    try { return await loadTripById(entry.tripId, entry.file); } catch (e) { return null; }
+  }))).filter(Boolean);
+
+  const activeCount = trips.filter(t => (t.meta.stage || 'upcoming') === 'active').length;
+
+  const pending = [];
+  trips.forEach(t => {
+    migrateChecklist(t).filter(c => !c.done && c.label).forEach(c => pending.push({ trip: t, label: c.label }));
+  });
+
+  statGrid.innerHTML = [
+    { label: 'Total Trips', value: trips.length, icon: 'itinerary' },
+    { label: 'Executives', value: execs.length, icon: 'contact', gold: true },
+    { label: 'Active Trips', value: activeCount, icon: 'flight' },
+    { label: 'Pending Items', value: pending.length, icon: 'document', gold: pending.length > 0 }
+  ].map(c => `<div class="stat-card">
+      <div class="stat-card__text"><div class="stat-card__label">${c.label}</div><div class="stat-card__value">${c.value}</div></div>
+      <div class="stat-card__icon ${c.gold ? 'gold' : ''}">${ICONS[c.icon]}</div>
+    </div>`).join('');
+
+  if (!pending.length) {
+    pendingWrap.innerHTML = `<div class="status-row"><div class="status-check">${ICONS.check}</div><div class="status-text">Nothing pending — every trip is fully arranged.</div></div>`;
+  } else {
+    pendingWrap.innerHTML = pending.map(p => `
+      <div class="status-row" style="cursor:pointer;" data-id="${esc(p.trip.traveller.tripId)}">
+        <div class="status-check" style="background:var(--gold-100);color:var(--navy-800);">${ICONS.bell}</div>
+        <div class="status-text">${esc(p.trip.traveller.name) || '(unnamed)'} — ${esc(p.label)}</div>
+      </div>`).join('');
+    pendingWrap.querySelectorAll('.status-row[data-id]').forEach(row => {
+      row.addEventListener('click', () => { editorOrigin = 'dashboard'; openEditor(row.dataset.id); });
+    });
+  }
+
+  previewWrap.innerHTML = trips.slice(0, 6).map(t => `
+    <div class="trip-card" data-id="${esc(t.traveller.tripId)}">
+      <div class="trip-card__top">
+        <div class="trip-card__avatar">${initials(t.traveller.name)}</div>
+        <div><div class="trip-card__name">${esc(t.traveller.name) || '(unnamed)'}</div><div class="trip-card__role">${esc(t.traveller.position || '')}</div></div>
+      </div>
+      <div class="trip-card__meta"><div><span>Destination </span>${esc(t.traveller.destination || '—')}</div><div><span>Dates </span>${esc(t.traveller.dates || '—')}</div></div>
+      <span class="trip-card__status ${t.meta.stage || 'upcoming'}">${t.meta.stage || 'upcoming'}</span>
+      <div class="trip-card__actions">
+        <button class="btn btn-primary btn-sm" data-act="edit">Edit</button>
+        <button class="btn btn-outline btn-sm" data-act="preview">Open in Portal</button>
+      </div>
+    </div>`).join('') || '<div class="empty-hint">No trips yet — head to the Trips tab to create the first one.</div>';
+
+  previewWrap.querySelectorAll('.trip-card').forEach(card => {
+    const id = card.dataset.id;
+    card.querySelector('[data-act="edit"]').addEventListener('click', () => { editorOrigin = 'dashboard'; openEditor(id); });
+    card.querySelector('[data-act="preview"]').addEventListener('click', () => window.open(`index.html?trip=${encodeURIComponent(id)}`, '_blank'));
+  });
+}
+
 /* ---------------- View: Trips list ---------------- */
 
 async function renderTripsList() {
@@ -175,7 +340,7 @@ async function renderTripsList() {
 
   grid.querySelectorAll('.trip-card').forEach(card => {
     const id = card.dataset.id;
-    card.querySelector('[data-act="edit"]').addEventListener('click', () => openEditor(id));
+    card.querySelector('[data-act="edit"]').addEventListener('click', () => { editorOrigin = 'list'; openEditor(id); });
     card.querySelector('[data-act="preview"]').addEventListener('click', () => window.open(`index.html?trip=${encodeURIComponent(id)}`, '_blank'));
     card.querySelector('[data-act="download"]').addEventListener('click', async () => {
       const t = await loadTripById(id);
@@ -188,6 +353,7 @@ async function renderTripsList() {
       clone.traveller.tripId = newId;
       clone.traveller.name = clone.traveller.name + ' (Copy)';
       currentTrip = clone; currentIsNew = true;
+      editorOrigin = 'list';
       openEditorWithTrip(clone, true);
       showToast('Duplicated — edit and Save to keep it.');
     });
@@ -467,14 +633,58 @@ function renderDocuments() {
   });
 }
 
-/* ---------------- Editor: load / bind / save ---------------- */
+/* ---------------- Checklist editor (trip) ---------------- */
 
-function openEditorWithTrip(trip, isNew) {
+function migrateChecklist(trip) {
+  if (Array.isArray(trip.checklist)) return trip.checklist;
+  const s = trip.status || {};
+  return [
+    { id: 'c1', label: 'Documents Ready', done: !!s.documentsReady },
+    { id: 'c2', label: 'Hotels Confirmed', done: !!s.hotelsConfirmed },
+    { id: 'c3', label: 'Transport Arranged', done: !!s.transportArranged }
+  ];
+}
+
+function renderChecklist() {
+  const wrap = document.getElementById('checklistList');
+  wrap.innerHTML = '';
+  if (!currentTrip.checklist.length) {
+    wrap.appendChild(el(`<div class="empty-hint">No checklist items yet.</div>`));
+  }
+  currentTrip.checklist.forEach((item, idx) => {
+    const row = el(`<div class="checklist-editor-row">
+      <input type="checkbox" ${item.done ? 'checked' : ''} data-role="done" />
+      <input type="text" class="f-input" value="${esc(item.label)}" placeholder="Checklist item" data-role="label" />
+      <button class="repeat-card__remove" type="button">Remove</button>
+    </div>`);
+    row.querySelector('[data-role="done"]').addEventListener('change', (e) => { item.done = e.target.checked; });
+    row.querySelector('[data-role="label"]').addEventListener('input', (e) => { item.label = e.target.value; });
+    row.querySelector('.repeat-card__remove').addEventListener('click', () => {
+      currentTrip.checklist.splice(idx, 1);
+      renderChecklist();
+    });
+    wrap.appendChild(row);
+  });
+}
+
+/* ---------------- Executive-select dropdown (used inside trip editor) ---------------- */
+
+async function populateExecutiveSelect(selectedExecId) {
+  const sel = document.getElementById('f_execId');
+  const execs = await loadExecutivesList();
+  sel.innerHTML = '<option value="">— Not linked to an executive profile —</option>' +
+    execs.map(e => `<option value="${esc(e.execId)}" ${e.execId === selectedExecId ? 'selected' : ''}>${esc(e.name)} — ${esc(e.position || '')}</option>`).join('');
+}
+
+/* ---------------- Editor: load / bind / save (Trip) ---------------- */
+
+async function openEditorWithTrip(trip, isNew) {
   currentTrip = trip;
   currentIsNew = !!isNew;
   if (!currentTrip.expenses) currentTrip.expenses = { currency: 'USD', perDiem: 0, items: [] };
   if (!currentTrip.documents) currentTrip.documents = {};
   if (!currentTrip.meta.stage) currentTrip.meta.stage = 'upcoming';
+  currentTrip.checklist = migrateChecklist(currentTrip);
 
   document.getElementById('editorHeading').textContent = isNew ? 'New Trip' : `Edit — ${trip.traveller.name || trip.traveller.tripId}`;
 
@@ -483,6 +693,7 @@ function openEditorWithTrip(trip, isNew) {
   f('f_tripId').readOnly = !isNew;
   f('f_tripId').title = isNew ? '' : 'Trip ID cannot be changed after creation — duplicate the trip to fork it.';
   f('f_stage').value = trip.meta.stage;
+  await populateExecutiveSelect(trip.traveller.execId || '');
   f('f_tripName').value = trip.meta.tripName || '';
   f('f_companyName').value = trip.meta.companyName || 'EFL Global';
   f('f_travellerName').value = trip.traveller.name || '';
@@ -503,28 +714,23 @@ function openEditorWithTrip(trip, isNew) {
   f('ne_gate').value = ne.gate || '';
   f('ne_seat').value = ne.seat || '';
 
-  f('st_documents').checked = !!trip.status.documentsReady;
-  f('st_hotels').checked = !!trip.status.hotelsConfirmed;
-  f('st_transport').checked = !!trip.status.transportArranged;
-
   f('exp_currency').value = trip.expenses.currency || 'USD';
   f('exp_perDiem').value = trip.expenses.perDiem || 0;
 
+  renderChecklist();
   renderItinerary();
   renderSimpleSections();
   renderDocuments();
 
-  document.getElementById('view-list').hidden = true;
-  document.getElementById('view-editor').hidden = false;
+  showView('editor');
   document.getElementById('topnavTitle').textContent = isNew ? 'New Trip' : 'Edit Trip';
-  document.getElementById('backBtn').classList.remove('hidden');
   window.scrollTo({ top: 0 });
 }
 
 async function openEditor(id) {
   try {
     const trip = await loadTripById(id);
-    openEditorWithTrip(trip, false);
+    await openEditorWithTrip(trip, false);
   } catch (e) {
     showToast('Could not load that trip.');
   }
@@ -534,6 +740,7 @@ function collectBasicFieldsIntoTrip() {
   const f = (id) => document.getElementById(id);
   currentTrip.traveller.tripId = f('f_tripId').value.trim() || newTripId(f('f_travellerName').value);
   currentTrip.meta.stage = f('f_stage').value;
+  currentTrip.traveller.execId = f('f_execId').value || '';
   currentTrip.meta.tripName = f('f_tripName').value;
   currentTrip.meta.companyName = f('f_companyName').value || 'EFL Global';
   currentTrip.traveller.name = f('f_travellerName').value;
@@ -550,9 +757,12 @@ function collectBasicFieldsIntoTrip() {
     terminal: f('ne_terminal').value, gate: f('ne_gate').value, seat: f('ne_seat').value
   } : null;
 
-  currentTrip.status.documentsReady = f('st_documents').checked;
-  currentTrip.status.hotelsConfirmed = f('st_hotels').checked;
-  currentTrip.status.transportArranged = f('st_transport').checked;
+  // Keep legacy `status` booleans in sync from the checklist for any code that still reads it.
+  currentTrip.status = {
+    documentsReady: currentTrip.checklist.some(c => /document/i.test(c.label) && c.done),
+    hotelsConfirmed: currentTrip.checklist.some(c => /hotel/i.test(c.label) && c.done),
+    transportArranged: currentTrip.checklist.some(c => /transport/i.test(c.label) && c.done)
+  };
 
   currentTrip.expenses.currency = f('exp_currency').value || 'USD';
   currentTrip.expenses.perDiem = Number(f('exp_perDiem').value) || 0;
@@ -572,32 +782,217 @@ function saveTrip() {
   document.getElementById('f_tripId').readOnly = true;
 }
 
+/* ---------------- View: Executives list ---------------- */
+
+async function renderExecutivesList() {
+  const grid = document.getElementById('execGrid');
+  grid.innerHTML = '<div class="empty-hint">Loading executives…</div>';
+  const execs = await loadExecutivesList(true);
+
+  if (!execs.length) {
+    grid.innerHTML = `<div class="empty-hint">No executives yet. Click <strong>+ New Executive</strong> to add the first profile.</div>`;
+    return;
+  }
+
+  const idx = await loadTripsIndex();
+  const cards = await Promise.all(execs.map(async (exec) => {
+    const tripCount = (await tripsForExecutive(exec)).length;
+    return `
+      <div class="exec-card" data-id="${esc(exec.execId)}">
+        <div class="exec-card__top">
+          <div class="exec-card__avatar">${initials(exec.name)}</div>
+          <div>
+            <div class="exec-card__name">${exec.name || '(unnamed)'}</div>
+            <div class="exec-card__role">${exec.position || ''}</div>
+            <div class="exec-card__dept">${exec.department || ''}</div>
+          </div>
+        </div>
+        <div class="exec-card__meta">
+          <div>${exec.email || 'No email on file'}</div>
+          <div>${exec.phone || ''}</div>
+        </div>
+        <span class="exec-card__badge">${tripCount} trip${tripCount === 1 ? '' : 's'}</span>
+        <div class="exec-card__actions">
+          <button class="btn btn-primary btn-sm" data-act="view">View Profile</button>
+          <button class="btn btn-outline btn-sm" data-act="download">Download</button>
+          <button class="btn btn-ghost btn-sm" data-act="delete">Delete</button>
+        </div>
+      </div>`;
+  }));
+  grid.innerHTML = cards.join('');
+
+  grid.querySelectorAll('.exec-card').forEach(card => {
+    const id = card.dataset.id;
+    card.querySelector('[data-act="view"]').addEventListener('click', () => openExecEditor(id));
+    card.querySelector('[data-act="download"]').addEventListener('click', async () => {
+      const e = await loadExecutiveById(id);
+      download(`${id}.json`, JSON.stringify(e, null, 2));
+    });
+    card.querySelector('[data-act="delete"]').addEventListener('click', () => {
+      const name = card.querySelector('.exec-card__name').textContent;
+      if (!confirm(`Delete executive "${name}"? This does not delete their past trips.`)) return;
+      deleteExecutive(id);
+      showToast('Executive deleted from this browser.');
+      renderExecutivesList();
+    });
+  });
+}
+
+/* ---------------- Executive profile editor ---------------- */
+
+async function openExecEditorWithData(exec, isNew) {
+  currentExec = exec;
+  currentExecIsNew = !!isNew;
+
+  document.getElementById('execEditorHeading').textContent = isNew ? 'New Executive' : `Edit — ${exec.name || exec.execId}`;
+  document.getElementById('execProfileAvatar').textContent = initials(exec.name) || '—';
+  document.getElementById('execProfileName').textContent = exec.name || 'New Executive';
+  document.getElementById('execProfileRole').textContent = exec.position || '';
+  document.getElementById('execProfileDept').textContent = exec.department || '';
+
+  const f = (id) => document.getElementById(id);
+  f('ex_execId').value = exec.execId || '';
+  f('ex_execId').readOnly = !isNew;
+  f('ex_execId').title = isNew ? '' : 'Executive ID cannot be changed after creation.';
+  f('ex_department').value = exec.department || '';
+  f('ex_name').value = exec.name || '';
+  f('ex_position').value = exec.position || '';
+  f('ex_initials').value = exec.photoInitials || '';
+  f('ex_nationality').value = exec.nationality || '';
+  f('ex_email').value = exec.email || '';
+  f('ex_phone').value = exec.phone || '';
+  f('ex_notes').value = exec.notes || '';
+
+  document.getElementById('execNewTripBtn').style.display = isNew ? 'none' : '';
+  const tripsWrap = document.getElementById('execTripsList');
+  if (isNew) {
+    tripsWrap.innerHTML = `<div class="empty-hint">Save this executive first to attach trips.</div>`;
+  } else {
+    tripsWrap.innerHTML = `<div class="empty-hint">Loading trips…</div>`;
+    const trips = await tripsForExecutive(exec);
+    if (!trips.length) {
+      tripsWrap.innerHTML = `<div class="empty-hint">No trips yet for ${esc(exec.name)}.</div>`;
+    } else {
+      tripsWrap.innerHTML = trips.map(t => `
+        <div class="exec-trip-row" data-id="${esc(t.traveller.tripId)}">
+          <div class="exec-trip-row__icon">${ICON_PLANE}</div>
+          <div>
+            <div class="exec-trip-row__name">${esc(t.meta.tripName || t.traveller.destination)}</div>
+            <div class="exec-trip-row__meta">${esc(t.traveller.destination)} · ${esc(t.traveller.dates)}</div>
+          </div>
+          <div class="exec-trip-row__actions">
+            <button class="btn btn-outline btn-sm" data-act="edit">Edit</button>
+          </div>
+        </div>`).join('');
+      tripsWrap.querySelectorAll('.exec-trip-row').forEach(row => {
+        row.querySelector('[data-act="edit"]').addEventListener('click', () => { editorOrigin = 'executives'; openEditor(row.dataset.id); });
+      });
+    }
+  }
+
+  showView('exec-editor');
+  document.getElementById('topnavTitle').textContent = isNew ? 'New Executive' : 'Executive Profile';
+  window.scrollTo({ top: 0 });
+}
+
+async function openExecEditor(id) {
+  try {
+    const exec = await loadExecutiveById(id);
+    await openExecEditorWithData(exec, false);
+  } catch (e) {
+    showToast('Could not load that executive.');
+  }
+}
+
+function collectExecFields() {
+  const f = (id) => document.getElementById(id);
+  currentExec.execId = f('ex_execId').value.trim() || newExecId(f('ex_name').value);
+  currentExec.department = f('ex_department').value;
+  currentExec.name = f('ex_name').value;
+  currentExec.position = f('ex_position').value;
+  currentExec.photoInitials = f('ex_initials').value || initials(f('ex_name').value);
+  currentExec.nationality = f('ex_nationality').value;
+  currentExec.email = f('ex_email').value;
+  currentExec.phone = f('ex_phone').value;
+  currentExec.notes = f('ex_notes').value;
+}
+
+async function saveExec() {
+  collectExecFields();
+  if (!currentExec.name.trim()) { showToast('Executive name is required.'); return; }
+  upsertExecutive(currentExec);
+  currentExecIsNew = false;
+  showToast('Executive saved to this browser. Download JSON to make it permanent.');
+  await openExecEditorWithData(currentExec, false);
+}
+
 /* ---------------- Init ---------------- */
+
+const ICON_PLANE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 3.5l7 7-3.5 1.4-3.9-2.5-2.1 2.1 1.6 3-1.4 1.4-3-3.6-3.6-3 1.4-1.4 3 1.6 2.1-2.1-2.5-3.9 1.4-3.5z"/></svg>';
 
 function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
 
+const VIEW_IDS = { dashboard: 'view-dashboard', list: 'view-list', editor: 'view-editor', executives: 'view-executives', 'exec-editor': 'view-exec-editor', settings: 'view-settings' };
+const VIEW_TITLES_ADMIN = { dashboard: 'Dashboard', list: 'Trips', editor: 'Edit Trip', executives: 'Executives', 'exec-editor': 'Executive Profile', settings: 'Settings' };
+
+function activeTabFor(name) {
+  if (name === 'editor') return editorOrigin === 'dashboard' ? 'dashboard' : editorOrigin === 'executives' ? 'executives' : 'list';
+  if (name === 'exec-editor') return 'executives';
+  return name;
+}
+
+function showView(name) {
+  Object.values(VIEW_IDS).forEach(id => { document.getElementById(id).hidden = true; });
+  document.getElementById(VIEW_IDS[name]).hidden = false;
+  document.getElementById('topnavTitle').textContent = VIEW_TITLES_ADMIN[name];
+  document.getElementById('backBtn').classList.toggle('hidden', !(name === 'editor' || name === 'exec-editor'));
+  const activeTab = activeTabFor(name);
+  document.querySelectorAll('.sidebar-link[data-view]').forEach(l => l.classList.toggle('active', l.dataset.view === activeTab));
+  currentView = name;
+  closeSidebar();
+}
+
+function backToDashboard() { showView('dashboard'); renderDashboard(); }
 function backToList() {
-  document.getElementById('view-editor').hidden = true;
-  document.getElementById('view-list').hidden = false;
-  document.getElementById('topnavTitle').textContent = 'All Trips';
-  document.getElementById('backBtn').classList.add('hidden');
   currentTrip = null;
+  showView('list');
   renderTripsList();
 }
+function backToExecutives() {
+  currentExec = null;
+  showView('executives');
+  renderExecutivesList();
+}
+function goToSettings() { showView('settings'); }
+
+function goBackFromEditor() {
+  currentTrip = null;
+  if (editorOrigin === 'dashboard') backToDashboard();
+  else if (editorOrigin === 'executives') backToExecutives();
+  else backToList();
+}
+function handleBackClick() {
+  if (currentView === 'exec-editor') backToExecutives();
+  else if (currentView === 'editor') goBackFromEditor();
+  else backToList();
+}
+
 
 function init() {
   document.getElementById('menuBtn').addEventListener('click', openSidebar);
   document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
-  document.getElementById('backBtn').addEventListener('click', backToList);
+  document.getElementById('backBtn').addEventListener('click', handleBackClick);
+  document.querySelector('.sidebar-link[data-view="dashboard"]').addEventListener('click', backToDashboard);
   document.querySelector('.sidebar-link[data-view="list"]').addEventListener('click', backToList);
+  document.querySelector('.sidebar-link[data-view="executives"]').addEventListener('click', backToExecutives);
+  document.querySelector('.sidebar-link[data-view="settings"]').addEventListener('click', goToSettings);
 
-  document.getElementById('newTripBtn').addEventListener('click', () => openEditorWithTrip(blankTrip(), true));
-  document.getElementById('navNewTrip').addEventListener('click', () => openEditorWithTrip(blankTrip(), true));
+  document.getElementById('newTripBtn').addEventListener('click', () => { editorOrigin = 'list'; openEditorWithTrip(blankTrip(), true); });
+  document.getElementById('newExecBtn').addEventListener('click', () => openExecEditorWithData(blankExecutive(), true));
 
   const importFile = document.getElementById('importFile');
   document.getElementById('importBtn').addEventListener('click', () => importFile.click());
-  document.getElementById('navImport').addEventListener('click', () => importFile.click());
   importFile.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -606,6 +1001,7 @@ function init() {
       try {
         const trip = JSON.parse(reader.result);
         if (!trip.traveller || !trip.traveller.tripId) trip.traveller.tripId = newTripId(trip.traveller?.name);
+        editorOrigin = 'list';
         openEditorWithTrip(trip, false);
         showToast('Imported — review and Save to keep it.');
       } catch (err) { showToast('That file is not valid trip JSON.'); }
@@ -614,12 +1010,17 @@ function init() {
     importFile.value = '';
   });
 
-  document.getElementById('cancelEditBtn').addEventListener('click', backToList);
+  document.getElementById('cancelEditBtn').addEventListener('click', goBackFromEditor);
   document.getElementById('saveTripBtn').addEventListener('click', saveTrip);
   document.getElementById('clearNextEventBtn').addEventListener('click', () => {
     ['ne_airline','ne_flightNumber','ne_route','ne_date','ne_departure','ne_arrival','ne_terminal','ne_gate','ne_seat'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ne_status').value = 'On Time';
     showToast('Next Event cleared — Save to apply.');
+  });
+
+  document.getElementById('addChecklistBtn').addEventListener('click', () => {
+    currentTrip.checklist.push({ id: 'c' + Date.now(), label: '', done: false });
+    renderChecklist();
   });
 
   document.getElementById('addDayBtn').addEventListener('click', () => {
@@ -654,7 +1055,7 @@ function init() {
     showToast(`"${currentTrip.traveller.name}" is now the default trip shown in the portal.`);
   });
   document.getElementById('deleteTripBtn').addEventListener('click', () => {
-    if (currentIsNew) { backToList(); return; }
+    if (currentIsNew) { goBackFromEditor(); return; }
     const id = currentTrip.traveller.tripId;
     if (!confirm(`Delete "${currentTrip.traveller.name}"? This removes it from this browser.`)) return;
     localStorage.removeItem(tripDataKey(id));
@@ -665,12 +1066,91 @@ function init() {
     localStorage.setItem(LS_EXTRA, JSON.stringify(extra));
     if (localStorage.getItem(LS_ACTIVE) === id) localStorage.removeItem(LS_ACTIVE);
     showToast('Trip deleted.');
-    backToList();
+    goBackFromEditor();
+  });
+
+  // Executive editor bindings
+  document.getElementById('cancelExecBtn').addEventListener('click', backToExecutives);
+  document.getElementById('saveExecBtn').addEventListener('click', saveExec);
+  document.getElementById('downloadExecBtn').addEventListener('click', () => {
+    collectExecFields();
+    download(`${currentExec.execId || 'executive'}.json`, JSON.stringify(currentExec, null, 2));
+  });
+  document.getElementById('deleteExecBtn').addEventListener('click', () => {
+    if (currentExecIsNew) { backToExecutives(); return; }
+    if (!confirm(`Delete executive "${currentExec.name}"? This does not delete their past trips.`)) return;
+    deleteExecutive(currentExec.execId);
+    showToast('Executive deleted.');
+    backToExecutives();
+  });
+  document.getElementById('execNewTripBtn').addEventListener('click', () => {
+    const t = blankTrip();
+    t.traveller.execId = currentExec.execId;
+    t.traveller.name = currentExec.name;
+    t.traveller.position = currentExec.position;
+    t.traveller.photoInitials = currentExec.photoInitials;
+    editorOrigin = 'executives';
+    openEditorWithTrip(t, true);
+  });
+
+  // Settings: export / import / reset
+  document.getElementById('exportAllBtn').addEventListener('click', async () => {
+    const idx = await loadTripsIndex();
+    const trips = (await Promise.all(idx.trips.map(async (entry) => {
+      try { return await loadTripById(entry.tripId, entry.file); } catch (e) { return null; }
+    }))).filter(Boolean);
+    const execs = await loadExecutivesList(true);
+    const bundle = { exportedAt: new Date().toISOString(), executives: execs, trips };
+    download(`efl-admin-export-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(bundle, null, 2));
+    showToast(`Exported ${trips.length} trip(s) and ${execs.length} executive(s).`);
+  });
+
+  const importAllFile = document.getElementById('importAllFile');
+  document.getElementById('importAllBtn').addEventListener('click', () => importAllFile.click());
+  importAllFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        const trips = Array.isArray(data) ? data : (data.trips || []);
+        const execs = Array.isArray(data) ? [] : (data.executives || []);
+        let tCount = 0, eCount = 0;
+        trips.forEach(t => {
+          if (!t.traveller || !t.traveller.tripId) return;
+          localStorage.setItem(tripDataKey(t.traveller.tripId), JSON.stringify(t));
+          upsertIndexEntry(t);
+          tCount++;
+        });
+        execs.forEach(ex => {
+          if (!ex.execId) return;
+          upsertExecutive(ex);
+          eCount++;
+        });
+        if (!tCount && !eCount) { showToast('No trips or executives found in that file.'); return; }
+        showToast(`Imported ${tCount} trip(s) and ${eCount} executive(s).`);
+        renderDashboard();
+      } catch (err) { showToast('That file is not a valid export bundle.'); }
+    };
+    reader.readAsText(file);
+    importAllFile.value = '';
+  });
+
+  document.getElementById('resetLocalBtn').addEventListener('click', () => {
+    if (!confirm('Clear all local admin edits in this browser? Trips or executives only saved here (never downloaded) will be lost.')) return;
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('efl-trip-data-') || k.startsWith('efl-exec-data-') || [LS_EXTRA, LS_REMOVED, LS_ACTIVE, LS_EXEC_EXTRA, LS_EXEC_REMOVED].includes(k))
+      .forEach(k => localStorage.removeItem(k));
+    EXEC_CACHE = null;
+    showToast('Local admin edits cleared.');
+    renderDashboard();
   });
 
   document.getElementById('toastClose').addEventListener('click', () => document.getElementById('toast').classList.remove('show'));
 
-  renderTripsList();
+  showView('dashboard');
+  renderDashboard();
 }
 
 document.addEventListener('DOMContentLoaded', init);

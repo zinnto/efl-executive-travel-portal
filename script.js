@@ -158,18 +158,22 @@ function renderHome() {
     </div>`));
   });
 
-  // Status checklist
+  // Checklist (dynamic — falls back to the older fixed status object for trips saved before this existed)
   const statusCard = document.getElementById('statusCard');
-  const rows = [
-    ['Documents Ready', s.documentsReady],
-    ['Hotels Confirmed', s.hotelsConfirmed],
-    ['Transport Arranged', s.transportArranged]
+  const checklist = Array.isArray(TRIP.checklist) ? TRIP.checklist : [
+    { label: 'Documents Ready', done: !!s.documentsReady },
+    { label: 'Hotels Confirmed', done: !!s.hotelsConfirmed },
+    { label: 'Transport Arranged', done: !!s.transportArranged }
   ];
-  statusCard.innerHTML = rows.map(([label, ok]) => `
-    <div class="status-row">
-      <div class="status-check" style="${ok ? '' : 'background:var(--line-soft);color:var(--ink-300);'}">${ICONS.check}</div>
-      <div class="status-text">${label}</div>
-    </div>`).join('');
+  if (!checklist.length) {
+    statusCard.innerHTML = `<div class="status-row"><div class="status-text" style="color:var(--ink-500)">No checklist items for this trip.</div></div>`;
+  } else {
+    statusCard.innerHTML = checklist.map(item => `
+      <div class="status-row">
+        <div class="status-check" style="${item.done ? '' : 'background:var(--line-soft);color:var(--ink-300);'}">${ICONS.check}</div>
+        <div class="status-text">${item.label}</div>
+      </div>`).join('');
+  }
 }
 
 /* ---------------- Render: Flights ---------------- */
