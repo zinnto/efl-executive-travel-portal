@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EFL Global — Admin Portal</title>
+
+<style>
+:root{
+    --navy:#0A1F3D;
+    --gold:#D6B876;
+    --bg:#f4f6fa;
+    --card:#ffffff;
+    --text:#1d2735;
+    --muted:#6b7280;
+}
+
+*{
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+
+/* SIDEBAR */
+
+.sidebar{
+    width:260px;
+    background:var(--navy);
+    color:white;
+    padding:25px 18px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:40px;
+}
+
+.logo-mark{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:var(--gold);
+}
+
+.logo h2{
+    margin:0;
+    font-size:18px;
+}
+
+.logo span{
+    font-size:12px;
+    opacity:.7;
+}
+
+
+.nav button{
+    width:100%;
+    border:0;
+    background:none;
+    color:white;
+    padding:14px;
+    text-align:left;
+    border-radius:10px;
+    cursor:pointer;
+    margin-bottom:8px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:rgba(255,255,255,.12);
+}
+
+
+/* MAIN */
+
+.main{
+    flex:1;
+    padding:30px;
+}
+
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    margin:0;
+}
+
+
+.admin-user{
+    background:white;
+    padding:12px 18px;
+    border-radius:20px;
+}
+
+
+/* CARDS */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+
+.card{
+    background:var(--card);
+    border-radius:18px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(0,0,0,.05);
+}
+
+.card h3{
+    margin:0;
+    font-size:14px;
+    color:var(--muted);
+}
+
+.number{
+    font-size:32px;
+    font-weight:700;
+    margin-top:12px;
+}
+
+
+
+/* TABLES */
+
+.section{
+    margin-top:35px;
+}
+
+
+.section h2{
+    margin-bottom:15px;
+}
+
+
+.table{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+
+.row{
+    display:grid;
+    grid-template-columns:2fr 2fr 1fr;
+    padding:16px;
+    border-bottom:1px solid #eee;
+}
+
+
+.row.header-row{
+    background:#f8fafc;
+    font-weight:bold;
+}
+
+
+.badge{
+    background:#e8f3ea;
+    color:#247a35;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+.sidebar{
+    display:none;
+}
+
+.main{
+    padding:20px;
+}
+
+.row{
+    grid-template-columns:1fr;
+    gap:8px;
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<aside class="sidebar">
+
+<div class="logo">
+<div class="logo-mark"></div>
+<div>
+<h2>EFL GLOBAL</h2>
+<span>Admin Portal</span>
+</div>
+</div>
+
+
+<div class="nav">
+
+<button class="active">
+Dashboard
+</button>
+
+<button>
+Executives
+</button>
+
+<button>
+Trips
+</button>
+
+<button>
+Documents
+</button>
+
+<button>
+Settings
+</button>
+
+</div>
+
+</aside>
+
+
+
+<main class="main">
+
+
+<div class="header">
+
+<div>
+<h1>Executive Travel Management</h1>
+<p>Manage executives, trips and travel documents</p>
+</div>
+
+
+<div class="admin-user">
+Administrator
+</div>
+
+</div>
+
+
+
+<div class="cards">
+
+
+<div class="card">
+<h3>Executives</h3>
+<div class="number" id="execCount">0</div>
+</div>
+
+
+<div class="card">
+<h3>Active Trips</h3>
+<div class="number" id="tripCount">0</div>
+</div>
+
+
+<div class="card">
+<h3>Documents</h3>
+<div class="number">—</div>
+</div>
+
+
+<div class="card">
+<h3>Status</h3>
+<div class="badge">
+System Ready
+</div>
+</div>
+
+
+</div>
+
+
+
+
+<div class="section">
+
+<h2>Executives</h2>
+
+
+<div class="table" id="executives">
+
+
+<div class="row header-row">
+<div>Name</div>
+<div>Role</div>
+<div>Status</div>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="section">
+
+<h2>Trips</h2>
+
+
+<div class="table" id="trips">
+
+
+<div class="row header-row">
+<div>Traveller</div>
+<div>Destination</div>
+<div>Status</div>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</main>
+
+
+</div>
+
+
+
+
+
+<script>
+
+async function loadExecutives(){
+
+try{
+
+const response = await fetch("data/executives.json");
+
+const data = await response.json();
+
+
+const container=document.getElementById("executives");
+
+
+let count=0;
+
+
+data.forEach(exec=>{
+
+
+count++;
+
+
+container.innerHTML += `
+
+<div class="row">
+
+<div>${exec.name || "Unknown"}</div>
+
+<div>${exec.role || "-"}</div>
+
+<div>
+<span class="badge">Active</span>
+</div>
+
+</div>
+
+`;
+
+});
+
+
+document.getElementById("execCount").innerText=count;
+
+
+}
+
+catch(error){
+
+console.log("Unable to load executives",error);
+
+}
+
+
+}
+
+
+
+async function loadTrips(){
+
+try{
+
+const response=await fetch("data/trips.json");
+
+const data=await response.json();
+
+
+const container=document.getElementById("trips");
+
+
+let count=0;
+
+
+data.forEach(trip=>{
+
+count++;
+
+
+container.innerHTML+=`
+
+<div class="row">
+
+<div>${trip.executive || "-"}</div>
+
+<div>${trip.destination || "-"}</div>
+
+<div>
+<span class="badge">
+${trip.status || "Planned"}
+</span>
+</div>
+
+</div>
+
+
+`;
+
+
+});
+
+
+document.getElementById("tripCount").innerText=count;
+
+
+}
+
+catch(error){
+
+console.log("Trips not loaded",error);
+
+}
+
+}
+
+
+loadExecutives();
+loadTrips();
+
+
+</script>
+
+
+
+</body>
+</html>
