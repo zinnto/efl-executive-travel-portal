@@ -48,6 +48,58 @@ function newExecId(name) {
   return `EXEC-${slugify(name).slice(0, 6) || 'NEW'}${Date.now().toString(36).slice(-3).toUpperCase()}`;
 }
 
+/* ---------------- Reference lists: airlines & airports ---------------- */
+
+const AIRLINE_OPTIONS = [
+  'Kenya Airways', 'Ethiopian Airlines', 'RwandAir', 'Uganda Airlines', 'South African Airways',
+  'EgyptAir', 'Emirates', 'Qatar Airways', 'Etihad Airways', 'Turkish Airlines',
+  'British Airways', 'Lufthansa', 'Air France', 'KLM', 'Swiss International Air Lines',
+  'Brussels Airlines', 'Delta Air Lines', 'United Airlines', 'American Airlines',
+  'Singapore Airlines', 'Qantas', 'Air Canada'
+];
+
+const AIRPORT_OPTIONS = [
+  'Nairobi (NBO) — Jomo Kenyatta Intl', 'Mombasa (MBA) — Moi Intl', 'Entebbe (EBB) — Entebbe Intl, Kampala',
+  'Kigali (KGL) — Kigali Intl', 'Dar es Salaam (DAR) — Julius Nyerere Intl', 'Zanzibar (ZNZ) — Abeid Amani Karume Intl',
+  'Addis Ababa (ADD) — Bole Intl', 'Lagos (LOS) — Murtala Muhammed Intl', 'Johannesburg (JNB) — OR Tambo Intl',
+  'Cape Town (CPT) — Cape Town Intl', 'Cairo (CAI) — Cairo Intl', 'Dubai (DXB) — Dubai Intl',
+  'Doha (DOH) — Hamad Intl', 'Istanbul (IST) — Istanbul Airport', 'London (LHR) — Heathrow',
+  'Paris (CDG) — Charles de Gaulle', 'Frankfurt (FRA) — Frankfurt Airport', 'Amsterdam (AMS) — Schiphol',
+  'New York (JFK) — John F. Kennedy Intl'
+];
+
+const OTHER_VALUE = '__other__';
+
+// A "select + other" field shows a dropdown of common options, plus a free-text
+// input (revealed by choosing "Other…") for anything not on the list.
+function selectOtherOptionsHtml(options, selected) {
+  return '<option value="">— Select —</option>' +
+    options.map(o => `<option value="${esc(o)}" ${selected === o ? 'selected' : ''}>${esc(o)}</option>`).join('') +
+    `<option value="${OTHER_VALUE}" ${selected === OTHER_VALUE ? 'selected' : ''}>Other (type manually)…</option>`;
+}
+function setSelectOtherPair(selectEl, otherEl, value, options) {
+  if (value && options.includes(value)) {
+    selectEl.value = value;
+    otherEl.value = '';
+    otherEl.style.display = 'none';
+  } else if (value) {
+    selectEl.value = OTHER_VALUE;
+    otherEl.value = value;
+    otherEl.style.display = '';
+  } else {
+    selectEl.value = '';
+    otherEl.value = '';
+    otherEl.style.display = 'none';
+  }
+}
+function getSelectOtherValue(selectEl, otherEl) {
+  return selectEl.value === OTHER_VALUE ? otherEl.value.trim() : selectEl.value;
+}
+// Short, human-friendly label for composing routes, e.g. "Nairobi (NBO) — Jomo…" -> "Nairobi (NBO)"
+function shortLabel(v) {
+  return (v || '').split(' — ')[0];
+}
+
 /* ---------------- Utilities ---------------- */
 
 function el(html) {
@@ -388,7 +440,42 @@ function renderRepeatList(containerEl, items, fields, opts) {
       <div class="form-grid"></div>
     </div>`);
     const grid = card.querySelector('.form-grid');
+    const refreshTitle = () => {
+      const t = card.querySelector('.repeat-card__title');
+      if (t) t.textContent = opts.title(item, idx);
+    };
+    const composeRouteIfApplicable = () => {
+      if (!('from' in item) && !('to' in item)) return;
+      const routeInput = grid.querySelector('[data-k="route"]');
+      if (!routeInput) return;
+      if (item.from && item.to) {
+        item.route = `${shortLabel(item.from)} → ${shortLabel(item.to)}`;
+        routeInput.value = item.route;
+      }
+    };
+
     fields.forEach(f => {
+      if (f.type === 'select-other') {
+        const wrap = el(`<div class="field ${f.span2 ? 'span-2' : ''}"><label>${f.label}</label></div>`);
+        const select = el(`<select class="f-input">${selectOtherOptionsHtml(f.options, f.options.includes(item[f.key]) ? item[f.key] : (item[f.key] ? OTHER_VALUE : ''))}</select>`);
+        const otherInput = el(`<input class="f-input" type="text" placeholder="Type manually" style="margin-top:6px;" value="${esc(f.options.includes(item[f.key]) ? '' : (item[f.key] || ''))}" />`);
+        otherInput.style.display = (select.value === OTHER_VALUE) ? '' : 'none';
+        const commit = () => {
+          item[f.key] = getSelectOtherValue(select, otherInput);
+          composeRouteIfApplicable();
+          refreshTitle();
+          if (opts.onChange) opts.onChange();
+        };
+        select.addEventListener('change', () => {
+          otherInput.style.display = select.value === OTHER_VALUE ? '' : 'none';
+          commit();
+        });
+        otherInput.addEventListener('input', commit);
+        wrap.appendChild(select);
+        wrap.appendChild(otherInput);
+        grid.appendChild(wrap);
+        return;
+      }
       const val = esc(item[f.key]);
       const inputHtml = f.type === 'textarea'
         ? `<textarea class="f-input" data-k="${f.key}">${item[f.key] || ''}</textarea>`
@@ -399,8 +486,7 @@ function renderRepeatList(containerEl, items, fields, opts) {
         if (f.type === 'number') v = v === '' ? 0 : Number(v);
         item[f.key] = v;
         if (opts.onChange) opts.onChange();
-        const titleEl = card.querySelector('.repeat-card__title');
-        if (titleEl) titleEl.textContent = opts.title(item, idx);
+        refreshTitle();
       });
       grid.appendChild(field);
     });
@@ -414,8 +500,11 @@ function renderRepeatList(containerEl, items, fields, opts) {
 
 const FIELD_SCHEMAS = {
   flight: [
-    { key: 'airline', label: 'Airline' }, { key: 'flightNumber', label: 'Flight Number' },
-    { key: 'route', label: 'Route', span2: true, placeholder: 'Nairobi (NBO) → Entebbe (EBB)' },
+    { key: 'airline', label: 'Airline', type: 'select-other', options: AIRLINE_OPTIONS },
+    { key: 'flightNumber', label: 'Flight Number' },
+    { key: 'from', label: 'From', type: 'select-other', options: AIRPORT_OPTIONS },
+    { key: 'to', label: 'To', type: 'select-other', options: AIRPORT_OPTIONS },
+    { key: 'route', label: 'Route (auto-filled from From/To — still editable)', span2: true, placeholder: 'Nairobi (NBO) → Entebbe (EBB)' },
     { key: 'date', label: 'Date' }, { key: 'departure', label: 'Departure' }, { key: 'arrival', label: 'Arrival' },
     { key: 'class', label: 'Class' }, { key: 'seat', label: 'Seat' }, { key: 'pnr', label: 'PNR' },
     { key: 'document', label: 'Document Path', span2: true, placeholder: 'documents/boarding-pass.pdf' }
@@ -686,12 +775,15 @@ async function openEditorWithTrip(trip, isNew) {
   if (!currentTrip.meta.stage) currentTrip.meta.stage = 'upcoming';
   currentTrip.checklist = migrateChecklist(currentTrip);
 
+  if (isNew && !currentTrip.traveller.tripId) {
+    currentTrip.traveller.tripId = newTripId(currentTrip.traveller.name || 'trip');
+  }
+
   document.getElementById('editorHeading').textContent = isNew ? 'New Trip' : `Edit — ${trip.traveller.name || trip.traveller.tripId}`;
 
   const f = (id) => document.getElementById(id);
   f('f_tripId').value = trip.traveller.tripId || '';
-  f('f_tripId').readOnly = !isNew;
-  f('f_tripId').title = isNew ? '' : 'Trip ID cannot be changed after creation — duplicate the trip to fork it.';
+  document.getElementById('regenTripIdBtn').style.display = isNew ? '' : 'none';
   f('f_stage').value = trip.meta.stage;
   await populateExecutiveSelect(trip.traveller.execId || '');
   f('f_tripName').value = trip.meta.tripName || '';
@@ -703,9 +795,11 @@ async function openEditorWithTrip(trip, isNew) {
   f('f_dates').value = trip.traveller.dates || '';
 
   const ne = trip.nextEvent || {};
-  f('ne_airline').value = ne.airline || '';
+  setSelectOtherPair(f('ne_airline_select'), f('ne_airline_other'), ne.airline || '', AIRLINE_OPTIONS);
   f('ne_flightNumber').value = ne.flightNumber || '';
   f('ne_status').value = ne.status || 'On Time';
+  setSelectOtherPair(f('ne_from_select'), f('ne_from_other'), ne.from || '', AIRPORT_OPTIONS);
+  setSelectOtherPair(f('ne_to_select'), f('ne_to_other'), ne.to || '', AIRPORT_OPTIONS);
   f('ne_route').value = ne.route || '';
   f('ne_date').value = ne.date || '';
   f('ne_departure').value = ne.departure || '';
@@ -749,11 +843,14 @@ function collectBasicFieldsIntoTrip() {
   currentTrip.traveller.destination = f('f_destination').value;
   currentTrip.traveller.dates = f('f_dates').value;
 
-  const hasNextEvent = f('ne_airline').value || f('ne_flightNumber').value || f('ne_route').value;
+  const neAirline = getSelectOtherValue(f('ne_airline_select'), f('ne_airline_other'));
+  const neFrom = getSelectOtherValue(f('ne_from_select'), f('ne_from_other'));
+  const neTo = getSelectOtherValue(f('ne_to_select'), f('ne_to_other'));
+  const hasNextEvent = neAirline || f('ne_flightNumber').value || f('ne_route').value;
   currentTrip.nextEvent = hasNextEvent ? {
     type: 'flight',
-    airline: f('ne_airline').value, flightNumber: f('ne_flightNumber').value, status: f('ne_status').value,
-    route: f('ne_route').value, date: f('ne_date').value, departure: f('ne_departure').value, arrival: f('ne_arrival').value,
+    airline: neAirline, flightNumber: f('ne_flightNumber').value, status: f('ne_status').value,
+    route: f('ne_route').value, from: neFrom, to: neTo, date: f('ne_date').value, departure: f('ne_departure').value, arrival: f('ne_arrival').value,
     terminal: f('ne_terminal').value, gate: f('ne_gate').value, seat: f('ne_seat').value
   } : null;
 
@@ -991,6 +1088,65 @@ function init() {
   document.getElementById('newTripBtn').addEventListener('click', () => { editorOrigin = 'list'; openEditorWithTrip(blankTrip(), true); });
   document.getElementById('newExecBtn').addEventListener('click', () => openExecEditorWithData(blankExecutive(), true));
 
+  // Next Event: populate the airline/airport dropdowns once, wire "Other" toggling and route auto-fill.
+  const neAirlineSelect = document.getElementById('ne_airline_select');
+  const neAirlineOther = document.getElementById('ne_airline_other');
+  const neFromSelect = document.getElementById('ne_from_select');
+  const neFromOther = document.getElementById('ne_from_other');
+  const neToSelect = document.getElementById('ne_to_select');
+  const neToOther = document.getElementById('ne_to_other');
+  neAirlineSelect.innerHTML = selectOtherOptionsHtml(AIRLINE_OPTIONS, '');
+  neFromSelect.innerHTML = selectOtherOptionsHtml(AIRPORT_OPTIONS, '');
+  neToSelect.innerHTML = selectOtherOptionsHtml(AIRPORT_OPTIONS, '');
+
+  neAirlineSelect.addEventListener('change', () => { neAirlineOther.style.display = neAirlineSelect.value === OTHER_VALUE ? '' : 'none'; });
+
+  const updateNeRoute = () => {
+    const from = getSelectOtherValue(neFromSelect, neFromOther);
+    const to = getSelectOtherValue(neToSelect, neToOther);
+    if (from && to) document.getElementById('ne_route').value = `${shortLabel(from)} → ${shortLabel(to)}`;
+  };
+  neFromSelect.addEventListener('change', () => { neFromOther.style.display = neFromSelect.value === OTHER_VALUE ? '' : 'none'; updateNeRoute(); });
+  neToSelect.addEventListener('change', () => { neToOther.style.display = neToSelect.value === OTHER_VALUE ? '' : 'none'; updateNeRoute(); });
+  neFromOther.addEventListener('input', updateNeRoute);
+  neToOther.addEventListener('input', updateNeRoute);
+
+  // Trip ID: system-generated. Regenerate button (new trips only) + live regeneration as the name is typed.
+  document.getElementById('regenTripIdBtn').addEventListener('click', () => {
+    if (!currentTrip) return;
+    const id = newTripId(document.getElementById('f_travellerName').value || 'trip');
+    currentTrip.traveller.tripId = id;
+    document.getElementById('f_tripId').value = id;
+  });
+  document.getElementById('f_travellerName').addEventListener('input', (e) => {
+    if (currentTrip && currentIsNew) {
+      const id = newTripId(e.target.value || 'trip');
+      currentTrip.traveller.tripId = id;
+      document.getElementById('f_tripId').value = id;
+    }
+  });
+
+  // Selecting an executive autofills the traveller fields (and regenerates the Trip ID for new trips).
+  document.getElementById('f_execId').addEventListener('change', async (e) => {
+    const execId = e.target.value;
+    if (!execId || !currentTrip) return;
+    try {
+      const exec = await loadExecutiveById(execId);
+      document.getElementById('f_travellerName').value = exec.name || '';
+      document.getElementById('f_position').value = exec.position || '';
+      document.getElementById('f_initials').value = exec.photoInitials || initials(exec.name);
+      currentTrip.traveller.name = exec.name || '';
+      currentTrip.traveller.position = exec.position || '';
+      currentTrip.traveller.photoInitials = exec.photoInitials || initials(exec.name);
+      if (currentIsNew) {
+        const id = newTripId(exec.name || 'trip');
+        currentTrip.traveller.tripId = id;
+        document.getElementById('f_tripId').value = id;
+      }
+      showToast(`Autofilled traveller details from ${exec.name}.`);
+    } catch (err) { /* profile not found — leave fields as-is */ }
+  });
+
   const importFile = document.getElementById('importFile');
   document.getElementById('importBtn').addEventListener('click', () => importFile.click());
   importFile.addEventListener('change', (e) => {
@@ -1013,8 +1169,11 @@ function init() {
   document.getElementById('cancelEditBtn').addEventListener('click', goBackFromEditor);
   document.getElementById('saveTripBtn').addEventListener('click', saveTrip);
   document.getElementById('clearNextEventBtn').addEventListener('click', () => {
-    ['ne_airline','ne_flightNumber','ne_route','ne_date','ne_departure','ne_arrival','ne_terminal','ne_gate','ne_seat'].forEach(id => document.getElementById(id).value = '');
+    ['ne_flightNumber','ne_route','ne_date','ne_departure','ne_arrival','ne_terminal','ne_gate','ne_seat'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ne_status').value = 'On Time';
+    setSelectOtherPair(neAirlineSelect, neAirlineOther, '', AIRLINE_OPTIONS);
+    setSelectOtherPair(neFromSelect, neFromOther, '', AIRPORT_OPTIONS);
+    setSelectOtherPair(neToSelect, neToOther, '', AIRPORT_OPTIONS);
     showToast('Next Event cleared — Save to apply.');
   });
 
@@ -1027,7 +1186,7 @@ function init() {
     currentTrip.itinerary.push({ day: currentTrip.itinerary.length + 1, date: '', city: '', events: [] });
     renderItinerary();
   });
-  document.getElementById('addFlightBtn').addEventListener('click', () => { currentTrip.flights.push({ airline: '', flightNumber: '', route: '', date: '', departure: '', arrival: '', class: 'Business', seat: '', pnr: '', document: '' }); renderSimpleSections(); });
+  document.getElementById('addFlightBtn').addEventListener('click', () => { currentTrip.flights.push({ airline: '', flightNumber: '', from: '', to: '', route: '', date: '', departure: '', arrival: '', class: 'Business', seat: '', pnr: '', document: '' }); renderSimpleSections(); });
   document.getElementById('addHotelBtn').addEventListener('click', () => { currentTrip.hotels.push({ name: '', address: '', checkIn: '', checkOut: '', room: '', confirmation: '', document: '', mapQuery: '' }); renderSimpleSections(); });
   document.getElementById('addMeetingBtn').addEventListener('click', () => { currentTrip.meetings.push({ title: '', with: '', date: '', location: '', document: '' }); renderSimpleSections(); });
   document.getElementById('addTransportBtn').addEventListener('click', () => { currentTrip.transport.push({ type: '', driver: '', phone: '', vehicle: '', notes: '' }); renderSimpleSections(); });

@@ -101,7 +101,12 @@
       <div class="admin-card">
         <h3>Basic Info</h3>
         <div class="form-grid">
-          <div class="field"><label>Trip ID</label><input class="f-input" id="f_tripId" placeholder="EFL-XX-0000" /></div>
+          <div class="field"><label>Trip ID</label>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <input class="f-input" id="f_tripId" placeholder="Auto-generated" readonly style="background:var(--line-soft); color:var(--ink-500);" />
+              <button class="btn btn-outline btn-sm" id="regenTripIdBtn" type="button" title="Regenerate ID" style="flex:none;">↻</button>
+            </div>
+          </div>
           <div class="field"><label>Stage</label>
             <select class="f-input" id="f_stage">
               <option value="active">Active</option>
@@ -128,14 +133,25 @@
       <div class="admin-card">
         <div class="admin-card__head"><h3>Next Event</h3><button class="btn btn-ghost btn-sm" id="clearNextEventBtn" type="button">Clear</button></div>
         <div class="form-grid cols-3">
-          <div class="field"><label>Airline</label><input class="f-input" id="ne_airline" /></div>
+          <div class="field"><label>Airline</label>
+            <select class="f-input" id="ne_airline_select"></select>
+            <input class="f-input" id="ne_airline_other" placeholder="Type airline name" style="margin-top:6px;display:none;" />
+          </div>
           <div class="field"><label>Flight Number</label><input class="f-input" id="ne_flightNumber" /></div>
           <div class="field"><label>Status</label>
             <select class="f-input" id="ne_status">
               <option>On Time</option><option>Delayed</option><option>Boarding</option><option>Cancelled</option>
             </select>
           </div>
-          <div class="field span-2"><label>Route</label><input class="f-input" id="ne_route" placeholder="Nairobi (NBO) → Entebbe (EBB)" /></div>
+          <div class="field"><label>From</label>
+            <select class="f-input" id="ne_from_select"></select>
+            <input class="f-input" id="ne_from_other" placeholder="Type city / airport" style="margin-top:6px;display:none;" />
+          </div>
+          <div class="field span-2"><label>To</label>
+            <select class="f-input" id="ne_to_select"></select>
+            <input class="f-input" id="ne_to_other" placeholder="Type city / airport" style="margin-top:6px;display:none;" />
+          </div>
+          <div class="field span-3"><label>Route (auto-filled from From/To — still editable)</label><input class="f-input" id="ne_route" placeholder="Nairobi (NBO) → Entebbe (EBB)" /></div>
           <div class="field"><label>Date</label><input class="f-input" id="ne_date" placeholder="20 Jul 2026" /></div>
           <div class="field"><label>Departure</label><input class="f-input" id="ne_departure" placeholder="09:30" /></div>
           <div class="field"><label>Arrival</label><input class="f-input" id="ne_arrival" placeholder="10:45" /></div>
