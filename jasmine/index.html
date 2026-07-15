@@ -1,77 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>EFL Global — Executive Travel Portal</title>
+<meta name="description" content="EFL Global Executive Travel Portal — your entire trip, one premium app." />
 
-<meta charset="UTF-8">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#0A1F3D" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EFL Travel" />
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Jasmine | Executive Travel Companion</title>
-
-<link rel="stylesheet" href="css/style.css">
-
+<link rel="stylesheet" href="style.css" />
 </head>
-
-
 <body>
 
-
-<div class="container">
-
-
-<header class="header">
-
-<div class="brand">
-
-<img src="assets/logo.png" class="logo" alt="EFL Global Logo">
-
-
-<div>
-
-<h1>
-Jasmine
-</h1>
-
-<p>
-Executive Travel & Business Companion
-</p>
-
+<!-- ============ SPLASH SCREEN ============ -->
+<div id="splash">
+  <div class="splash-mark">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M2 16l6.5-2 3.2 1.9L13 14l-3-5.4L14.5 3l1 .6L13 10l6 1.7.6 1.6-7 .3-2.4 4.2L8 20l-1.4-.4.7-4.6L2 16z" fill="#D6B876"/></svg>
+  </div>
+  <div class="splash-word">EFL GLOBAL</div>
+  <div class="splash-sub">Executive Travel Portal</div>
+  <div class="splash-loader"><span></span></div>
 </div>
 
+<!-- ============ APP SHELL ============ -->
+<div id="app">
 
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============ SIDEBAR (Soft-UI nav rail) ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand__mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2 16l6.5-2 3.2 1.9L13 14l-3-5.4L14.5 3l1 .6L13 10l6 1.7.6 1.6-7 .3-2.4 4.2L8 20l-1.4-.4.7-4.6L2 16z" fill="#D6B876"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-brand__name">EFL GLOBAL</div>
+        <div class="sidebar-brand__tag">Travel Portal</div>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><button class="sidebar-link active" data-view="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Dashboard</span></button></li>
+      <li><button class="sidebar-link" data-view="itinerary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 3v3M16 3v3"/></svg><span>Itinerary</span></button></li>
+      <li><button class="sidebar-link" data-view="flights"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 3.5l7 7-3.5 1.4-3.9-2.5-2.1 2.1 1.6 3-1.4 1.4-3-3.6-3.6-3 1.4-1.4 3 1.6 2.1-2.1-2.5-3.9 1.4-3.5z"/></svg><span>Flights</span></button></li>
+      <li><button class="sidebar-link" data-view="hotels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l7-4 7 4v13"/><path d="M3 12h18M9 21v-6h4v6"/></svg><span>Hotels</span></button></li>
+      <li><button class="sidebar-link" data-view="meetings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Meetings</span></button></li>
+      <li><button class="sidebar-link" data-view="transport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13l1.5-5A2 2 0 0 1 6.4 6.5h11.2A2 2 0 0 1 19.5 8l1.5 5"/><rect x="2" y="13" width="20" height="6" rx="1.5"/><circle cx="6.5" cy="19.5" r="1.5"/><circle cx="17.5" cy="19.5" r="1.5"/></svg><span>Transport</span></button></li>
+      <li><button class="sidebar-link" data-view="documents"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span>Documents</span></button></li>
+      <li><button class="sidebar-link" data-view="maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-6-3V4l6 3 6-3 6 3v13l-6-3-6 3z"/><path d="M9 4v13M15 7v13"/></svg><span>Maps</span></button></li>
+      <li><button class="sidebar-link" data-view="contacts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>Contacts</span></button></li>
+      <li><button class="sidebar-link" data-view="expenses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1-3 2.3c0 3 6 1.4 6 4.3 0 1.4-1.3 2.4-3 2.4s-3-1-3-2.4"/></svg><span>Expenses</span></button></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li><button class="sidebar-link" data-view="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button></li>
+    </ul>
+    <div class="sidebar-foot">EFL GLOBAL © 2026 · v1.0</div>
+  </aside>
+
+  <div class="main-content">
+
+    <!-- Top navbar -->
+    <header class="topnav" id="topnav">
+      <button class="topnav__menu-btn" id="menuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <button class="topnav__back hidden" id="backBtn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topnav__crumb">
+        <div class="topnav__crumb-eyebrow">EFL Global / Travel Portal</div>
+        <div class="topnav__crumb-title" id="topnavTitle">Dashboard</div>
+      </div>
+      <div class="topnav__avatar" id="topnavAvatar">—</div>
+    </header>
+
+    <!-- ============ HOME / DASHBOARD ============ -->
+    <section class="view" id="view-home" data-title="Dashboard">
+
+      <div class="dash-grid">
+        <div>
+          <div class="brand-header">
+            <div class="brand-row">
+              <div class="brand-lockup">
+                <div>
+                  <div class="brand-name">WELCOME BACK</div>
+                  <div class="brand-tagline" id="homeRole2">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="traveller-block">
+              <div class="traveller-avatar" id="homeAvatar">—</div>
+              <div>
+                <div class="traveller-name" id="homeName">—</div>
+                <div class="traveller-role" id="homeRole">—</div>
+              </div>
+            </div>
+
+            <div class="trip-meta-row">
+              <div class="trip-meta">
+                <div class="trip-meta__label">Destination</div>
+                <div class="trip-meta__value" id="homeDestination">—</div>
+              </div>
+              <div class="trip-meta">
+                <div class="trip-meta__label">Travel Dates</div>
+                <div class="trip-meta__value" id="homeDates">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-head" style="margin-top:22px"><h2>Next Event</h2></div>
+          <div class="pass-card" id="nextEventCard"><!-- injected --></div>
+
+          <div class="section-head"><h2>Quick Access</h2></div>
+          <div class="quick-grid" id="quickGrid"><!-- injected --></div>
+        </div>
+
+        <div>
+          <div class="section-head" style="margin-top:0"><h2>Trip Status</h2></div>
+          <div class="stat-grid" id="statGrid"><!-- injected --></div>
+
+          <div class="section-head"><h2>Checklist</h2></div>
+          <div class="status-card" id="statusCard"><!-- injected --></div>
+        </div>
+      </div>
+
+      <div class="app-footer-mark">EFL GLOBAL · Executive Travel Portal</div>
+    </section>
+
+    <!-- ============ FLIGHTS ============ -->
+    <section class="view" id="view-flights" data-title="Flights" hidden>
+      <div id="flightsList"></div>
+    </section>
+
+    <!-- ============ HOTELS ============ -->
+    <section class="view" id="view-hotels" data-title="Hotels" hidden>
+      <div id="hotelsList"></div>
+    </section>
+
+    <!-- ============ ITINERARY ============ -->
+    <section class="view" id="view-itinerary" data-title="Itinerary" hidden>
+      <div class="day-tabs" id="dayTabs"></div>
+      <div class="timeline" id="timelineList"></div>
+    </section>
+
+    <!-- ============ MEETINGS ============ -->
+    <section class="view" id="view-meetings" data-title="Meetings" hidden>
+      <div id="meetingsList"></div>
+    </section>
+
+    <!-- ============ TRANSPORT ============ -->
+    <section class="view" id="view-transport" data-title="Transport" hidden>
+      <div id="transportList"></div>
+    </section>
+
+    <!-- ============ DOCUMENTS ============ -->
+    <section class="view" id="view-documents" data-title="Documents" hidden>
+      <div id="docsList"></div>
+    </section>
+
+    <!-- ============ MAPS ============ -->
+    <section class="view" id="view-maps" data-title="Maps" hidden>
+      <div id="mapsList"></div>
+    </section>
+
+    <!-- ============ CONTACTS ============ -->
+    <section class="view" id="view-contacts" data-title="Contacts" hidden>
+      <div id="contactsList"></div>
+    </section>
+
+    <!-- ============ EXPENSES ============ -->
+    <section class="view" id="view-expenses" data-title="Expenses" hidden>
+      <div id="expensesWrap"></div>
+    </section>
+
+    <!-- ============ SETTINGS ============ -->
+    <section class="view" id="view-settings" data-title="Settings" hidden>
+
+      <div class="section-head" style="margin-top:6px"><h2>Trip</h2></div>
+      <div class="settings-group">
+        <div class="settings-row">
+          <div class="settings-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M4 19h16"/><path d="M8 7h8M8 11h8"/></svg></div>
+          <div class="settings-row__text">
+            <div class="settings-row__label">Trip Name</div>
+            <div class="settings-row__value" id="settingsTripName">—</div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></div>
+          <div class="settings-row__text">
+            <div class="settings-row__label">Traveller</div>
+            <div class="settings-row__value" id="settingsTraveller">—</div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
+          <div class="settings-row__text">
+            <div class="settings-row__label">Company Branding</div>
+            <div class="settings-row__value">EFL Global — Executive Tier</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>Preferences</h2></div>
+      <div class="settings-group">
+        <div class="settings-row">
+          <div class="settings-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div>
+          <div class="settings-row__text">
+            <div class="settings-row__label">Dark Mode</div>
+            <div class="settings-row__value">Easier viewing in low light</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="darkModeToggle" /><span class="switch-track"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <div class="settings-row__text">
+            <div class="settings-row__label">Offline Mode</div>
+            <div class="settings-row__value" id="offlineStatusText">Cache trip for offline access</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="offlineToggle" /><span class="switch-track"></span></label>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>App</h2></div>
+      <div class="settings-group">
+        <button class="settings-row" id="installRow" style="width:100%; border:none; background:none; text-align:left; cursor:pointer;">
+          <div class="settings-row__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
+          <div class="settings-row__text">
+            <div class="settings-row__label">Add to Home Screen</div>
+            <div class="settings-row__value">Install as an app on this device</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="app-footer-mark">Version 1.0 · EFL Global © 2026</div>
+    </section>
+
+  </div>
 </div>
 
-</header>
-
-
-
-<section>
-
-<h2>
-Active Trips
-</h2>
-
-
-<div id="trip-list">
-
-Loading trips...
-
+<!-- ============ EVENT DETAIL SHEET ============ -->
+<div class="sheet-backdrop" id="sheetBackdrop">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div id="sheetContent"></div>
+  </div>
 </div>
 
-
-</section>
-
-
-
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast">
+  <div class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+  <div class="toast__text" id="toastText"></div>
+  <button class="toast__close" id="toastClose">✕</button>
 </div>
 
-
-
-<script src="js/app.js"></script>
-
-
+<script src="script.js"></script>
 </body>
-
-
 </html>
