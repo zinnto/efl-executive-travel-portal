@@ -1,0 +1,20 @@
+{
+  "hotels": [
+    { "name": "Villa Rosa Kempinski", "city": "Nairobi", "country": "Kenya" },
+    { "name": "Sarova Stanley", "city": "Nairobi", "country": "Kenya" },
+    { "name": "Serena Hotel Kampala", "city": "Kampala", "country": "Uganda" },
+    { "name": "Mestil Hotel", "city": "Kampala", "country": "Uganda" },
+    { "name": "Serena Hotel Dar es Salaam", "city": "Dar es Salaam", "country": "Tanzania" },
+    { "name": "Kigali Serena Hotel", "city": "Kigali", "country": "Rwanda" },
+    { "name": "Sheraton Addis", "city": "Addis Ababa", "country": "Ethiopia" },
+    { "name": "Taj Mahal Palace", "city": "Mumbai", "country": "India" },
+    { "name": "The Leela Palace", "city": "Delhi", "country": "India" },
+    { "name": "ITC Grand Chola", "city": "Chennai", "country": "India" },
+    { "name": "Cinnamon Grand Colombo", "city": "Colombo", "country": "Sri Lanka" },
+    { "name": "Jumeirah Emirates Towers", "city": "Dubai", "country": "United Arab Emirates" },
+    { "name": "The Ritz-Carlton", "city": "Abu Dhabi", "country": "United Arab Emirates" },
+    { "name": "The Savoy", "city": "London", "country": "United Kingdom" },
+    { "name": "Radisson Blu", "city": "Johannesburg", "country": "South Africa" },
+    { "name": "Other", "city": "Other", "country": "Other" }
+  ]
+}

@@ -1,209 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>EFL Global — Admin Portal</title>
 
-<style>
-:root{
-    --navy:#0A1F3D;
-    --gold:#D6B876;
-    --bg:#f4f6fa;
-    --card:#ffffff;
-    --text:#1d2735;
-    --muted:#6b7280;
-}
+<link rel="stylesheet" href="css/admin.css">
 
-*{
-    box-sizing:border-box;
-    font-family:Inter,Arial,sans-serif;
-}
-
-body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-}
-
-.app{
-    display:flex;
-    min-height:100vh;
-}
-
-
-/* SIDEBAR */
-
-.sidebar{
-    width:260px;
-    background:var(--navy);
-    color:white;
-    padding:25px 18px;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    margin-bottom:40px;
-}
-
-.logo-mark{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    background:var(--gold);
-}
-
-.logo h2{
-    margin:0;
-    font-size:18px;
-}
-
-.logo span{
-    font-size:12px;
-    opacity:.7;
-}
-
-
-.nav button{
-    width:100%;
-    border:0;
-    background:none;
-    color:white;
-    padding:14px;
-    text-align:left;
-    border-radius:10px;
-    cursor:pointer;
-    margin-bottom:8px;
-}
-
-.nav button:hover,
-.nav button.active{
-    background:rgba(255,255,255,.12);
-}
-
-
-/* MAIN */
-
-.main{
-    flex:1;
-    padding:30px;
-}
-
-
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:30px;
-}
-
-.header h1{
-    margin:0;
-}
-
-
-.admin-user{
-    background:white;
-    padding:12px 18px;
-    border-radius:20px;
-}
-
-
-/* CARDS */
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-}
-
-
-.card{
-    background:var(--card);
-    border-radius:18px;
-    padding:22px;
-    box-shadow:0 8px 25px rgba(0,0,0,.05);
-}
-
-.card h3{
-    margin:0;
-    font-size:14px;
-    color:var(--muted);
-}
-
-.number{
-    font-size:32px;
-    font-weight:700;
-    margin-top:12px;
-}
-
-
-
-/* TABLES */
-
-.section{
-    margin-top:35px;
-}
-
-
-.section h2{
-    margin-bottom:15px;
-}
-
-
-.table{
-    background:white;
-    border-radius:16px;
-    overflow:hidden;
-}
-
-
-.row{
-    display:grid;
-    grid-template-columns:2fr 2fr 1fr;
-    padding:16px;
-    border-bottom:1px solid #eee;
-}
-
-
-.row.header-row{
-    background:#f8fafc;
-    font-weight:bold;
-}
-
-
-.badge{
-    background:#e8f3ea;
-    color:#247a35;
-    padding:5px 12px;
-    border-radius:20px;
-    font-size:12px;
-}
-
-
-/* MOBILE */
-
-@media(max-width:800px){
-
-.sidebar{
-    display:none;
-}
-
-.main{
-    padding:20px;
-}
-
-.row{
-    grid-template-columns:1fr;
-    gap:8px;
-}
-
-}
-
-</style>
 
 </head>
 
@@ -211,117 +18,122 @@ body{
 <body>
 
 
-<div class="app">
+<div class="app-layout">
+
 
 
 <aside class="sidebar">
 
-<div class="logo">
-<div class="logo-mark"></div>
-<div>
+
+<div class="brand">
+
+<div class="brand-mark" aria-hidden="true"></div>
+
 <h2>EFL GLOBAL</h2>
-<span>Admin Portal</span>
+
+<p>Admin Portal</p>
+
 </div>
-</div>
 
 
-<div class="nav">
 
-<button class="active">
+
+
+<nav>
+
+
+<button class="nav-button active"
+data-page="dashboard">
+
 Dashboard
+
 </button>
 
-<button>
+
+
+<button class="nav-button"
+data-page="executives">
+
 Executives
+
 </button>
 
-<button>
+
+
+<button class="nav-button"
+data-page="trips">
+
 Trips
+
 </button>
 
-<button>
-Documents
-</button>
 
-<button>
+
+<button class="nav-button"
+data-page="settings">
+
 Settings
+
 </button>
 
-</div>
+<a class="nav-link-portal" href="index.html" target="_blank">Executive Portal ↗</a>
+
+</nav>
+
+
 
 </aside>
 
 
 
-<main class="main">
-
-
-<div class="header">
-
-<div>
-<h1>Executive Travel Management</h1>
-<p>Manage executives, trips and travel documents</p>
-</div>
-
-
-<div class="admin-user">
-Administrator
-</div>
-
-</div>
 
 
 
-<div class="cards">
 
 
-<div class="card">
-<h3>Executives</h3>
-<div class="number" id="execCount">0</div>
-</div>
+
+<main class="main-content">
 
 
-<div class="card">
-<h3>Active Trips</h3>
-<div class="number" id="tripCount">0</div>
-</div>
 
 
-<div class="card">
-<h3>Documents</h3>
-<div class="number">—</div>
-</div>
+
+<header class="page-header">
+
+
+<h1>
+Executive Travel Management
+</h1>
+
+
+<p>EFL Global Travel Management</p>
+
+
+</header>
+
+
+
+
+
+
+
+
+
+<section id="dashboard"
+class="page-section">
 
 
 <div class="card">
-<h3>Status</h3>
-<div class="badge">
-System Ready
-</div>
-</div>
 
 
-</div>
+<h2>
+Welcome back
+</h2>
 
 
-
-
-<div class="section">
-
-<h2>Executives</h2>
-
-
-<div class="table" id="executives">
-
-
-<div class="row header-row">
-<div>Name</div>
-<div>Role</div>
-<div>Status</div>
-</div>
-
-
-</div>
+<p>
+Your executive travel command centre.
+</p>
 
 
 </div>
@@ -330,25 +142,1126 @@ System Ready
 
 
 
-<div class="section">
-
-<h2>Trips</h2>
+<div class="stats-grid">
 
 
-<div class="table" id="trips">
+<div class="card">
+
+<h3>
+Executives
+</h3>
+
+<p id="executive-count">
+0
+</p>
+
+</div>
 
 
-<div class="row header-row">
-<div>Traveller</div>
-<div>Destination</div>
-<div>Status</div>
+
+<div class="card">
+
+<h3>
+Active Trips
+</h3>
+
+<p id="active-trip-count">
+0
+</p>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+Pending Items
+</h3>
+
+<p id="pending-count">
+0
+</p>
+
 </div>
 
 
 </div>
 
 
+
+
+<div class="card">
+
+<h2>
+Upcoming Trips
+</h2>
+
+<div id="upcoming-trips">
+
 </div>
+
+</div>
+
+
+
+
+<div class="card">
+
+<h2>
+Attention Required
+</h2>
+
+<div id="pending-items">
+
+</div>
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section id="executives"
+class="page-section hidden">
+
+
+<div class="card">
+
+
+<div class="section-header">
+
+
+<h2>
+Executives
+</h2>
+
+
+<button id="new-executive">
+
++ Add Executive
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div id="executive-list">
+
+Loading...
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div id="executive-form"
+class="card hidden">
+
+
+
+<h2>
+New Executive
+</h2>
+
+
+
+
+
+<label>
+Full Name
+</label>
+
+
+<input id="executive-name"
+placeholder="Name">
+
+
+
+
+
+
+<label>
+Position
+</label>
+
+
+<input id="executive-title"
+placeholder="Job Title">
+
+
+
+
+
+
+<label>
+Company
+</label>
+
+
+<input id="executive-company"
+placeholder="Company">
+
+
+
+
+
+
+<label>
+Email
+</label>
+
+
+<input id="executive-email"
+placeholder="Email">
+
+
+
+
+
+
+<label>
+Phone
+</label>
+
+
+<input id="executive-phone"
+placeholder="Phone">
+
+
+
+
+
+
+<button id="save-executive">
+
+Save Executive
+
+</button>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section id="trips"
+class="page-section hidden">
+
+
+<div class="card">
+
+
+<div class="section-header">
+
+
+<h2>
+Trip Manager
+</h2>
+
+
+<button id="new-trip">
+
++ New Trip
+
+</button>
+
+
+</div>
+
+
+
+<div id="trip-filter-bar" class="filter-bar hidden">
+
+</div>
+
+
+<div id="trip-list">
+
+
+<p>
+No trips created yet.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div id="trip-form"
+class="card hidden">
+
+
+<h2>
+Create New Trip
+</h2>
+
+
+<label>
+Executive
+</label>
+
+<select id="trip-executive"></select>
+
+
+
+
+<label>
+Country
+</label>
+
+<select id="trip-country"></select>
+
+
+
+
+<label>
+City
+</label>
+
+<select id="trip-city"></select>
+
+
+
+
+<label>
+Airline
+</label>
+
+<select id="trip-airline"></select>
+
+<p id="trip-airline-link" style="margin-top:-10px; font-size:13px;">
+</p>
+
+
+
+
+<label>
+Departure Date
+</label>
+
+<input 
+type="date"
+id="trip-departure"
+>
+
+
+
+<label>
+Return Date
+</label>
+
+<input
+type="date"
+id="trip-return"
+>
+
+
+
+
+<label>
+Trip Purpose
+</label>
+
+<input
+id="trip-purpose"
+placeholder="Business meeting"
+>
+
+
+
+
+<label>
+Readiness Checklist
+</label>
+
+<p style="margin-top:-8px; color:#777; font-size:13px;">
+Choose what needs to be tracked for this trip. The readiness
+tracker will only check the items you select here.
+</p>
+
+<div id="trip-checklist-options">
+
+</div>
+
+
+
+
+<button id="save-trip">
+
+Save Trip
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div id="trip-workspace"
+class="card hidden">
+
+
+<div class="workspace-header">
+
+<h2>
+Trip Details
+</h2>
+
+<div class="workspace-actions">
+
+<button id="toggle-trip-edit">
+
+✏ Edit Trip
+
+</button>
+
+<button id="close-trip-workspace" style="background:#666;">
+
+Close
+
+</button>
+
+<button id="delete-trip" style="background:#c0392b;">
+
+Cancel / Remove Trip
+
+</button>
+
+</div>
+
+</div>
+
+
+<div id="trip-summary">
+
+
+</div>
+
+
+<h3>
+✈ Flight
+</h3>
+
+<div id="flight-summary">
+
+
+</div>
+
+
+<h3>
+🏨 Hotel
+</h3>
+
+<div id="hotel-summary">
+
+
+</div>
+
+
+<h3>
+📄 Documents
+</h3>
+
+<div id="document-summary">
+
+
+</div>
+
+
+<h3>
+📞 Contacts
+</h3>
+
+<div id="contact-summary">
+
+
+</div>
+
+
+<h3>
+✅ Readiness
+</h3>
+
+<div id="readiness-summary">
+
+</div>
+
+
+
+
+<div id="trip-edit-panel" class="hidden">
+
+
+<p class="edit-panel-label">
+Editing mode — changes save immediately per section
+</p>
+
+
+<h3>
+Edit Trip Details
+</h3>
+
+<div id="edit-trip-details">
+
+<label>
+Executive
+</label>
+
+<select id="edit-trip-executive"></select>
+
+<label>
+Country
+</label>
+
+<select id="edit-trip-country"></select>
+
+<label>
+City
+</label>
+
+<select id="edit-trip-city"></select>
+
+<label>
+Airline
+</label>
+
+<select id="edit-trip-airline"></select>
+
+<label>
+Departure Date
+</label>
+
+<input type="date" id="edit-trip-departure">
+
+<label>
+Return Date
+</label>
+
+<input type="date" id="edit-trip-return">
+
+<label>
+Trip Purpose
+</label>
+
+<input id="edit-trip-purpose" placeholder="e.g. JULY TRIP">
+
+<button id="save-trip-details">
+
+Save Trip Details
+
+</button>
+
+</div>
+
+
+<hr>
+
+
+
+<h3>
+Flight Details
+</h3>
+
+
+<div id="flight-details">
+
+
+<label>
+Airline
+</label>
+
+<input id="flight-airline"
+placeholder="Airline">
+
+
+<label>
+Flight Number
+</label>
+
+<input id="flight-number"
+placeholder="Flight Number">
+
+
+<label>
+Departure Airport
+</label>
+
+<input id="flight-departure-airport"
+placeholder="e.g. NBO">
+
+
+<label>
+Arrival Airport
+</label>
+
+<input id="flight-arrival-airport"
+placeholder="e.g. DXB">
+
+
+<label>
+Departure Time
+</label>
+
+<input
+type="datetime-local"
+id="flight-departure-time"
+>
+
+
+<label>
+Arrival Time
+</label>
+
+<input
+type="datetime-local"
+id="flight-arrival-time"
+>
+
+
+<label>
+Booking Reference
+</label>
+
+<input id="flight-booking"
+placeholder="Booking Reference">
+
+
+<button id="save-flight">
+
+Save Flight
+
+</button>
+
+
+</div>
+
+
+<hr>
+
+
+<h3>
+Hotel Details
+</h3>
+
+
+<div id="hotel-details">
+
+
+<label>
+Hotel Name
+</label>
+
+<input
+id="hotel-name"
+placeholder="Hotel name"
+>
+
+
+
+
+<label>
+Hotel City
+</label>
+
+<input
+id="hotel-city"
+placeholder="City"
+>
+
+
+
+
+<label>
+Check In
+</label>
+
+<input
+type="date"
+id="hotel-checkin"
+>
+
+
+
+
+<label>
+Check Out
+</label>
+
+<input
+type="date"
+id="hotel-checkout"
+>
+
+
+
+
+<label>
+Booking Reference
+</label>
+
+<input
+id="hotel-booking"
+placeholder="Booking reference"
+>
+
+
+
+
+<button id="save-hotel">
+
+Save Hotel
+
+</button>
+
+
+</div>
+
+
+<hr>
+
+
+<h3>
+Schedule
+</h3>
+
+
+<p>
+Coming next
+</p>
+
+
+<hr>
+
+
+<h3>
+Add / Edit Document
+</h3>
+
+
+<div id="documents-section">
+
+
+<label>
+Document Type
+</label>
+
+
+<select id="document-type">
+
+<option>
+Select Type
+</option>
+
+<option>
+Visa
+</option>
+
+<option>
+Passport
+</option>
+
+<option>
+Flight Ticket
+</option>
+
+<option>
+Hotel Confirmation
+</option>
+
+<option>
+Invitation Letter
+</option>
+
+<option>
+Insurance
+</option>
+
+<option>
+Other
+</option>
+
+
+</select>
+
+
+
+
+
+<label>
+Document Name
+</label>
+
+
+<input
+id="document-name"
+placeholder="e.g. UK Visa"
+/>
+
+
+
+
+
+<label>
+Document Link
+</label>
+
+
+<input
+id="document-link"
+placeholder="Paste document link"
+/>
+
+
+
+
+
+<select id="document-status">
+
+
+<option>
+Pending
+</option>
+
+
+<option>
+Received
+</option>
+
+
+<option>
+Verified
+</option>
+
+
+</select>
+
+
+
+
+
+<button id="save-document">
+
+Save Document
+
+</button>
+
+<button id="cancel-document-edit" style="background:#666;">
+
+Cancel
+
+</button>
+
+
+</div>
+
+
+<hr>
+
+
+<h3>
+Add Contact
+</h3>
+
+
+<div id="contact-details">
+
+<label>
+Contact Name
+</label>
+
+<input id="contact-name" placeholder="e.g. Hotel Concierge">
+
+<label>
+Contact Type
+</label>
+
+<input id="contact-type" placeholder="e.g. Hotel, Driver, Emergency, Office">
+
+<button id="save-contact">
+
+Save Contact
+
+</button>
+
+</div>
+
+
+<hr>
+
+
+<label>
+Edit Checklist
+</label>
+
+<div id="workspace-checklist-options">
+
+</div>
+
+<button id="save-checklist">
+
+Update Checklist
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+
+</section>
+
+	
+
+
+
+
+
+
+
+
+
+<section id="settings"
+class="page-section hidden">
+
+
+<div class="card">
+
+
+<h2>
+Settings
+</h2>
+
+
+<p>EFL Global portal configuration.</p>
+
+
+
+<label>
+Organisation Name
+</label>
+
+<input id="setting-organisation" placeholder="Organisation name">
+
+
+<label>
+Timezone
+</label>
+
+<input id="setting-timezone" placeholder="e.g. Africa/Nairobi">
+
+
+<label>
+Default Currency
+</label>
+
+<input id="setting-currency" placeholder="e.g. USD">
+
+
+<label>
+Default Assistant Name
+</label>
+
+<input id="setting-assistant" placeholder="Assistant name">
+
+
+<button id="save-settings">
+
+Save Settings
+
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>
+Publish & Sync
+</h2>
+
+
+<p>
+This portal is a static site — data lives in this browser only, not
+on a server. Executives and trips added here won't be visible
+to anyone visiting the site in a different browser or device
+until you publish them.
+</p>
+
+
+<p>
+<strong>Export Data</strong> downloads the current executives,
+trips, and settings as JSON files. Replace the matching files
+in <code>data/</code> in the repo with these and redeploy to
+make this the data everyone sees on their first visit.
+</p>
+
+
+<button id="export-data">
+
+Export Data
+
+</button>
+
+
+<p style="margin-top:20px;">
+<strong>Reload Shipped Data</strong> discards whatever is
+currently saved in this browser and re-loads whatever is
+published in the live <code>data/</code> files. Use this to
+pull down changes published from elsewhere.
+</p>
+
+
+<button id="reload-data" style="background:#c0392b;">
+
+Reload Shipped Data
+
+</button>
+
+
+</div>
+
+
+
+<div class="card">
+
+
+<h2>
+GitHub Publishing
+</h2>
+
+
+<p>
+Publish executives, trips, and settings straight to your repo
+with one click, instead of exporting and committing manually.
+This also bumps the data version automatically, so your
+executives' browsers refresh to the new data as soon as they
+open their profile link — no action needed on their end.
+</p>
+
+
+<div class="attention-item">
+
+<p>
+<strong>Use a scoped token.</strong> Create a
+<a href="https://github.com/settings/personal-access-tokens/new" target="_blank">fine-grained personal access token</a>
+limited to this one repository with <strong>Contents: Read and write</strong>
+permission only — not a token with full account access. It's
+stored in this browser only and is never included in data
+exports. Treat it like a password: only save it on a device
+you trust, and revoke it from GitHub if that ever changes.
+</p>
+
+</div>
+
+
+<label>
+Repository Owner (username or org)
+</label>
+
+<input id="github-owner" placeholder="e.g. zinnto">
+
+
+<label>
+Repository Name
+</label>
+
+<input id="github-repo" placeholder="e.g. efl-executive-travel-portal">
+
+
+<label>
+Branch
+</label>
+
+<input id="github-branch" placeholder="main">
+
+
+<label>
+Personal Access Token
+</label>
+
+<input id="github-token" type="password" placeholder="Paste token — stored in this browser only">
+
+
+<button id="save-github-settings">
+
+Save GitHub Settings
+
+</button>
+
+
+<button id="publish-to-github" style="background:#1a7f37; margin-left:10px;">
+
+Publish All Data to GitHub
+
+</button>
+
+
+<p id="github-publish-status" style="margin-top:14px; font-size:14px;">
+
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
 
 
 
@@ -361,128 +1274,15 @@ System Ready
 
 
 
-<script>
 
-async function loadExecutives(){
 
-try{
 
-const response = await fetch("data/executives.json");
+<script src="js/app.js"></script>
 
-const data = await response.json();
-
-
-const container=document.getElementById("executives");
-
-
-let count=0;
-
-
-data.forEach(exec=>{
-
-
-count++;
-
-
-container.innerHTML += `
-
-<div class="row">
-
-<div>${exec.name || "Unknown"}</div>
-
-<div>${exec.role || "-"}</div>
-
-<div>
-<span class="badge">Active</span>
-</div>
-
-</div>
-
-`;
-
-});
-
-
-document.getElementById("execCount").innerText=count;
-
-
-}
-
-catch(error){
-
-console.log("Unable to load executives",error);
-
-}
-
-
-}
-
-
-
-async function loadTrips(){
-
-try{
-
-const response=await fetch("data/trips.json");
-
-const data=await response.json();
-
-
-const container=document.getElementById("trips");
-
-
-let count=0;
-
-
-data.forEach(trip=>{
-
-count++;
-
-
-container.innerHTML+=`
-
-<div class="row">
-
-<div>${trip.executive || "-"}</div>
-
-<div>${trip.destination || "-"}</div>
-
-<div>
-<span class="badge">
-${trip.status || "Planned"}
-</span>
-</div>
-
-</div>
-
-
-`;
-
-
-});
-
-
-document.getElementById("tripCount").innerText=count;
-
-
-}
-
-catch(error){
-
-console.log("Trips not loaded",error);
-
-}
-
-}
-
-
-loadExecutives();
-loadTrips();
-
-
-</script>
+<script src="js/admin.js"></script>
 
 
 
 </body>
+
 </html>

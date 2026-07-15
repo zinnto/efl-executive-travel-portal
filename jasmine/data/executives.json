@@ -1,0 +1,34 @@
+{
+  "executives": [
+    {
+      "id": "exec001",
+      "name": "Wasantha Ranasinghe",
+      "title": "Director - East Africa",
+      "company": "EFL Global",
+      "email": "",
+      "phone": "",
+      "assistant": "Zenat",
+      "status": "Active"
+    },
+    {
+      "id": "exec002",
+      "name": "Prageeth Seneviratne",
+      "title": "Head of Ocean Freight - East Africa",
+      "company": "EFL Global",
+      "email": "",
+      "phone": "",
+      "assistant": "Zenat",
+      "status": "Active"
+    },
+    {
+      "id": "exec003",
+      "name": "Kavinda Atapattu",
+      "title": "Country ManagerEFL Global - Kenya",
+      "company": "",
+      "email": "kavindaa@efl.global",
+      "phone": "0735156546",
+      "assistant": "",
+      "status": "Active"
+    }
+  ]
+}
