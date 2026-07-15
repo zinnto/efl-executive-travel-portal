@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>EFL Global — Admin Dashboard</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand__mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2 16l6.5-2 3.2 1.9L13 14l-3-5.4L14.5 3l1 .6L13 10l6 1.7.6 1.6-7 .3-2.4 4.2L8 20l-1.4-.4.7-4.6L2 16z" fill="#D6B876"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-brand__name">EFL GLOBAL</div>
+        <div class="sidebar-brand__tag">Admin Dashboard</div>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><button class="sidebar-link active" data-view="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>All Trips</span></button></li>
+      <li><button class="sidebar-link" id="navNewTrip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span>New Trip</span></button></li>
+      <li><button class="sidebar-link" id="navImport"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span>Import JSON</span></button></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li><a class="sidebar-link" href="index.html" style="display:flex;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Open Portal</span></a></li>
+    </ul>
+    <div class="sidebar-foot">EFL GLOBAL © 2026 · Admin v1.0</div>
+  </aside>
+
+  <div class="main-content">
+
+    <header class="topnav" id="topnav">
+      <button class="topnav__menu-btn" id="menuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <button class="topnav__back hidden" id="backBtn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topnav__crumb">
+        <div class="topnav__crumb-eyebrow">EFL Global / Admin</div>
+        <div class="topnav__crumb-title" id="topnavTitle">All Trips</div>
+      </div>
+      <div class="topnav__avatar" style="background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--gold-400);">A</div>
+    </header>
+
+    <!-- ============ TRIPS LIST ============ -->
+    <section class="view" id="view-list">
+      <div class="admin-toolbar">
+        <h2>Trips &amp; Executives</h2>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="importBtn">Import JSON</button>
+          <button class="btn btn-primary btn-sm" id="newTripBtn">+ New Trip</button>
+        </div>
+      </div>
+      <div class="trips-grid" id="tripsGrid"><!-- injected --></div>
+      <input type="file" id="importFile" accept="application/json" hidden />
+    </section>
+
+    <!-- ============ TRIP EDITOR ============ -->
+    <section class="view" id="view-editor" hidden>
+
+      <div class="admin-toolbar">
+        <h2 id="editorHeading">Edit Trip</h2>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="openPortalBtn">Open in Portal</button>
+          <button class="btn btn-outline btn-sm" id="downloadBtn">Download JSON</button>
+          <button class="btn btn-ghost btn-sm" id="deleteTripBtn">Delete</button>
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="admin-card">
+        <h3>Basic Info</h3>
+        <div class="form-grid">
+          <div class="field"><label>Trip ID</label><input class="f-input" id="f_tripId" placeholder="EFL-XX-0000" /></div>
+          <div class="field"><label>Stage</label>
+            <select class="f-input" id="f_stage">
+              <option value="active">Active</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div class="field"><label>Trip Name</label><input class="f-input" id="f_tripName" placeholder="Uganda Regional Review — July 2026" /></div>
+          <div class="field"><label>Company Name</label><input class="f-input" id="f_companyName" placeholder="EFL Global" /></div>
+          <div class="field"><label>Traveller Name</label><input class="f-input" id="f_travellerName" placeholder="Full name" /></div>
+          <div class="field"><label>Position / Title</label><input class="f-input" id="f_position" placeholder="Regional Finance Manager" /></div>
+          <div class="field"><label>Photo Initials</label><input class="f-input" id="f_initials" maxlength="3" placeholder="PR" /></div>
+          <div class="field"><label>Destination</label><input class="f-input" id="f_destination" placeholder="Kampala & Entebbe, Uganda" /></div>
+          <div class="field span-2"><label>Travel Dates</label><input class="f-input" id="f_dates" placeholder="20 – 27 Jul 2026" /></div>
+        </div>
+      </div>
+
+      <!-- Next Event -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Next Event</h3><button class="btn btn-ghost btn-sm" id="clearNextEventBtn" type="button">Clear</button></div>
+        <div class="form-grid cols-3">
+          <div class="field"><label>Airline</label><input class="f-input" id="ne_airline" /></div>
+          <div class="field"><label>Flight Number</label><input class="f-input" id="ne_flightNumber" /></div>
+          <div class="field"><label>Status</label>
+            <select class="f-input" id="ne_status">
+              <option>On Time</option><option>Delayed</option><option>Boarding</option><option>Cancelled</option>
+            </select>
+          </div>
+          <div class="field span-2"><label>Route</label><input class="f-input" id="ne_route" placeholder="Nairobi (NBO) → Entebbe (EBB)" /></div>
+          <div class="field"><label>Date</label><input class="f-input" id="ne_date" placeholder="20 Jul 2026" /></div>
+          <div class="field"><label>Departure</label><input class="f-input" id="ne_departure" placeholder="09:30" /></div>
+          <div class="field"><label>Arrival</label><input class="f-input" id="ne_arrival" placeholder="10:45" /></div>
+          <div class="field"><label>Terminal</label><input class="f-input" id="ne_terminal" /></div>
+          <div class="field"><label>Gate</label><input class="f-input" id="ne_gate" /></div>
+          <div class="field"><label>Seat</label><input class="f-input" id="ne_seat" /></div>
+        </div>
+      </div>
+
+      <!-- Status checklist -->
+      <div class="admin-card">
+        <h3>Trip Status Checklist</h3>
+        <div class="checklist-row"><input type="checkbox" id="st_documents" /><label for="st_documents">Documents Ready</label></div>
+        <div class="checklist-row"><input type="checkbox" id="st_hotels" /><label for="st_hotels">Hotels Confirmed</label></div>
+        <div class="checklist-row"><input type="checkbox" id="st_transport" /><label for="st_transport">Transport Arranged</label></div>
+      </div>
+
+      <!-- Itinerary -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Itinerary</h3><button class="btn btn-outline btn-sm" id="addDayBtn" type="button">+ Add Day</button></div>
+        <div id="itineraryList"></div>
+      </div>
+
+      <!-- Flights -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Flights</h3><button class="btn btn-outline btn-sm" id="addFlightBtn" type="button">+ Add Flight</button></div>
+        <div id="flightsList"></div>
+      </div>
+
+      <!-- Hotels -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Hotels</h3><button class="btn btn-outline btn-sm" id="addHotelBtn" type="button">+ Add Hotel</button></div>
+        <div id="hotelsList"></div>
+      </div>
+
+      <!-- Meetings -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Meetings</h3><button class="btn btn-outline btn-sm" id="addMeetingBtn" type="button">+ Add Meeting</button></div>
+        <div id="meetingsList"></div>
+      </div>
+
+      <!-- Transport -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Transport</h3><button class="btn btn-outline btn-sm" id="addTransportBtn" type="button">+ Add Transport</button></div>
+        <div id="transportList"></div>
+      </div>
+
+      <!-- Documents -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Documents</h3><button class="btn btn-outline btn-sm" id="addDocCatBtn" type="button">+ Add Category</button></div>
+        <div id="docsList"></div>
+      </div>
+
+      <!-- Contacts -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Contacts</h3><button class="btn btn-outline btn-sm" id="addContactBtn" type="button">+ Add Contact</button></div>
+        <div id="contactsList"></div>
+      </div>
+
+      <!-- Maps -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Maps</h3><button class="btn btn-outline btn-sm" id="addMapBtn" type="button">+ Add Place</button></div>
+        <div id="mapsList"></div>
+      </div>
+
+      <!-- Expenses -->
+      <div class="admin-card">
+        <h3>Expenses</h3>
+        <div class="form-grid">
+          <div class="field"><label>Currency</label><input class="f-input" id="exp_currency" placeholder="USD" /></div>
+          <div class="field"><label>Per Diem (per day)</label><input class="f-input" type="number" id="exp_perDiem" /></div>
+        </div>
+        <h4>Logged Items</h4>
+        <div id="expensesList"></div>
+        <button class="btn btn-outline btn-sm" id="addExpenseBtn" type="button">+ Add Expense Item</button>
+      </div>
+
+      <div class="admin-savebar">
+        <button class="btn btn-primary" id="saveTripBtn">Save Trip</button>
+        <button class="btn btn-outline" id="setActiveBtn">Set as Default in Portal</button>
+        <button class="btn btn-ghost" id="cancelEditBtn">Back to All Trips</button>
+      </div>
+
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+  <div class="toast__text" id="toastText"></div>
+  <button class="toast__close" id="toastClose">✕</button>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
