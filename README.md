@@ -91,34 +91,37 @@ most recent trips with quick Edit / Open in Portal actions.
 
 **Trips** — every trip currently known to this browser, as cards with
 Edit / Open in Portal / Duplicate / Download / Delete. **+ New Trip** opens
-a full form: an optional link to an executive profile, traveller details,
-next event, a **checklist** (add/remove/rename any number of items — not
-fixed to "documents / hotels / transport"), itinerary (day-by-day, with
-events and attachments), flights, hotels, meetings, transport, documents
-(by category), contacts, maps and expenses. No JSON editing required.
-**Import JSON** lets you paste in or upload an existing trip file.
+a full form: an optional link to an executive profile (which autofills the
+traveller's name/position/photo initials), a system-generated Trip ID, next
+event with airline and airport dropdowns, a **checklist** (add/remove/rename
+any number of items), itinerary (day-by-day, with events and attachments),
+flights (with the same airline/airport dropdowns), hotels, meetings,
+transport, documents (by category), contacts, maps and expenses. No JSON
+editing required. **Import JSON** lets you paste in or upload an existing
+trip file. **Download trips-index.json** gives you an up-to-date copy of the
+whole trip directory, ready to replace the one in your repo.
 
 **Executives** — the executive directory. Add a profile once (name,
 position, department, contact info, travel notes), then link any number of
-trips to it. Opening an executive's profile shows every trip linked to them,
-lets you jump straight into editing one, open their current trip in the
-portal, or start a new trip pre-filled with their details.
+trips to it from the trip editor's "Executive" dropdown — selecting one
+autofills the traveller fields. Opening an executive's profile shows every
+trip linked to them and lets you jump straight into editing one, open their
+current trip in the portal, or start a new trip pre-filled with their
+details. **Download executives-index.json** gives you the full executive
+directory as one file, ready to replace the one in your repo.
 
 **Settings** — documentation on how the data model and publishing flow
-work, an **Export All (JSON)** button that backs up every trip and executive
-currently saved in this browser into one file, an **Import Bundle** button
-to restore from that file, and a "Clear All Local Admin Edits" reset for
-when local preview data gets out of sync.
+work (including a concrete "which downloaded file goes where" checklist and
+how to attach PDFs or Google Drive links), an **Export All (JSON)** button
+that backs up every trip and executive currently saved in this browser into
+one file, an **Import Bundle** button to restore from that file, and a
+"Clear All Local Admin Edits" reset for when local preview data gets out of
+sync.
 
 **Save** — writes into this browser's local storage. Because the portal
 checks local storage before fetching the file on disk, **this makes your
 edit appear in the portal instantly**, in this browser, without any deploy —
 perfect for reviewing before you publish.
-
-**Download JSON** — downloads the trip or executive as `<id>.json`. This is
-how a change becomes *permanent*: drop trip files into `data/trips/` (and
-update `data/trips-index.json`), or add/update entries in
-`data/executives-index.json`, then commit and push.
 
 **Set as Default in Portal** — makes this trip the one shown when the portal
 opens with no trip already remembered on this device.
@@ -126,10 +129,40 @@ opens with no trip already remembered on this device.
 > **Why "Save" isn't automatically permanent:** GitHub Pages (like this
 > project) serves static files — there is no database or server the admin
 > page can write to. The local-storage save gives you an instant, private
-> preview; "Download JSON" + commit is the publishing step. If you later want
-> true multi-user editing with no manual file step, that would need a small
-> backend (e.g. a serverless function + database) — happy to help design
-> that if EFL Global wants to take this further.
+> preview; downloading + committing the right file (see the checklist below)
+> is the publishing step. If you later want true multi-user editing with no
+> manual file step, that would need a small backend (e.g. a serverless
+> function + database) — happy to help design that if EFL Global wants to
+> take this further.
+
+## 5a. Publishing checklist — where each downloaded file goes
+
+Every "Download" button in the Admin Dashboard produces a file already
+named correctly. Here's exactly where each one goes in your repository:
+
+| You downloaded… | Goes in… | Also do… |
+|---|---|---|
+| `<tripId>.json` (from a Trip) | `data/trips/` | Also download & replace `trips-index.json` (see below) |
+| `trips-index.json` (Trips tab button) | `data/` — replace the whole file | — |
+| `executives-index.json` (Executives tab button) | `data/` — replace the whole file | This is one array of **all** executives — always replace the whole file, don't try to hand-merge individual downloads into it |
+| A PDF (boarding pass, hotel confirmation, etc.) | `documents/` | Reference it in the trip as `documents/your-file.pdf` |
+
+**Adding a PDF:** upload it straight into the `documents/` folder in your
+GitHub repo (GitHub's web UI: **Add file → Upload files**, or copy it in
+locally before you commit), then type `documents/your-file-name.pdf` into
+the relevant document/attachment field in the admin editor.
+
+**Using Google Drive (or any other link) instead:** every document/attachment
+field accepts a full URL in place of a local path — e.g.
+`https://drive.google.com/file/d/XXXXXXXX/view`. Set the Drive file's sharing
+to "Anyone with the link can view" (the executive opening it from the portal
+won't be logged into your Drive), and nothing needs to go in `documents/`
+for that entry.
+
+The **Export All (JSON)** button in Settings is a separate, different-shaped
+bundle meant only for backup/restore *within the admin tool itself* (via
+**Import Bundle**) — it is not in the same format as the repo files above, so
+use the table above when you're ready to publish.
 
 ## 6. Running it locally
 

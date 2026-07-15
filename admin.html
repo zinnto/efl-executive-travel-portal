@@ -75,12 +75,14 @@
     <!-- ============ TRIPS LIST ============ -->
     <section class="view" id="view-list" hidden>
       <div class="admin-toolbar">
-        <h2>Trips &amp; Executives</h2>
+        <h2>Trips</h2>
         <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="downloadIndexBtn">Download trips-index.json</button>
           <button class="btn btn-outline btn-sm" id="importBtn">Import JSON</button>
           <button class="btn btn-primary btn-sm" id="newTripBtn">+ New Trip</button>
         </div>
       </div>
+      <p style="font-size:12px;color:var(--ink-500);margin:-6px 0 14px;">Downloading a trip gives you <code>&lt;tripId&gt;.json</code> for <code>data/trips/</code>. After adding/removing/renaming trips, also click <strong>Download trips-index.json</strong> and replace the copy in <code>data/</code> — see Settings for the full checklist.</p>
       <div class="trips-grid" id="tripsGrid"><!-- injected --></div>
       <input type="file" id="importFile" accept="application/json" hidden />
     </section>
@@ -240,9 +242,11 @@
       <div class="admin-toolbar">
         <h2>Executives</h2>
         <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="downloadExecIndexBtn">Download executives-index.json</button>
           <button class="btn btn-primary btn-sm" id="newExecBtn">+ New Executive</button>
         </div>
       </div>
+      <p style="font-size:12px;color:var(--ink-500);margin:-6px 0 14px;">Executives are stored as ONE array file — <code>data/executives-index.json</code>. After adding/editing/removing any executive, click <strong>Download executives-index.json</strong> and replace the whole file in your repo (don't merge by hand).</p>
       <div class="trips-grid" id="execGrid"><!-- injected --></div>
     </section>
 
@@ -322,8 +326,46 @@ documents/                        → PDFs referenced by trips</pre>
       </div>
 
       <div class="admin-card">
+        <h3>Publishing checklist — where each downloaded file goes</h3>
+        <p style="font-size:12.5px;color:var(--ink-500);line-height:1.6;margin:0 0 12px;">
+          Every "Download" button in this tool produces a file already named
+          correctly for your repository. Here's exactly where each one goes:
+        </p>
+        <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+          <tr style="text-align:left; color:var(--ink-500);"><th style="padding:6px 8px 6px 0;">You downloaded…</th><th style="padding:6px 8px;">Goes in…</th><th style="padding:6px 0;">Also do…</th></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;"><code>&lt;tripId&gt;.json</code> (from a Trip)</td><td style="padding:8px;"><code>data/trips/</code></td><td style="padding:8px 0;">Click <strong>Download trips-index.json</strong> in the Trips tab and replace <code>data/trips-index.json</code> too</td></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;"><code>trips-index.json</code></td><td style="padding:8px;"><code>data/</code> (replace the whole file)</td><td style="padding:8px 0;">—</td></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;"><code>executives-index.json</code></td><td style="padding:8px;"><code>data/</code> (replace the whole file)</td><td style="padding:8px 0;">This is one array of ALL executives — don't try to merge individual downloads by hand, always use this whole-file download</td></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;">A PDF (boarding pass, hotel confirmation, etc.)</td><td style="padding:8px;"><code>documents/</code></td><td style="padding:8px 0;">Reference it in the trip as <code>documents/your-file.pdf</code> — see below</td></tr>
+        </table>
+      </div>
+
+      <div class="admin-card">
+        <h3>Attaching documents (PDFs or Google Drive links)</h3>
+        <p style="font-size:13px;color:var(--ink-700);line-height:1.6;margin:0 0 10px;">
+          Every document/attachment field in the trip editor (Flights, Hotels, Meetings,
+          Documents, Itinerary attachments) accepts <strong>either</strong> of two things:
+        </p>
+        <p style="font-size:12.5px;color:var(--ink-700);line-height:1.7;margin:0 0 8px;">
+          <strong>1. A local PDF you host yourself</strong> — upload the PDF file directly into
+          the <code>documents/</code> folder in your GitHub repository (via GitHub's web
+          "Add file → Upload files", or by copying it into that folder before you commit &amp;
+          push). Then type <code>documents/your-file-name.pdf</code> into the field — that's the
+          path relative to the site root, so it must start with <code>documents/</code>.
+        </p>
+        <p style="font-size:12.5px;color:var(--ink-700);line-height:1.7;margin:0;">
+          <strong>2. A link to a file hosted elsewhere</strong> (Google Drive, SharePoint, etc.)
+          — paste the full sharing URL instead, e.g.
+          <code>https://drive.google.com/file/d/XXXXXXXX/view</code>. Make sure the file's
+          sharing setting is "Anyone with the link can view", since the executive opening it
+          from the portal won't be logged into your Drive. No file needs to go in
+          <code>documents/</code> for this option.
+        </p>
+      </div>
+
+      <div class="admin-card">
         <h3>Export &amp; Import</h3>
-        <p style="font-size:12.5px;color:var(--ink-500);margin:0 0 12px;">Back up every trip and executive currently saved in this browser, or restore/seed from a backup file.</p>
+        <p style="font-size:12.5px;color:var(--ink-500);margin:0 0 12px;">Back up every trip and executive currently saved in this browser, or restore/seed from a backup file. This bundle is for backup/restore <em>within this tool</em> — it isn't in the same shape as the repo files above, so use the table above for publishing.</p>
         <div class="admin-toolbar__actions">
           <button class="btn btn-primary btn-sm" id="exportAllBtn">Export All (JSON)</button>
           <button class="btn btn-outline btn-sm" id="importAllBtn">Import Bundle</button>

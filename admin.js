@@ -59,13 +59,27 @@ const AIRLINE_OPTIONS = [
 ];
 
 const AIRPORT_OPTIONS = [
+  // East & Southern Africa
   'Nairobi (NBO) — Jomo Kenyatta Intl', 'Mombasa (MBA) — Moi Intl', 'Entebbe (EBB) — Entebbe Intl, Kampala',
   'Kigali (KGL) — Kigali Intl', 'Dar es Salaam (DAR) — Julius Nyerere Intl', 'Zanzibar (ZNZ) — Abeid Amani Karume Intl',
   'Addis Ababa (ADD) — Bole Intl', 'Lagos (LOS) — Murtala Muhammed Intl', 'Johannesburg (JNB) — OR Tambo Intl',
-  'Cape Town (CPT) — Cape Town Intl', 'Cairo (CAI) — Cairo Intl', 'Dubai (DXB) — Dubai Intl',
-  'Doha (DOH) — Hamad Intl', 'Istanbul (IST) — Istanbul Airport', 'London (LHR) — Heathrow',
-  'Paris (CDG) — Charles de Gaulle', 'Frankfurt (FRA) — Frankfurt Airport', 'Amsterdam (AMS) — Schiphol',
-  'New York (JFK) — John F. Kennedy Intl'
+  'Cape Town (CPT) — Cape Town Intl',
+  // Middle East / North Africa
+  'Cairo (CAI) — Cairo Intl', 'Dubai (DXB) — Dubai Intl', 'Abu Dhabi (AUH) — Zayed Intl',
+  'Doha (DOH) — Hamad Intl', 'Istanbul (IST) — Istanbul Airport',
+  // Europe
+  'London (LHR) — Heathrow', 'London (LGW) — Gatwick', 'Paris (CDG) — Charles de Gaulle',
+  'Amsterdam (AMS) — Schiphol', 'Frankfurt (FRA) — Frankfurt Airport', 'Munich (MUC) — Munich Airport',
+  'Zurich (ZRH) — Zurich Airport', 'Geneva (GVA) — Geneva Airport', 'Vienna (VIE) — Vienna Intl',
+  'Brussels (BRU) — Brussels Airport', 'Madrid (MAD) — Adolfo Suárez Barajas', 'Rome (FCO) — Fiumicino',
+  'Milan (MXP) — Malpensa', 'Copenhagen (CPH) — Kastrup', 'Stockholm (ARN) — Arlanda',
+  'Dublin (DUB) — Dublin Airport', 'Lisbon (LIS) — Humberto Delgado', 'Warsaw (WAW) — Chopin Airport',
+  // USA / Canada
+  'New York (JFK) — John F. Kennedy Intl', 'New York (EWR) — Newark Liberty', 'Washington DC (IAD) — Dulles Intl',
+  'Los Angeles (LAX) — LA Intl', 'San Francisco (SFO) — SF Intl', 'Chicago (ORD) — O\'Hare Intl',
+  'Atlanta (ATL) — Hartsfield-Jackson', 'Houston (IAH) — George Bush Intercontinental', 'Miami (MIA) — Miami Intl',
+  'Boston (BOS) — Logan Intl', 'Dallas (DFW) — Dallas/Fort Worth Intl', 'Seattle (SEA) — Sea-Tac Intl',
+  'Toronto (YYZ) — Pearson Intl'
 ];
 
 const OTHER_VALUE = '__other__';
@@ -507,19 +521,19 @@ const FIELD_SCHEMAS = {
     { key: 'route', label: 'Route (auto-filled from From/To — still editable)', span2: true, placeholder: 'Nairobi (NBO) → Entebbe (EBB)' },
     { key: 'date', label: 'Date' }, { key: 'departure', label: 'Departure' }, { key: 'arrival', label: 'Arrival' },
     { key: 'class', label: 'Class' }, { key: 'seat', label: 'Seat' }, { key: 'pnr', label: 'PNR' },
-    { key: 'document', label: 'Document Path', span2: true, placeholder: 'documents/boarding-pass.pdf' }
+    { key: 'document', label: 'Document (local path or full URL)', span2: true, placeholder: 'documents/boarding-pass.pdf  or  https://drive.google.com/...' }
   ],
   hotel: [
     { key: 'name', label: 'Hotel Name', span2: true }, { key: 'address', label: 'Address', span2: true },
     { key: 'checkIn', label: 'Check-in' }, { key: 'checkOut', label: 'Check-out' },
     { key: 'room', label: 'Room Type' }, { key: 'confirmation', label: 'Confirmation No.' },
     { key: 'mapQuery', label: 'Map Search Query', span2: true },
-    { key: 'document', label: 'Document Path', span2: true, placeholder: 'documents/hotel-confirmation.pdf' }
+    { key: 'document', label: 'Document (local path or full URL)', span2: true, placeholder: 'documents/hotel-confirmation.pdf  or  https://drive.google.com/...' }
   ],
   meeting: [
     { key: 'title', label: 'Title', span2: true }, { key: 'with', label: 'With' }, { key: 'date', label: 'Date / Time' },
     { key: 'location', label: 'Location', span2: true },
-    { key: 'document', label: 'Document Path', span2: true, placeholder: 'documents/meeting-brief.pdf' }
+    { key: 'document', label: 'Document (local path or full URL)', span2: true, placeholder: 'documents/meeting-brief.pdf  or  https://drive.google.com/...' }
   ],
   transport: [
     { key: 'type', label: 'Type', span2: true, placeholder: 'Airport Transfer' },
@@ -542,7 +556,7 @@ const FIELD_SCHEMAS = {
   ],
   attachment: [
     { key: 'name', label: 'Attachment Name', span2: true },
-    { key: 'file', label: 'File Path', span2: true, placeholder: 'documents/file.pdf' }
+    { key: 'file', label: 'File (local path or full URL)', span2: true, placeholder: 'documents/file.pdf  or  https://drive.google.com/...' }
   ]
 };
 
@@ -689,7 +703,7 @@ function renderDocuments() {
       files.forEach((f, fIdx) => {
         const row = el(`<div class="doc-item-row">
           <input class="f-input" placeholder="Document name" value="${esc(f.name)}" data-role="name" />
-          <input class="f-input" placeholder="documents/file.pdf" value="${esc(f.file)}" data-role="file" />
+          <input class="f-input" placeholder="documents/file.pdf or https://drive.google.com/..." value="${esc(f.file)}" data-role="file" />
           <button class="repeat-card__remove" type="button">Remove</button>
         </div>`);
         row.querySelector('[data-role="name"]').addEventListener('input', (e) => { f.name = e.target.value; });
@@ -1087,6 +1101,30 @@ function init() {
 
   document.getElementById('newTripBtn').addEventListener('click', () => { editorOrigin = 'list'; openEditorWithTrip(blankTrip(), true); });
   document.getElementById('newExecBtn').addEventListener('click', () => openExecEditorWithData(blankExecutive(), true));
+
+  document.getElementById('downloadIndexBtn').addEventListener('click', async () => {
+    const idx = await loadTripsIndex();
+    const trips = await Promise.all(idx.trips.map(async (entry) => {
+      try {
+        const t = await loadTripById(entry.tripId, entry.file);
+        return {
+          tripId: t.traveller.tripId, file: `data/trips/${t.traveller.tripId}.json`,
+          travellerName: t.traveller.name, position: t.traveller.position,
+          destination: t.traveller.destination, dates: t.traveller.dates,
+          status: (t.meta && t.meta.stage) || 'upcoming'
+        };
+      } catch (e) { return entry; }
+    }));
+    const out = { defaultTripId: localStorage.getItem(LS_ACTIVE) || idx.defaultTripId, trips };
+    download('trips-index.json', JSON.stringify(out, null, 2));
+    showToast("Downloaded the full trips-index.json — replace the copy in your repo's data/ folder.");
+  });
+
+  document.getElementById('downloadExecIndexBtn').addEventListener('click', async () => {
+    const execs = await loadExecutivesList(true);
+    download('executives-index.json', JSON.stringify(execs, null, 2));
+    showToast("Downloaded the full executives-index.json — replace the copy in your repo's data/ folder.");
+  });
 
   // Next Event: populate the airline/airport dropdowns once, wire "Other" toggling and route auto-fill.
   const neAirlineSelect = document.getElementById('ne_airline_select');
