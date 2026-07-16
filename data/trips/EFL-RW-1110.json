@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "tripName": "Kigali Investment Review — November 2026",
+    "companyName": "EFL Global",
+    "generatedOn": "2026-07-15",
+    "stage": "upcoming"
+  },
+  "traveller": {
+    "name": "Prageeth Ranasinghe",
+    "position": "Regional Finance Manager — East Africa",
+    "photoInitials": "PR",
+    "destination": "Kigali, Rwanda",
+    "dates": "10 – 14 Nov 2026",
+    "tripId": "EFL-RW-1110",
+    "execId": "EXEC-PR001"
+  },
+  "nextEvent": {
+    "type": "flight",
+    "airline": "RwandAir",
+    "flightNumber": "WB301",
+    "route": "Nairobi (NBO) → Kigali (KGL)",
+    "departure": "07:15",
+    "arrival": "08:45",
+    "date": "10 Nov 2026",
+    "dateISO": "2026-11-10",
+    "terminal": "Terminal 1A",
+    "gate": "9",
+    "seat": "4A",
+    "status": "On Time"
+  },
+  "status": { "documentsReady": true, "hotelsConfirmed": true, "transportArranged": false },
+  "quickAccess": [
+    { "id": "flights", "label": "Flights", "icon": "flight" },
+    { "id": "hotels", "label": "Hotels", "icon": "hotel" },
+    { "id": "itinerary", "label": "Itinerary", "icon": "itinerary" },
+    { "id": "meetings", "label": "Meetings", "icon": "meeting" },
+    { "id": "transport", "label": "Transport", "icon": "transport" },
+    { "id": "documents", "label": "Documents", "icon": "document" },
+    { "id": "maps", "label": "Maps", "icon": "map" },
+    { "id": "contacts", "label": "Contacts", "icon": "contact" },
+    { "id": "expenses", "label": "Expenses", "icon": "expense" }
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "dateISO": "2026-11-10",
+      "date": "Tue, 10 Nov 2026",
+      "city": "Nairobi → Kigali",
+      "events": [
+        {
+          "time": "07:15",
+          "title": "Flight WB301 — Nairobi to Kigali",
+          "type": "flight",
+          "location": "Jomo Kenyatta Intl Airport, Terminal 1A",
+          "contact": "RwandAir — +250 788 177 000",
+          "notes": "Seat 4A, Business Class.",
+          "attachments": [ { "name": "Boarding Pass — WB301.pdf", "file": "documents/boarding-pass-wb301.pdf" } ],
+          "mapQuery": "Jomo Kenyatta International Airport"
+        },
+        {
+          "time": "10:00",
+          "title": "Driver pickup — Kigali Airport",
+          "type": "transport",
+          "location": "Kigali International Airport, Arrivals",
+          "contact": "Eric Nshimiyimana — +250 788 445 221",
+          "notes": "Meet at Arrivals with EFL Global signboard.",
+          "attachments": [],
+          "mapQuery": "Kigali International Airport"
+        },
+        {
+          "time": "15:00",
+          "title": "Investment committee briefing",
+          "type": "meeting",
+          "location": "Kigali Heights, Kacyiru",
+          "contact": "Aline Uwase — Country Manager, Rwanda",
+          "notes": "Review Q4 investment pipeline.",
+          "attachments": [],
+          "mapQuery": "Kigali Heights Kacyiru"
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "dateISO": "2026-11-11",
+      "date": "Wed, 11 Nov 2026",
+      "city": "Kigali",
+      "events": [
+        {
+          "time": "09:00",
+          "title": "Site visit — Kigali logistics hub",
+          "type": "meeting",
+          "location": "Special Economic Zone, Kigali",
+          "contact": "Aline Uwase — Country Manager, Rwanda",
+          "notes": "Hard hat provided on site.",
+          "attachments": [],
+          "mapQuery": "Kigali Special Economic Zone"
+        }
+      ]
+    }
+  ],
+  "flights": [
+    {
+      "airline": "RwandAir", "flightNumber": "WB301", "from": "Nairobi (NBO) — Jomo Kenyatta Intl", "to": "Kigali (KGL) — Kigali Intl",
+      "route": "Nairobi (NBO) → Kigali (KGL)", "dateISO": "2026-11-10", "date": "10 Nov 2026",
+      "departure": "07:15", "arrival": "08:45", "class": "Business", "seat": "4A", "pnr": "RW88KQ",
+      "document": "documents/boarding-pass-wb301.pdf"
+    },
+    {
+      "airline": "RwandAir", "flightNumber": "WB302", "from": "Kigali (KGL) — Kigali Intl", "to": "Nairobi (NBO) — Jomo Kenyatta Intl",
+      "route": "Kigali (KGL) → Nairobi (NBO)", "dateISO": "2026-11-14", "date": "14 Nov 2026",
+      "departure": "18:20", "arrival": "19:50", "class": "Business", "seat": "4C", "pnr": "RW88KQ",
+      "document": "documents/boarding-pass-wb302.pdf"
+    }
+  ],
+  "hotels": [
+    {
+      "name": "Kigali Marriott Hotel", "address": "KN 3 Ave, Kigali, Rwanda",
+      "checkIn": "10 Nov 2026, 14:00", "checkOut": "14 Nov 2026, 12:00",
+      "room": "Executive Suite", "confirmation": "MAR-55210",
+      "document": "documents/hotel-confirmation-marriott-kigali.pdf",
+      "mapQuery": "Kigali Marriott Hotel"
+    }
+  ],
+  "meetings": [
+    { "title": "Investment Committee Briefing", "with": "Aline Uwase, Country Manager Rwanda", "date": "10 Nov 2026, 15:00", "location": "Kigali Heights, Kacyiru", "document": "" },
+    { "title": "Logistics Hub Site Visit", "with": "Aline Uwase, Country Manager Rwanda", "date": "11 Nov 2026, 09:00", "location": "Special Economic Zone, Kigali", "document": "" }
+  ],
+  "transport": [
+    { "type": "Airport Transfer", "driver": "Eric Nshimiyimana", "phone": "+250788445221", "vehicle": "Toyota Land Cruiser, Black", "notes": "Kigali Airport to Kigali Marriott, 10:00" }
+  ],
+  "documents": {
+    "Flight Documents": [
+      { "name": "Boarding Pass — WB301 (NBO–KGL)", "file": "documents/boarding-pass-wb301.pdf" },
+      { "name": "Boarding Pass — WB302 (KGL–NBO)", "file": "documents/boarding-pass-wb302.pdf" }
+    ],
+    "Hotel Reservations": [
+      { "name": "Kigali Marriott — Confirmation", "file": "documents/hotel-confirmation-marriott-kigali.pdf" }
+    ]
+  },
+  "contacts": [
+    { "name": "Eric Nshimiyimana", "company": "EFL Global Ground Services", "role": "Driver — Kigali", "phone": "+250788445221", "whatsapp": "250788445221", "email": "eric.nshimiyimana@eflground.com" },
+    { "name": "Aline Uwase", "company": "EFL Global", "role": "Country Manager, Rwanda", "phone": "+250788221100", "whatsapp": "250788221100", "email": "aline.uwase@eflglobal.com" },
+    { "name": "Kigali Marriott Hotel", "company": "Marriott International", "role": "Front Desk", "phone": "+250788123456", "whatsapp": "250788123456", "email": "reservations.kigali@marriott.com" }
+  ],
+  "maps": [
+    { "category": "Airport", "name": "Kigali International Airport", "address": "Kigali, Rwanda", "query": "Kigali International Airport" },
+    { "category": "Hotel", "name": "Kigali Marriott Hotel", "address": "KN 3 Ave, Kigali", "query": "Kigali Marriott Hotel" },
+    { "category": "Meeting", "name": "Kigali Heights", "address": "Kacyiru, Kigali", "query": "Kigali Heights Kacyiru" }
+  ],
+  "expenses": {
+    "currency": "USD",
+    "perDiem": 150,
+    "items": [
+      { "date": "10 Nov 2026", "category": "Ground Transport", "description": "Airport transfer, Kigali", "amount": 40 }
+    ]
+  }
+}

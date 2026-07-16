@@ -113,6 +113,14 @@ function getSelectOtherValue(selectEl, otherEl) {
 function shortLabel(v) {
   return (v || '').split(' — ')[0];
 }
+// "2026-07-20" -> "Mon, 20 Jul 2026" — used to auto-fill the free-text display
+// date whenever a real (dateISO) date is picked, so the two never drift apart.
+function formatDateISO(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d.getTime())) return '';
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+}
 
 /* ---------------- Utilities ---------------- */
 
@@ -499,6 +507,12 @@ function renderRepeatList(containerEl, items, fields, opts) {
         let v = e.target.value;
         if (f.type === 'number') v = v === '' ? 0 : Number(v);
         item[f.key] = v;
+        if (f.key === 'dateISO' && v) {
+          const pretty = formatDateISO(v);
+          item.date = pretty;
+          const dateInput = grid.querySelector('[data-k="date"]');
+          if (dateInput) dateInput.value = pretty;
+        }
         if (opts.onChange) opts.onChange();
         refreshTitle();
       });
@@ -519,7 +533,9 @@ const FIELD_SCHEMAS = {
     { key: 'from', label: 'From', type: 'select-other', options: AIRPORT_OPTIONS },
     { key: 'to', label: 'To', type: 'select-other', options: AIRPORT_OPTIONS },
     { key: 'route', label: 'Route (auto-filled from From/To — still editable)', span2: true, placeholder: 'Nairobi (NBO) → Entebbe (EBB)' },
-    { key: 'date', label: 'Date' }, { key: 'departure', label: 'Departure' }, { key: 'arrival', label: 'Arrival' },
+    { key: 'dateISO', label: 'Date (drives calendar & Next Event)', type: 'date' },
+    { key: 'date', label: 'Date (display, auto-filled)', placeholder: '20 Jul 2026' },
+    { key: 'departure', label: 'Departure' }, { key: 'arrival', label: 'Arrival' },
     { key: 'class', label: 'Class' }, { key: 'seat', label: 'Seat' }, { key: 'pnr', label: 'PNR' },
     { key: 'document', label: 'Document (local path or full URL)', span2: true, placeholder: 'documents/boarding-pass.pdf  or  https://drive.google.com/...' }
   ],
@@ -597,8 +613,9 @@ function renderItinerary() {
       <div class="day-card">
         <div class="day-card__head">
           <div class="field-inline">
-            <input class="f-input" data-k="day" type="number" value="${esc(day.day)}" placeholder="Day #" style="max-width:90px" />
-            <input class="f-input" data-k="date" value="${esc(day.date)}" placeholder="Mon, 20 Jul 2026" />
+            <input class="f-input" data-k="day" type="number" value="${esc(day.day)}" placeholder="Day #" style="max-width:70px" />
+            <input class="f-input" data-k="dateISO" type="date" value="${esc(day.dateISO || '')}" style="max-width:150px" title="Drives the calendar & Next Event" />
+            <input class="f-input" data-k="date" value="${esc(day.date)}" placeholder="Mon, 20 Jul 2026 (auto-filled)" />
             <input class="f-input" data-k="city" value="${esc(day.city)}" placeholder="City / Route" />
           </div>
           <button class="repeat-card__remove" type="button">Remove Day</button>
@@ -608,7 +625,15 @@ function renderItinerary() {
       </div>`);
 
     dayCard.querySelectorAll('[data-k]').forEach(inp => {
-      inp.addEventListener('input', () => { day[inp.dataset.k] = inp.type === 'number' ? Number(inp.value) : inp.value; });
+      inp.addEventListener('input', () => {
+        const key = inp.dataset.k;
+        day[key] = inp.type === 'number' ? Number(inp.value) : inp.value;
+        if (key === 'dateISO' && inp.value) {
+          day.date = formatDateISO(inp.value);
+          const dateTextInput = dayCard.querySelector('[data-k="date"]');
+          if (dateTextInput) dateTextInput.value = day.date;
+        }
+      });
     });
     dayCard.querySelector('.repeat-card__remove').addEventListener('click', () => {
       currentTrip.itinerary.splice(dIdx, 1);
@@ -829,6 +854,7 @@ async function openEditorWithTrip(trip, isNew) {
   setSelectOtherPair(f('ne_from_select'), f('ne_from_other'), ne.from || '', AIRPORT_OPTIONS);
   setSelectOtherPair(f('ne_to_select'), f('ne_to_other'), ne.to || '', AIRPORT_OPTIONS);
   f('ne_route').value = ne.route || '';
+  f('ne_dateISO').value = ne.dateISO || '';
   f('ne_date').value = ne.date || '';
   f('ne_departure').value = ne.departure || '';
   f('ne_arrival').value = ne.arrival || '';
@@ -878,7 +904,7 @@ function collectBasicFieldsIntoTrip() {
   currentTrip.nextEvent = hasNextEvent ? {
     type: 'flight',
     airline: neAirline, flightNumber: f('ne_flightNumber').value, status: f('ne_status').value,
-    route: f('ne_route').value, from: neFrom, to: neTo, date: f('ne_date').value, departure: f('ne_departure').value, arrival: f('ne_arrival').value,
+    route: f('ne_route').value, from: neFrom, to: neTo, dateISO: f('ne_dateISO').value, date: f('ne_date').value, departure: f('ne_departure').value, arrival: f('ne_arrival').value,
     terminal: f('ne_terminal').value, gate: f('ne_gate').value, seat: f('ne_seat').value
   } : null;
 
@@ -1153,6 +1179,10 @@ function init() {
 
   neAirlineSelect.addEventListener('change', () => { neAirlineOther.style.display = neAirlineSelect.value === OTHER_VALUE ? '' : 'none'; });
 
+  document.getElementById('ne_dateISO').addEventListener('input', (e) => {
+    if (e.target.value) document.getElementById('ne_date').value = formatDateISO(e.target.value);
+  });
+
   const updateNeRoute = () => {
     const from = getSelectOtherValue(neFromSelect, neFromOther);
     const to = getSelectOtherValue(neToSelect, neToOther);
@@ -1176,6 +1206,7 @@ function init() {
     neToOther.style.display = neToSelect.value === OTHER_VALUE ? '' : 'none';
     document.getElementById('ne_flightNumber').value = fl.flightNumber || '';
     document.getElementById('ne_route').value = fl.route || '';
+    document.getElementById('ne_dateISO').value = fl.dateISO || '';
     document.getElementById('ne_date').value = fl.date || '';
     document.getElementById('ne_departure').value = fl.departure || '';
     document.getElementById('ne_arrival').value = fl.arrival || '';
@@ -1241,7 +1272,7 @@ function init() {
   document.getElementById('cancelEditBtn').addEventListener('click', goBackFromEditor);
   document.getElementById('saveTripBtn').addEventListener('click', saveTrip);
   document.getElementById('clearNextEventBtn').addEventListener('click', () => {
-    ['ne_flightNumber','ne_route','ne_date','ne_departure','ne_arrival','ne_terminal','ne_gate','ne_seat'].forEach(id => document.getElementById(id).value = '');
+    ['ne_flightNumber','ne_route','ne_dateISO','ne_date','ne_departure','ne_arrival','ne_terminal','ne_gate','ne_seat'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('ne_status').value = 'On Time';
     setSelectOtherPair(neAirlineSelect, neAirlineOther, '', AIRLINE_OPTIONS);
     setSelectOtherPair(neFromSelect, neFromOther, '', AIRPORT_OPTIONS);
@@ -1255,10 +1286,10 @@ function init() {
   });
 
   document.getElementById('addDayBtn').addEventListener('click', () => {
-    currentTrip.itinerary.push({ day: currentTrip.itinerary.length + 1, date: '', city: '', events: [] });
+    currentTrip.itinerary.push({ day: currentTrip.itinerary.length + 1, dateISO: '', date: '', city: '', events: [] });
     renderItinerary();
   });
-  document.getElementById('addFlightBtn').addEventListener('click', () => { currentTrip.flights.push({ airline: '', flightNumber: '', from: '', to: '', route: '', date: '', departure: '', arrival: '', class: 'Business', seat: '', pnr: '', document: '' }); renderSimpleSections(); });
+  document.getElementById('addFlightBtn').addEventListener('click', () => { currentTrip.flights.push({ airline: '', flightNumber: '', from: '', to: '', route: '', dateISO: '', date: '', departure: '', arrival: '', class: 'Business', seat: '', pnr: '', document: '' }); renderSimpleSections(); });
   document.getElementById('addHotelBtn').addEventListener('click', () => { currentTrip.hotels.push({ name: '', address: '', checkIn: '', checkOut: '', room: '', confirmation: '', document: '', mapQuery: '' }); renderSimpleSections(); });
   document.getElementById('addMeetingBtn').addEventListener('click', () => { currentTrip.meetings.push({ title: '', with: '', date: '', location: '', document: '' }); renderSimpleSections(); });
   document.getElementById('addTransportBtn').addEventListener('click', () => { currentTrip.transport.push({ type: '', driver: '', phone: '', vehicle: '', notes: '' }); renderSimpleSections(); });

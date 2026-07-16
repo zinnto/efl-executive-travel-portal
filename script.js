@@ -30,7 +30,6 @@ const ICONS = {
 
 let TRIP = null;
 let TRIP_ID = null;
-let currentDay = 0;
 let CACHE_ON = false;
 
 /* ---------------- Utilities ---------------- */
@@ -110,6 +109,140 @@ function switchToTrip(tripId) {
   window.location.href = window.location.pathname + '?trip=' + encodeURIComponent(tripId);
 }
 
+// Loads the FULL trip object (not just index metadata) for every trip
+// belonging to the current traveller — used to power the live Next Event,
+// the cross-trip Flights/Hotels/Contacts views, and the itinerary calendar.
+// Cached per page load since it's used by several views.
+let ALL_MY_TRIPS_CACHE = null;
+async function loadAllTripsForTraveller() {
+  if (ALL_MY_TRIPS_CACHE) return ALL_MY_TRIPS_CACHE;
+  const entries = getTripsForCurrentTraveller();
+  const trips = await Promise.all(entries.map(async (entry) => {
+    try {
+      const override = localStorage.getItem('efl-trip-data-' + entry.tripId);
+      if (override) return JSON.parse(override);
+      const res = await fetch(entry.file, { cache: 'no-store' });
+      return await res.json();
+    } catch (err) {
+      console.warn('Could not load trip', entry.tripId, err);
+      return null;
+    }
+  }));
+  ALL_MY_TRIPS_CACHE = trips.filter(Boolean);
+  if (!ALL_MY_TRIPS_CACHE.length && TRIP) ALL_MY_TRIPS_CACHE = [TRIP];
+  return ALL_MY_TRIPS_CACHE;
+}
+
+// Turns a "YYYY-MM-DD" + "HH:MM" pair into a real Date, or null if unusable.
+function toDateTime(dateISO, time) {
+  if (!dateISO) return null;
+  const d = new Date(`${dateISO}T${time && /^\d{2}:\d{2}/.test(time) ? time : '00:00'}:00`);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+// Scans every flight and itinerary event across ALL of this traveller's trips
+// (not just the one currently open) and returns whichever is chronologically
+// next from right now — so the Home card is always "live" regardless of
+// which trip happens to be selected.
+async function computeLiveNextEvent() {
+  const trips = await loadAllTripsForTraveller();
+  const now = new Date();
+  const candidates = [];
+
+  trips.forEach(trip => {
+    (trip.flights || []).forEach(f => {
+      const dt = toDateTime(f.dateISO, f.departure);
+      if (dt) candidates.push({ kind: 'flight', dt, data: f, trip });
+    });
+    (trip.itinerary || []).forEach(day => {
+      (day.events || []).forEach(ev => {
+        const dt = toDateTime(day.dateISO, ev.time);
+        if (dt) candidates.push({ kind: 'event', dt, data: ev, trip });
+      });
+    });
+  });
+
+  const upcoming = candidates.filter(c => c.dt >= now).sort((a, b) => a.dt - b.dt);
+  return upcoming[0] || null;
+}
+
+async function renderNextEventCard() {
+  const passCard = document.getElementById('nextEventCard');
+  const live = await computeLiveNextEvent();
+
+  if (live) {
+    const fromOtherTrip = live.trip.traveller.tripId !== TRIP_ID;
+    const tripTag = fromOtherTrip
+      ? `<button class="pass-trip-tag" id="passTripSwitchBtn" data-id="${live.trip.traveller.tripId}">${ICONS.pin} via ${live.trip.traveller.destination} — switch trip</button>`
+      : '';
+
+    if (live.kind === 'flight') {
+      const f = live.data;
+      passCard.innerHTML = `
+        <div class="pass-card__top">
+          <div class="pass-eyebrow"><span class="dot"></span>${f.class || 'Confirmed'} · ${f.date || ''}</div>
+          <div class="pass-route">
+            <span class="pass-route__plane">${ICONS.flight}</span>
+            <span class="pass-route__city">${f.route || ''}</span>
+          </div>
+          <div class="pass-flight-id">${f.airline || ''} ${f.flightNumber || ''}</div>
+          ${tripTag}
+        </div>
+        <div class="pass-divider"></div>
+        <div class="pass-card__bottom">
+          <div><div class="pass-stat__label">Departure</div><div class="pass-stat__value">${f.departure || '—'}</div></div>
+          <div><div class="pass-stat__label">Class</div><div class="pass-stat__value">${f.class || '—'}</div></div>
+          <div><div class="pass-stat__label">Seat</div><div class="pass-stat__value">${f.seat || '—'}</div></div>
+        </div>`;
+    } else {
+      const ev = live.data;
+      passCard.innerHTML = `
+        <div class="pass-card__top">
+          <div class="pass-eyebrow"><span class="dot"></span>${(ev.type || 'Event')} · ${live.dt.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}</div>
+          <div class="pass-route">
+            <span class="pass-route__plane">${ICONS[ev.type] || ICONS.itinerary}</span>
+            <span class="pass-route__city">${ev.title || ''}</span>
+          </div>
+          <div class="pass-flight-id">${ev.location || ''}</div>
+          ${tripTag}
+        </div>
+        <div class="pass-divider"></div>
+        <div class="pass-card__bottom">
+          <div><div class="pass-stat__label">Time</div><div class="pass-stat__value">${ev.time || '—'}</div></div>
+          <div><div class="pass-stat__label">Type</div><div class="pass-stat__value" style="text-transform:capitalize;">${ev.type || '—'}</div></div>
+          <div><div class="pass-stat__label">Contact</div><div class="pass-stat__value" style="font-size:12px;">${ev.contact || '—'}</div></div>
+        </div>`;
+    }
+
+    const switchBtn = document.getElementById('passTripSwitchBtn');
+    if (switchBtn) switchBtn.addEventListener('click', () => switchToTrip(switchBtn.dataset.id));
+    return;
+  }
+
+  // Fall back to a legacy static Next Event field for trips that don't have
+  // dateISO data yet (older trips created before this feature existed).
+  const ne = TRIP.nextEvent;
+  if (ne) {
+    passCard.innerHTML = `
+      <div class="pass-card__top">
+        <div class="pass-eyebrow"><span class="dot"></span>${ne.status || 'Confirmed'} · ${ne.date || ''}</div>
+        <div class="pass-route">
+          <span class="pass-route__plane">${ICONS.flight}</span>
+          <span class="pass-route__city">${ne.route || ''}</span>
+        </div>
+        <div class="pass-flight-id">${ne.airline || ''} ${ne.flightNumber || ''}</div>
+      </div>
+      <div class="pass-divider"></div>
+      <div class="pass-card__bottom">
+        <div><div class="pass-stat__label">Departure</div><div class="pass-stat__value">${ne.departure || '—'}</div></div>
+        <div><div class="pass-stat__label">Gate</div><div class="pass-stat__value">${ne.gate || '—'}</div></div>
+        <div><div class="pass-stat__label">Seat</div><div class="pass-stat__value">${ne.seat || '—'}</div></div>
+      </div>`;
+  } else {
+    passCard.innerHTML = `<div class="empty-state">${ICONS.flight}<p>No upcoming events scheduled.</p></div>`;
+  }
+}
+
 /* ---------------- Render: Home / Dashboard ---------------- */
 
 function renderHome() {
@@ -143,28 +276,8 @@ function renderHome() {
     switcherSection.hidden = true;
   }
 
-  // Next event pass card
-  const ne = TRIP.nextEvent;
-  const passCard = document.getElementById('nextEventCard');
-  if (ne) {
-    passCard.innerHTML = `
-      <div class="pass-card__top">
-        <div class="pass-eyebrow"><span class="dot"></span>${ne.status || 'Confirmed'} · ${ne.date || ''}</div>
-        <div class="pass-route">
-          <span class="pass-route__plane">${ICONS.flight}</span>
-          <span class="pass-route__city">${ne.route}</span>
-        </div>
-        <div class="pass-flight-id">${ne.airline} ${ne.flightNumber}</div>
-      </div>
-      <div class="pass-divider"></div>
-      <div class="pass-card__bottom">
-        <div><div class="pass-stat__label">Departure</div><div class="pass-stat__value">${ne.departure}</div></div>
-        <div><div class="pass-stat__label">Gate</div><div class="pass-stat__value">${ne.gate || '—'}</div></div>
-        <div><div class="pass-stat__label">Seat</div><div class="pass-stat__value">${ne.seat || '—'}</div></div>
-      </div>`;
-  } else {
-    passCard.innerHTML = `<div class="empty-state">${ICONS.flight}<p>No upcoming events scheduled.</p></div>`;
-  }
+  // Next event pass card — live, computed across all of this traveller's trips
+  renderNextEventCard();
 
   // Quick access grid
   const grid = document.getElementById('quickGrid');
@@ -218,9 +331,19 @@ function renderHome() {
 
 /* ---------------- Render: Flights ---------------- */
 
-function renderFlights() {
+async function renderFlights() {
   const wrap = document.getElementById('flightsList');
-  const flights = TRIP.flights || [];
+  wrap.innerHTML = `<div class="empty-state">${ICONS.flight}<p>Loading flights…</p></div>`;
+  const trips = await loadAllTripsForTraveller();
+  const flights = [];
+  trips.forEach(t => (t.flights || []).forEach(f => flights.push({ ...f, _tripDest: t.traveller.destination })));
+  flights.sort((a, b) => {
+    const da = toDateTime(a.dateISO, a.departure), db = toDateTime(b.dateISO, b.departure);
+    if (da && db) return da - db;
+    if (da) return -1;
+    if (db) return 1;
+    return 0;
+  });
   if (!flights.length) { wrap.innerHTML = emptyState('flight', 'No flights on file.'); return; }
   wrap.innerHTML = flights.map(f => `
     <div class="info-card">
@@ -236,6 +359,7 @@ function renderFlights() {
         <div>Seat<strong>${f.seat}</strong></div>
         <div>PNR<strong>${f.pnr}</strong></div>
       </div>
+      ${trips.length > 1 ? `<div class="info-card__trip-tag">${f._tripDest}</div>` : ''}
       <div class="info-card__actions">
         ${f.document ? `<a class="btn btn-primary btn-full" href="${f.document}" target="_blank" rel="noopener">${ICONS.pdf} View Boarding Pass</a>` : ''}
       </div>
@@ -244,9 +368,12 @@ function renderFlights() {
 
 /* ---------------- Render: Hotels ---------------- */
 
-function renderHotels() {
+async function renderHotels() {
   const wrap = document.getElementById('hotelsList');
-  const hotels = TRIP.hotels || [];
+  wrap.innerHTML = `<div class="empty-state">${ICONS.hotel}<p>Loading hotels…</p></div>`;
+  const trips = await loadAllTripsForTraveller();
+  const hotels = [];
+  trips.forEach(t => (t.hotels || []).forEach(h => hotels.push({ ...h, _tripDest: t.traveller.destination })));
   if (!hotels.length) { wrap.innerHTML = emptyState('hotel', 'No hotel reservations on file.'); return; }
   wrap.innerHTML = hotels.map(h => `
     <div class="info-card">
@@ -261,6 +388,7 @@ function renderHotels() {
         <div>Room<strong>${h.room}</strong></div>
         <div>Confirmation<strong>${h.confirmation}</strong></div>
       </div>
+      ${trips.length > 1 ? `<div class="info-card__trip-tag">${h._tripDest}</div>` : ''}
       <div class="info-card__actions">
         ${h.document ? `<a class="btn btn-primary" href="${h.document}" target="_blank" rel="noopener">${ICONS.pdf} Confirmation</a>` : ''}
         <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.mapQuery || h.name)}" target="_blank" rel="noopener">${ICONS.pin} Map</a>
@@ -313,42 +441,159 @@ function renderTransport() {
     </div>`).join('');
 }
 
-/* ---------------- Render: Itinerary ---------------- */
+/* ---------------- Render: Itinerary (calendar, cross-trip) ---------------- */
 
-function renderItinerary() {
-  const days = TRIP.itinerary || [];
-  const tabs = document.getElementById('dayTabs');
-  tabs.innerHTML = '';
-  days.forEach((d, i) => {
-    const tab = el(`<button class="day-tab ${i === currentDay ? 'active' : ''}">Day ${d.day}</button>`);
-    tab.addEventListener('click', () => { currentDay = i; renderItinerary(); });
-    tabs.appendChild(tab);
+let calendarMonth = null;   // Date (day always 1) — which month the calendar is showing
+let selectedDateISO = null; // "YYYY-MM-DD" — which day's timeline is shown below the calendar
+let ITINERARY_DAY_MAP = null; // dateISO -> { days: [{day, trip}], flights: [{flight, trip}] }
+
+function buildItineraryDayMap(trips) {
+  const map = {};
+  trips.forEach(trip => {
+    (trip.itinerary || []).forEach(day => {
+      if (!day.dateISO) return;
+      if (!map[day.dateISO]) map[day.dateISO] = { days: [], flights: [] };
+      map[day.dateISO].days.push({ day, trip });
+    });
+    (trip.flights || []).forEach(flight => {
+      if (!flight.dateISO) return;
+      if (!map[flight.dateISO]) map[flight.dateISO] = { days: [], flights: [] };
+      map[flight.dateISO].flights.push({ flight, trip });
+    });
   });
+  return map;
+}
 
+async function renderItinerary() {
+  const trips = await loadAllTripsForTraveller();
+  ITINERARY_DAY_MAP = buildItineraryDayMap(trips);
+  const allDates = Object.keys(ITINERARY_DAY_MAP).sort();
+  const todayISO = new Date().toISOString().slice(0, 10);
+
+  if (!calendarMonth) {
+    const anchor = allDates.find(d => d >= todayISO) || allDates[allDates.length - 1] || todayISO;
+    calendarMonth = new Date(anchor + 'T00:00:00');
+    calendarMonth.setDate(1);
+  }
+  if (!selectedDateISO) {
+    selectedDateISO = allDates.find(d => d >= todayISO) || allDates[allDates.length - 1] || todayISO;
+  }
+
+  renderCalendarGrid();
+  renderSelectedDayTimeline();
+}
+
+function renderCalendarGrid() {
+  const wrap = document.getElementById('itineraryCalendar');
+  const year = calendarMonth.getFullYear();
+  const month = calendarMonth.getMonth();
+  const first = new Date(year, month, 1);
+  const startOffset = (first.getDay() + 6) % 7; // Monday-first grid
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const todayISO = new Date().toISOString().slice(0, 10);
+
+  let cells = '';
+  for (let i = 0; i < startOffset; i++) cells += `<div class="cal-cell empty"></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const hasData = !!ITINERARY_DAY_MAP[iso];
+    cells += `<button class="cal-cell ${hasData ? 'has-data' : ''} ${iso === selectedDateISO ? 'selected' : ''} ${iso === todayISO ? 'today' : ''}" data-iso="${iso}">
+      <span class="cal-cell__num">${d}</span>
+      ${hasData ? `<span class="cal-cell__dot"></span>` : ''}
+    </button>`;
+  }
+
+  wrap.innerHTML = `
+    <div class="cal-head">
+      <button class="cal-nav" id="calPrev" aria-label="Previous month">${ICONS.chevron}</button>
+      <div class="cal-title">${calendarMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</div>
+      <button class="cal-nav next" id="calNext" aria-label="Next month">${ICONS.chevron}</button>
+    </div>
+    <div class="cal-weekdays">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(w => `<div>${w}</div>`).join('')}</div>
+    <div class="cal-grid">${cells}</div>`;
+
+  document.getElementById('calPrev').addEventListener('click', () => { calendarMonth.setMonth(calendarMonth.getMonth() - 1); renderCalendarGrid(); });
+  document.getElementById('calNext').addEventListener('click', () => { calendarMonth.setMonth(calendarMonth.getMonth() + 1); renderCalendarGrid(); });
+  wrap.querySelectorAll('.cal-cell[data-iso]').forEach(cell => {
+    cell.addEventListener('click', () => {
+      selectedDateISO = cell.dataset.iso;
+      renderCalendarGrid();
+      renderSelectedDayTimeline();
+    });
+  });
+}
+
+function renderSelectedDayTimeline() {
   const list = document.getElementById('timelineList');
-  const day = days[currentDay];
-  if (!day) { list.innerHTML = emptyState('itinerary', 'No itinerary available.'); return; }
+  const info = ITINERARY_DAY_MAP[selectedDateISO];
+  const prettyDate = new Date(selectedDateISO + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
 
   list.innerHTML = '';
-  const heading = el(`<div style="margin:-4px 0 14px; font-size:12.5px; color:var(--ink-500); font-weight:600;">${day.date} · ${day.city}</div>`);
+  const heading = el(`<div style="margin:-4px 0 14px; font-size:12.5px; color:var(--ink-500); font-weight:600;">${prettyDate}</div>`);
   list.appendChild(heading);
 
+  if (!info || (!info.days.length && !info.flights.length)) {
+    const empty = el(emptyState('itinerary', 'No trip activity on this day.'));
+    list.appendChild(empty);
+    return;
+  }
+
+  const showTripTag = getTripsForCurrentTraveller().length > 1;
+  const entries = [];
+  info.flights.forEach(({ flight, trip }) => entries.push({
+    time: flight.departure || '', title: `${flight.airline || ''} ${flight.flightNumber || ''}`.trim(),
+    location: flight.route || '', type: 'flight', trip, raw: flight, isFlight: true
+  }));
+  info.days.forEach(({ day, trip }) => (day.events || []).forEach(ev => entries.push({
+    time: ev.time || '', title: ev.title, location: ev.location, type: ev.type, trip, raw: ev, isFlight: false
+  })));
+  entries.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
   const timeline = el(`<div class="timeline"></div>`);
-  day.events.forEach((ev, idx) => {
+  entries.forEach(entry => {
     const item = el(`
       <div class="timeline-item">
         <div class="timeline-dot">${ICONS.check}</div>
-        <div class="timeline-time">${ev.time}</div>
+        <div class="timeline-time">${entry.time}</div>
         <div class="timeline-card">
-          <div class="timeline-title">${ev.title}</div>
-          <div class="timeline-loc">${ICONS.pin}${ev.location}</div>
-          <div class="timeline-tags"><span class="tag">${ev.type}</span></div>
+          <div class="timeline-title">${entry.title}</div>
+          <div class="timeline-loc">${ICONS.pin}${entry.location || ''}</div>
+          <div class="timeline-tags"><span class="tag">${entry.type}</span></div>
+          ${showTripTag ? `<div class="info-card__trip-tag" style="margin-top:8px;">${entry.trip.traveller.destination}</div>` : ''}
         </div>
       </div>`);
-    item.querySelector('.timeline-card').addEventListener('click', () => openEventSheet(ev));
+    item.querySelector('.timeline-card').addEventListener('click', () => {
+      if (entry.isFlight) openFlightSheet(entry.raw, entry.trip);
+      else openEventSheet(entry.raw);
+    });
     timeline.appendChild(item);
   });
   list.appendChild(timeline);
+}
+
+function openFlightSheet(f, trip) {
+  const content = document.getElementById('sheetContent');
+  content.innerHTML = `
+    <h3>${f.airline || ''} ${f.flightNumber || ''}</h3>
+    <div style="font-size:12.5px;color:var(--ink-500);margin-bottom:6px;">${f.date || ''} · Departs ${f.departure || '—'}</div>
+    <div class="sheet-row">
+      <div class="sheet-row__icon">${ICONS.flight}</div>
+      <div><div class="sheet-row__label">Route</div><div class="sheet-row__value">${f.route || '—'}</div></div>
+    </div>
+    <div class="sheet-row">
+      <div class="sheet-row__icon">${ICONS.itinerary}</div>
+      <div><div class="sheet-row__label">Seat / Class</div><div class="sheet-row__value">${f.seat || '—'} · ${f.class || '—'}</div></div>
+    </div>
+    <div class="sheet-row">
+      <div class="sheet-row__icon">${ICONS.pin}</div>
+      <div><div class="sheet-row__label">Trip</div><div class="sheet-row__value">${trip.traveller.destination}</div></div>
+    </div>
+    <div class="sheet-actions">
+      ${f.document ? `<a class="btn btn-primary" href="${f.document}" target="_blank" rel="noopener">${ICONS.pdf} Boarding Pass</a>` : ''}
+      <button class="btn btn-ghost" id="sheetCloseBtn">Close</button>
+    </div>`;
+  document.getElementById('sheetCloseBtn').addEventListener('click', closeSheet);
+  document.getElementById('sheetBackdrop').classList.add('open');
 }
 
 function openEventSheet(ev) {
@@ -434,9 +679,17 @@ function renderMaps() {
 
 /* ---------------- Render: Contacts ---------------- */
 
-function renderContacts() {
+async function renderContacts() {
   const wrap = document.getElementById('contactsList');
-  const contacts = TRIP.contacts || [];
+  wrap.innerHTML = `<div class="empty-state">${ICONS.contact}<p>Loading contacts…</p></div>`;
+  const trips = await loadAllTripsForTraveller();
+  const seen = new Map();
+  trips.forEach(t => (t.contacts || []).forEach(c => {
+    const key = (c.name || '').toLowerCase().trim() + '|' + (c.phone || '').replace(/\s/g, '');
+    if (!seen.has(key)) seen.set(key, c);
+  }));
+  const contacts = Array.from(seen.values());
+  if (!contacts.length) { wrap.innerHTML = emptyState('contact', 'No contacts on file.'); return; }
   wrap.innerHTML = contacts.map(c => `
     <div class="contact-card">
       <div class="contact-top">

@@ -702,6 +702,55 @@ a { color: inherit; text-decoration: none; }
 .trip-chip.active .trip-chip__badge { color: var(--gold-400); }
 
 /* ==========================================================================
+   Itinerary calendar
+   ========================================================================== */
+
+.calendar {
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--r-md);
+  box-shadow: var(--shadow-card); padding: 16px; margin-bottom: 18px;
+}
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.cal-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.cal-nav {
+  width: 30px; height: 30px; border-radius: var(--r-pill); border: 1px solid var(--line);
+  background: var(--white); color: var(--ink-700); display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.cal-nav svg { width: 14px; height: 14px; }
+.cal-nav:not(.next) svg { transform: rotate(180deg); }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 4px; }
+.cal-weekdays div { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-300); padding: 4px 0; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-cell {
+  aspect-ratio: 1; border-radius: 10px; border: none; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  color: var(--ink-700); font-size: 12.5px; position: relative;
+}
+.cal-cell.empty { cursor: default; }
+.cal-cell.today .cal-cell__num { color: var(--gold-500); font-weight: 700; }
+.cal-cell.has-data { font-weight: 600; }
+.cal-cell.has-data:hover { background: var(--line-soft); }
+.cal-cell__dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold-500); }
+.cal-cell.selected { background: var(--navy-900); color: var(--white); }
+.cal-cell.selected .cal-cell__num { color: var(--white); }
+.cal-cell.selected .cal-cell__dot { background: var(--gold-400); }
+
+/* ---- Cross-trip tags / badges (Home Next Event, Flights/Hotels/Contacts lists) ---- */
+
+.pass-trip-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 10px; padding: 5px 10px; border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.10); border: 1px solid rgba(255,130,57,0.4);
+  color: var(--gold-400); font-size: 10.5px; font-weight: 700;
+  cursor: pointer; position: relative; z-index: 1;
+}
+.info-card__trip-tag {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--gold-500); background: var(--gold-100); padding: 3px 9px; border-radius: var(--r-pill); margin-top: 8px;
+}
+[data-theme="dark"] .info-card__trip-tag { color: var(--gold-400); background: rgba(255,106,19,0.15); }
+
+/* ==========================================================================
    Dashboard stat cards (Soft-UI mini-card pattern)
    ========================================================================== */
 

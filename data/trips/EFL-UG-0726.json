@@ -1,16 +1,16 @@
 {
   "meta": {
-    "tripName": "Uganda Regional Review — July 2026",
+    "tripName": "Uganda Regional Review \u2014 July 2026",
     "companyName": "EFL Global",
     "generatedOn": "2026-07-09",
     "stage": "active"
   },
   "traveller": {
     "name": "Prageeth Ranasinghe",
-    "position": "Regional Finance Manager — East Africa",
+    "position": "Regional Finance Manager \u2014 East Africa",
     "photoInitials": "PR",
     "destination": "Kampala & Entebbe, Uganda",
-    "dates": "20 – 27 July 2026",
+    "dates": "20 \u2013 27 July 2026",
     "tripId": "EFL-UG-0726",
     "execId": "EXEC-PR001"
   },
@@ -18,14 +18,15 @@
     "type": "flight",
     "airline": "Kenya Airways",
     "flightNumber": "KQ414",
-    "route": "Nairobi (NBO) → Entebbe (EBB)",
+    "route": "Nairobi (NBO) \u2192 Entebbe (EBB)",
     "departure": "09:30",
     "arrival": "10:45",
     "date": "20 Jul 2026",
     "terminal": "Terminal 1A",
     "gate": "12",
     "seat": "2A",
-    "status": "On Time"
+    "status": "On Time",
+    "dateISO": "2026-07-20"
   },
   "status": {
     "documentsReady": true,
@@ -83,28 +84,28 @@
     {
       "day": 1,
       "date": "Mon, 20 Jul 2026",
-      "city": "Nairobi → Entebbe",
+      "city": "Nairobi \u2192 Entebbe",
       "events": [
         {
           "time": "08:00",
           "title": "Leave hotel for airport",
           "type": "transport",
           "location": "Sankara Nairobi, Westlands",
-          "contact": "James Mwangi — Driver",
+          "contact": "James Mwangi \u2014 Driver",
           "notes": "Vehicle: Black Mercedes E-Class, plate KDA 221B. Allow extra time for Westlands traffic.",
           "attachments": [],
           "mapQuery": "Sankara Nairobi Westlands"
         },
         {
           "time": "09:30",
-          "title": "Flight KQ414 — Nairobi to Entebbe",
+          "title": "Flight KQ414 \u2014 Nairobi to Entebbe",
           "type": "flight",
           "location": "Jomo Kenyatta Intl Airport, Terminal 1A",
-          "contact": "Kenya Airways — +254 20 327 4747",
+          "contact": "Kenya Airways \u2014 +254 20 327 4747",
           "notes": "Seat 2A, Business Class. E-boarding pass in Documents.",
           "attachments": [
             {
-              "name": "Boarding Pass — KQ414.pdf",
+              "name": "Boarding Pass \u2014 KQ414.pdf",
               "file": "documents/boarding-pass-kq414.pdf"
             }
           ],
@@ -112,24 +113,24 @@
         },
         {
           "time": "12:00",
-          "title": "Driver pickup — Entebbe Airport",
+          "title": "Driver pickup \u2014 Entebbe Airport",
           "type": "transport",
           "location": "Entebbe International Airport, Arrivals",
-          "contact": "Moses Okello — +256 772 445 118",
+          "contact": "Moses Okello \u2014 +256 772 445 118",
           "notes": "Meet at Arrivals with EFL Global signboard. Vehicle: White Land Cruiser.",
           "attachments": [],
           "mapQuery": "Entebbe International Airport"
         },
         {
           "time": "14:00",
-          "title": "Client meeting — Stanbic Bank HQ",
+          "title": "Client meeting \u2014 Stanbic Bank HQ",
           "type": "meeting",
           "location": "Stanbic Bank Uganda, Crested Towers, Kampala",
-          "contact": "Sarah Nakato — Country Manager",
+          "contact": "Sarah Nakato \u2014 Country Manager",
           "notes": "Discuss Q3 regional logistics contract. Bring signed MSA copy.",
           "attachments": [
             {
-              "name": "Meeting Brief — Stanbic.pdf",
+              "name": "Meeting Brief \u2014 Stanbic.pdf",
               "file": "documents/meeting-brief-stanbic.pdf"
             }
           ],
@@ -137,15 +138,16 @@
         },
         {
           "time": "18:00",
-          "title": "Dinner — Executive welcome",
+          "title": "Dinner \u2014 Executive welcome",
           "type": "dining",
           "location": "Cassia Kampala, Rooftop Restaurant",
-          "contact": "Sarah Nakato — Country Manager",
+          "contact": "Sarah Nakato \u2014 Country Manager",
           "notes": "Smart formal attire. Table reserved under EFL Global.",
           "attachments": [],
           "mapQuery": "Cassia Kampala"
         }
-      ]
+      ],
+      "dateISO": "2026-07-20"
     },
     {
       "day": 2,
@@ -157,7 +159,7 @@
           "title": "Breakfast briefing",
           "type": "dining",
           "location": "Kampala Serena Hotel",
-          "contact": "—",
+          "contact": "\u2014",
           "notes": "Review agenda for regional review board meeting.",
           "attachments": [],
           "mapQuery": "Kampala Serena Hotel"
@@ -167,7 +169,7 @@
           "title": "Regional Review Board Meeting",
           "type": "meeting",
           "location": "EFL Global Uganda Office, Nakasero",
-          "contact": "David Ochieng — Regional Director",
+          "contact": "David Ochieng \u2014 Regional Director",
           "notes": "Full-day session. Finance pack pre-circulated.",
           "attachments": [
             {
@@ -182,38 +184,41 @@
           "title": "Dinner with Board",
           "type": "dining",
           "location": "The Lawns Restaurant, Kololo",
-          "contact": "David Ochieng — Regional Director",
+          "contact": "David Ochieng \u2014 Regional Director",
           "notes": "",
           "attachments": [],
           "mapQuery": "Kololo Kampala"
         }
-      ]
+      ],
+      "dateISO": "2026-07-21"
     }
   ],
   "flights": [
     {
       "airline": "Kenya Airways",
       "flightNumber": "KQ414",
-      "route": "Nairobi (NBO) → Entebbe (EBB)",
+      "route": "Nairobi (NBO) \u2192 Entebbe (EBB)",
       "date": "20 Jul 2026",
       "departure": "09:30",
       "arrival": "10:45",
       "class": "Business",
       "seat": "2A",
       "pnr": "XZQ7RT",
-      "document": "documents/boarding-pass-kq414.pdf"
+      "document": "documents/boarding-pass-kq414.pdf",
+      "dateISO": "2026-07-20"
     },
     {
       "airline": "Kenya Airways",
       "flightNumber": "KQ413",
-      "route": "Entebbe (EBB) → Nairobi (NBO)",
+      "route": "Entebbe (EBB) \u2192 Nairobi (NBO)",
       "date": "27 Jul 2026",
       "departure": "17:15",
       "arrival": "18:35",
       "class": "Business",
       "seat": "2C",
       "pnr": "XZQ7RT",
-      "document": "documents/boarding-pass-kq413.pdf"
+      "document": "documents/boarding-pass-kq413.pdf",
+      "dateISO": "2026-07-27"
     }
   ],
   "hotels": [
@@ -230,7 +235,7 @@
   ],
   "meetings": [
     {
-      "title": "Stanbic Bank HQ — Contract Review",
+      "title": "Stanbic Bank HQ \u2014 Contract Review",
       "with": "Sarah Nakato, Country Manager",
       "date": "20 Jul 2026, 14:00",
       "location": "Crested Towers, Kampala",
@@ -263,17 +268,17 @@
   "documents": {
     "Flight Documents": [
       {
-        "name": "Boarding Pass — KQ414 (NBO–EBB)",
+        "name": "Boarding Pass \u2014 KQ414 (NBO\u2013EBB)",
         "file": "documents/boarding-pass-kq414.pdf"
       },
       {
-        "name": "Boarding Pass — KQ413 (EBB–NBO)",
+        "name": "Boarding Pass \u2014 KQ413 (EBB\u2013NBO)",
         "file": "documents/boarding-pass-kq413.pdf"
       }
     ],
     "Hotel Reservations": [
       {
-        "name": "Kampala Serena — Confirmation",
+        "name": "Kampala Serena \u2014 Confirmation",
         "file": "documents/hotel-confirmation-serena.pdf"
       }
     ],
@@ -295,7 +300,7 @@
     ],
     "Meeting Documents": [
       {
-        "name": "Meeting Brief — Stanbic Bank",
+        "name": "Meeting Brief \u2014 Stanbic Bank",
         "file": "documents/meeting-brief-stanbic.pdf"
       },
       {
@@ -314,7 +319,7 @@
     {
       "name": "James Mwangi",
       "company": "EFL Global Ground Services",
-      "role": "Driver — Nairobi",
+      "role": "Driver \u2014 Nairobi",
       "phone": "+254711223456",
       "whatsapp": "254711223456",
       "email": "james.mwangi@eflground.com"
@@ -322,7 +327,7 @@
     {
       "name": "Moses Okello",
       "company": "EFL Global Ground Services",
-      "role": "Driver — Entebbe",
+      "role": "Driver \u2014 Entebbe",
       "phone": "+256772445118",
       "whatsapp": "256772445118",
       "email": "moses.okello@eflground.com"
@@ -354,7 +359,7 @@
     {
       "name": "Grace Wambui",
       "company": "EFL Global",
-      "role": "Travel Agent — Head Office",
+      "role": "Travel Agent \u2014 Head Office",
       "phone": "+254720556677",
       "whatsapp": "254720556677",
       "email": "travel@eflglobal.com"

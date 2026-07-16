@@ -1,6 +1,6 @@
 {
   "meta": {
-    "tripName": "Singapore Investor Roadshow — August 2026",
+    "tripName": "Singapore Investor Roadshow \u2014 August 2026",
     "companyName": "EFL Global",
     "generatedOn": "2026-07-10",
     "stage": "active"
@@ -10,7 +10,7 @@
     "position": "Chief Financial Officer",
     "photoInitials": "AC",
     "destination": "Singapore",
-    "dates": "12 – 16 Aug 2026",
+    "dates": "12 \u2013 16 Aug 2026",
     "tripId": "EFL-SG-0812",
     "execId": "EXEC-AC002"
   },
@@ -18,14 +18,15 @@
     "type": "flight",
     "airline": "Singapore Airlines",
     "flightNumber": "SQ317",
-    "route": "Nairobi (NBO) → Singapore (SIN)",
+    "route": "Nairobi (NBO) \u2192 Singapore (SIN)",
     "departure": "23:55",
     "arrival": "18:40",
     "date": "12 Aug 2026",
     "terminal": "Terminal 1A",
     "gate": "7",
     "seat": "3K",
-    "status": "On Time"
+    "status": "On Time",
+    "dateISO": "2026-08-12"
   },
   "status": {
     "documentsReady": true,
@@ -83,7 +84,7 @@
     {
       "day": 1,
       "date": "Wed, 12 Aug 2026",
-      "city": "Nairobi → Singapore",
+      "city": "Nairobi \u2192 Singapore",
       "events": [
         {
           "time": "20:30",
@@ -97,15 +98,16 @@
         },
         {
           "time": "23:55",
-          "title": "Flight SQ317 — Nairobi to Singapore",
+          "title": "Flight SQ317 \u2014 Nairobi to Singapore",
           "type": "flight",
           "location": "Jomo Kenyatta Intl Airport, Terminal 1A",
-          "contact": "Singapore Airlines — +254 20 276 6700",
+          "contact": "Singapore Airlines \u2014 +254 20 276 6700",
           "notes": "Seat 3K, Business Class. Overnight flight.",
           "attachments": [],
           "mapQuery": "Jomo Kenyatta International Airport"
         }
-      ]
+      ],
+      "dateISO": "2026-08-12"
     },
     {
       "day": 2,
@@ -114,17 +116,17 @@
       "events": [
         {
           "time": "18:40",
-          "title": "Arrival — Changi Airport",
+          "title": "Arrival \u2014 Changi Airport",
           "type": "flight",
           "location": "Singapore Changi Airport",
-          "contact": "—",
+          "contact": "\u2014",
           "notes": "Hotel car booking pending confirmation.",
           "attachments": [],
           "mapQuery": "Singapore Changi Airport"
         },
         {
           "time": "20:30",
-          "title": "Check-in — Marina Bay Sands",
+          "title": "Check-in \u2014 Marina Bay Sands",
           "type": "dining",
           "location": "Marina Bay Sands, Singapore",
           "contact": "Hotel Front Desk",
@@ -132,21 +134,23 @@
           "attachments": [],
           "mapQuery": "Marina Bay Sands Singapore"
         }
-      ]
+      ],
+      "dateISO": "2026-08-13"
     }
   ],
   "flights": [
     {
       "airline": "Singapore Airlines",
       "flightNumber": "SQ317",
-      "route": "Nairobi (NBO) → Singapore (SIN)",
+      "route": "Nairobi (NBO) \u2192 Singapore (SIN)",
       "date": "12 Aug 2026",
       "departure": "23:55",
       "arrival": "18:40 (+1)",
       "class": "Business",
       "seat": "3K",
       "pnr": "QF8L2M",
-      "document": ""
+      "document": "",
+      "dateISO": "2026-08-12"
     }
   ],
   "hotels": [
@@ -163,7 +167,7 @@
   ],
   "meetings": [
     {
-      "title": "Investor Roadshow — DBS Group",
+      "title": "Investor Roadshow \u2014 DBS Group",
       "with": "Wei Ling Tan, Head of Institutional Banking",
       "date": "14 Aug 2026, 10:00",
       "location": "DBS Asia Central, Marina Bay",
