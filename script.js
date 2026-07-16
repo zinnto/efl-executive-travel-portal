@@ -77,9 +77,13 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
   }
 }
 
+let LOAD_ERROR_DETAIL = null;
+
 async function loadTrip() {
+  LOAD_ERROR_DETAIL = null;
   try {
     const idxRes = await fetchWithTimeout('data/trips-index.json', { cache: 'no-store' });
+    if (!idxRes.ok) throw new Error(`data/trips-index.json — ${idxRes.status} ${idxRes.statusText}`);
     const idx = await idxRes.json();
     TRIPS_INDEX = idx;
 
@@ -87,20 +91,35 @@ async function loadTrip() {
     const requested = params.get('trip');
     const remembered = localStorage.getItem('efl-active-trip');
     TRIP_ID = requested || remembered || idx.defaultTripId || (idx.trips[0] && idx.trips[0].tripId);
-    localStorage.setItem('efl-active-trip', TRIP_ID);
 
     const override = localStorage.getItem('efl-trip-data-' + TRIP_ID);
     if (override) {
       TRIP = JSON.parse(override);
+      localStorage.setItem('efl-active-trip', TRIP_ID);
       return;
     }
 
-    const entry = idx.trips.find(t => t.tripId === TRIP_ID);
+    let entry = idx.trips.find(t => t.tripId === TRIP_ID);
+    if (!entry) {
+      // The remembered/requested trip isn't in the index — most likely stale
+      // from an earlier local-only admin test. Fall back to the real
+      // default trip instead of failing outright.
+      const fallbackId = idx.defaultTripId || (idx.trips[0] && idx.trips[0].tripId);
+      if (fallbackId && fallbackId !== TRIP_ID) {
+        console.warn(`Trip "${TRIP_ID}" not found in trips-index.json — falling back to "${fallbackId}".`);
+        TRIP_ID = fallbackId;
+        entry = idx.trips.find(t => t.tripId === TRIP_ID);
+      }
+    }
+    if (!entry && !idx.trips.length) throw new Error('trips-index.json has no trips listed.');
     const file = entry ? entry.file : `data/trips/${TRIP_ID}.json`;
     const res = await fetchWithTimeout(file, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`${file} — ${res.status} ${res.statusText}${!entry ? ' (Trip ID "' + TRIP_ID + '" was not found in trips-index.json — it may be stale from an earlier test.)' : ''}`);
     TRIP = await res.json();
+    localStorage.setItem('efl-active-trip', TRIP_ID);
   } catch (err) {
-    console.error('Failed to load trip data', err);
+    LOAD_ERROR_DETAIL = err.message || String(err);
+    console.error('Failed to load trip data:', LOAD_ERROR_DETAIL);
     TRIP = null;
   }
 }
@@ -883,16 +902,29 @@ function hideSplash() {
 function renderLoadError() {
   const homeView = document.getElementById('view-home');
   if (!homeView) return;
+  const detail = LOAD_ERROR_DETAIL
+    ? `<pre style="font-size:11px; color:var(--danger); background:var(--line-soft); border-radius:var(--r-sm); padding:10px 12px; max-width:320px; white-space:pre-wrap; text-align:left; margin:0 0 20px;">${LOAD_ERROR_DETAIL}</pre>`
+    : '';
   homeView.innerHTML = `
     <div style="min-height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 20px;">
       <div style="width:56px;height:56px;border-radius:16px;background:var(--line-soft);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--ink-500);">
         ${ICONS.document}
       </div>
       <h2 style="font-family:var(--font-display); font-size:17px; margin:0 0 8px; color:var(--ink-900);">Couldn't load your trip</h2>
-      <p style="font-size:13.5px; color:var(--ink-500); max-width:280px; margin:0 0 20px;">This is usually a weak connection. Check your signal or Wi-Fi and try again.</p>
-      <button class="btn btn-primary" id="retryLoadBtn">Try Again</button>
+      <p style="font-size:13.5px; color:var(--ink-500); max-width:280px; margin:0 0 14px;">This is usually a weak connection, or a trip that no longer exists. Details below.</p>
+      ${detail}
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" id="retryLoadBtn">Try Again</button>
+        <button class="btn btn-outline" id="resetLoadBtn">Reset &amp; Reload</button>
+      </div>
     </div>`;
   document.getElementById('retryLoadBtn').addEventListener('click', () => window.location.reload());
+  document.getElementById('resetLoadBtn').addEventListener('click', () => {
+    localStorage.removeItem('efl-active-trip');
+    const url = new URL(window.location.href);
+    url.searchParams.delete('trip');
+    window.location.href = url.toString();
+  });
 }
 
 async function init() {
@@ -905,7 +937,7 @@ async function init() {
     await loadTrip();
 
     if (!TRIP) {
-      showToast('Could not load trip data.');
+      showToast(LOAD_ERROR_DETAIL ? `Could not load trip data: ${LOAD_ERROR_DETAIL}` : 'Could not load trip data.');
       renderLoadError();
       return;
     }
