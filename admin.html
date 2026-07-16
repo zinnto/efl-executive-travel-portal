@@ -1,74 +1,405 @@
-%PDF-1.4
-%���� ReportLab Generated PDF document (opensource)
-1 0 obj
-<<
-/F1 2 0 R /F2 3 0 R
->>
-endobj
-2 0 obj
-<<
-/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
->>
-endobj
-3 0 obj
-<<
-/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
->>
-endobj
-4 0 obj
-<<
-/Contents 8 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 7 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>EFL Global — Admin Dashboard</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
->> 
-  /Type /Page
->>
-endobj
-5 0 obj
-<<
-/PageMode /UseNone /Pages 7 0 R /Type /Catalog
->>
-endobj
-6 0 obj
-<<
-/Author (anonymous) /CreationDate (D:20260715074928+00'00') /Creator (anonymous) /Keywords () /ModDate (D:20260715074928+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (unspecified) /Title (untitled) /Trapped /False
->>
-endobj
-7 0 obj
-<<
-/Count 1 /Kids [ 4 0 R ] /Type /Pages
->>
-endobj
-8 0 obj
-<<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 787
->>
-stream
-GatUp>u03/'Sc)R/'c\PU#GelNpTIV"X/#_.KSpG2^WO&VgQ`af_G2&8L^I(<&(eC)TC-Mch!_=1SFNInNX2Wc8569aaeBPf"_o]5dl2g2Bu0<c;GdD1RT.(I/=pBZPl2r9So&l!GNh<p]Xh2+[SJ6YWeHeV:%ad+K8a8#p;R33Yb$[R$%P]@nK&^91h<Z06F.a)K$C*Wea[]<Pc`OjT;S#2s4h3:QYO.lspAgFF883(bgaaOrhtL7M&"fhMQcSJ%a%.n)oe7cL0j'=Pg-b]aR!XFMp$AEKt!dEflC19,HO']*^a;r(lYDk[<).5(B/['<8"\)@4ku81YFL7UoTY$o(B8R$f$S,ne(Zi*0,<G&Xl"5.@b:)rK07K6)_`0(1n%j<4%H9JHr6M+bYYco-90i<QD6m.OWncA<<.$5H+*M:<sLH<.oM)tFbh2bFB4.@-GK$(Ah1Oq\FM:&DuQlU21W0!$^u@9:Qp(N(VCN$\jtHscO6p&^VW;mlWn<1HLS[ps[uR_CBs$au(4'=oD2Vm=M(:2N8DN@R1[h;DW8lCea9<Nbb_G-5f'&Jc!HE1t7<l^P4l4G%p[F^=0AO(dHeBX)KpYQ9/X\elSD4gL\D2R,?$SL_R@KT5e./pG%sNksV>qpkRoq!08W/PBW_^5C9"TpK2,\9p71YR>3X^#m,qioX,cPoTC.O$5nXjSd`mh_r?keLjrT(d'oJpZQ"t#Ku8GQICNtp;rSE_1W<Ea)-mGC.eecmHj&6E)fiW%^h$!U$Y5%6l3t`%a=nR055VK~>endstream
-endobj
-xref
-0 9
-0000000000 65535 f 
-0000000061 00000 n 
-0000000102 00000 n 
-0000000209 00000 n 
-0000000321 00000 n 
-0000000524 00000 n 
-0000000592 00000 n 
-0000000853 00000 n 
-0000000912 00000 n 
-trailer
-<<
-/ID 
-[<f76c7e5ad980f951ba8458f19b288da8><f76c7e5ad980f951ba8458f19b288da8>]
-% ReportLab generated PDF document -- digest (opensource)
+<div id="app">
 
-/Info 6 0 R
-/Root 5 0 R
-/Size 9
->>
-startxref
-1789
-%%EOF
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand__mark">
+        <img src="assets/brand/efl-mark-256.png" alt="EFL Global" />
+      </div>
+      <div>
+        <div class="sidebar-brand__name">EFL GLOBAL</div>
+        <div class="sidebar-brand__tag">Admin Dashboard</div>
+      </div>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><button class="sidebar-link active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg><span>Dashboard</span></button></li>
+      <li><button class="sidebar-link" data-view="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 3.5l7 7-3.5 1.4-3.9-2.5-2.1 2.1 1.6 3-1.4 1.4-3-3.6-3.6-3 1.4-1.4 3 1.6 2.1-2.1-2.5-3.9 1.4-3.5z"/></svg><span>Trips</span></button></li>
+      <li><button class="sidebar-link" data-view="executives"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="8" r="2.7"/><path d="M15.5 14.2c2.8.4 4.5 2.5 4.5 5.8"/></svg><span>Executives</span></button></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li><button class="sidebar-link" data-view="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button></li>
+    </ul>
+
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li><a class="sidebar-link" href="index.html" style="display:flex;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Open Portal</span></a></li>
+    </ul>
+    <div class="sidebar-foot">EFL GLOBAL © 2026 · Admin v2.0</div>
+  </aside>
+
+  <div class="main-content">
+
+    <header class="topnav" id="topnav">
+      <button class="topnav__menu-btn" id="menuBtn" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <button class="topnav__back hidden" id="backBtn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="topnav__crumb">
+        <div class="topnav__crumb-eyebrow">EFL Global / Admin</div>
+        <div class="topnav__crumb-title" id="topnavTitle">All Trips</div>
+      </div>
+      <div class="topnav__avatar" style="background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--gold-400);">A</div>
+    </header>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section class="view" id="view-dashboard">
+      <div class="admin-toolbar"><h2>Overview</h2></div>
+
+      <div class="stat-grid" id="dashStatGrid"><!-- injected --></div>
+
+      <div class="section-head" style="margin-top:24px"><h2>Pending Matters</h2></div>
+      <div class="status-card" id="dashPending"><!-- injected --></div>
+
+      <div class="section-head"><h2>Trips at a Glance</h2></div>
+      <div class="trips-grid" id="dashTripsPreview"><!-- injected --></div>
+    </section>
+
+    <!-- ============ TRIPS LIST ============ -->
+    <section class="view" id="view-list" hidden>
+      <div class="admin-toolbar">
+        <h2>Trips</h2>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="downloadIndexBtn">Download trips-index.json</button>
+          <button class="btn btn-outline btn-sm" id="importBtn">Import JSON</button>
+          <button class="btn btn-primary btn-sm" id="newTripBtn">+ New Trip</button>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--ink-500);margin:-6px 0 14px;">Downloading a trip gives you <code>&lt;tripId&gt;.json</code> for <code>data/trips/</code>. After adding/removing/renaming trips, also click <strong>Download trips-index.json</strong> and replace the copy in <code>data/</code> — see Settings for the full checklist.</p>
+      <div class="trips-grid" id="tripsGrid"><!-- injected --></div>
+      <input type="file" id="importFile" accept="application/json" hidden />
+    </section>
+
+    <!-- ============ TRIP EDITOR ============ -->
+    <section class="view" id="view-editor" hidden>
+
+      <div class="admin-toolbar">
+        <h2 id="editorHeading">Edit Trip</h2>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="openPortalBtn">Open in Portal</button>
+          <button class="btn btn-outline btn-sm" id="downloadBtn">Download JSON</button>
+          <button class="btn btn-ghost btn-sm" id="deleteTripBtn">Delete</button>
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="admin-card">
+        <h3>Basic Info</h3>
+        <div class="form-grid">
+          <div class="field"><label>Trip ID</label>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <input class="f-input" id="f_tripId" placeholder="Auto-generated" readonly style="background:var(--line-soft); color:var(--ink-500);" />
+              <button class="btn btn-outline btn-sm" id="regenTripIdBtn" type="button" title="Regenerate ID" style="flex:none;">↻</button>
+            </div>
+          </div>
+          <div class="field"><label>Stage</label>
+            <select class="f-input" id="f_stage">
+              <option value="active">Active</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div class="field span-2"><label>Executive</label>
+            <select class="f-input" id="f_execId">
+              <option value="">— Not linked to an executive profile —</option>
+            </select>
+          </div>
+          <div class="field"><label>Trip Name</label><input class="f-input" id="f_tripName" placeholder="Uganda Regional Review — July 2026" /></div>
+          <div class="field"><label>Company Name</label><input class="f-input" id="f_companyName" placeholder="EFL Global" /></div>
+          <div class="field"><label>Traveller Name</label><input class="f-input" id="f_travellerName" placeholder="Full name" /></div>
+          <div class="field"><label>Position / Title</label><input class="f-input" id="f_position" placeholder="Regional Finance Manager" /></div>
+          <div class="field"><label>Photo Initials</label><input class="f-input" id="f_initials" maxlength="3" placeholder="PR" /></div>
+          <div class="field"><label>Destination</label><input class="f-input" id="f_destination" placeholder="Kampala & Entebbe, Uganda" /></div>
+          <div class="field span-2"><label>Travel Dates</label><input class="f-input" id="f_dates" placeholder="20 – 27 Jul 2026" /></div>
+        </div>
+      </div>
+
+      <!-- Next Event -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Next Event</h3><button class="btn btn-ghost btn-sm" id="clearNextEventBtn" type="button">Clear</button></div>
+        <div class="field" style="margin-bottom:14px;">
+          <label>Copy details from an existing flight</label>
+          <select class="f-input" id="ne_copy_from_flight">
+            <option value="">— Select a flight below to copy from —</option>
+          </select>
+        </div>
+        <div class="form-grid cols-3">
+          <div class="field"><label>Airline</label>
+            <select class="f-input" id="ne_airline_select"></select>
+            <input class="f-input" id="ne_airline_other" placeholder="Type airline name" style="margin-top:6px;display:none;" />
+          </div>
+          <div class="field"><label>Flight Number</label><input class="f-input" id="ne_flightNumber" /></div>
+          <div class="field"><label>Status</label>
+            <select class="f-input" id="ne_status">
+              <option>On Time</option><option>Delayed</option><option>Boarding</option><option>Cancelled</option>
+            </select>
+          </div>
+          <div class="field"><label>From</label>
+            <select class="f-input" id="ne_from_select"></select>
+            <input class="f-input" id="ne_from_other" placeholder="Type city / airport" style="margin-top:6px;display:none;" />
+          </div>
+          <div class="field span-2"><label>To</label>
+            <select class="f-input" id="ne_to_select"></select>
+            <input class="f-input" id="ne_to_other" placeholder="Type city / airport" style="margin-top:6px;display:none;" />
+          </div>
+          <div class="field span-3"><label>Route (auto-filled from From/To — still editable)</label><input class="f-input" id="ne_route" placeholder="Nairobi (NBO) → Entebbe (EBB)" /></div>
+          <div class="field"><label>Date</label><input class="f-input" id="ne_date" placeholder="20 Jul 2026" /></div>
+          <div class="field"><label>Departure</label><input class="f-input" id="ne_departure" placeholder="09:30" /></div>
+          <div class="field"><label>Arrival</label><input class="f-input" id="ne_arrival" placeholder="10:45" /></div>
+          <div class="field"><label>Terminal</label><input class="f-input" id="ne_terminal" /></div>
+          <div class="field"><label>Gate</label><input class="f-input" id="ne_gate" /></div>
+          <div class="field"><label>Seat</label><input class="f-input" id="ne_seat" /></div>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Trip Checklist</h3><button class="btn btn-outline btn-sm" id="addChecklistBtn" type="button">+ Add Item</button></div>
+        <div id="checklistList"></div>
+      </div>
+
+      <!-- Itinerary -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Itinerary</h3><button class="btn btn-outline btn-sm" id="addDayBtn" type="button">+ Add Day</button></div>
+        <div id="itineraryList"></div>
+      </div>
+
+      <!-- Flights -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Flights</h3><button class="btn btn-outline btn-sm" id="addFlightBtn" type="button">+ Add Flight</button></div>
+        <p style="font-size:12px;color:var(--ink-500);margin:-4px 0 12px;">Add every leg here. Then scroll up to <strong>Next Event</strong> and use "Copy details from an existing flight" instead of retyping.</p>
+        <div id="flightsList"></div>
+      </div>
+
+      <!-- Hotels -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Hotels</h3><button class="btn btn-outline btn-sm" id="addHotelBtn" type="button">+ Add Hotel</button></div>
+        <div id="hotelsList"></div>
+      </div>
+
+      <!-- Meetings -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Meetings</h3><button class="btn btn-outline btn-sm" id="addMeetingBtn" type="button">+ Add Meeting</button></div>
+        <div id="meetingsList"></div>
+      </div>
+
+      <!-- Transport -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Transport</h3><button class="btn btn-outline btn-sm" id="addTransportBtn" type="button">+ Add Transport</button></div>
+        <div id="transportList"></div>
+      </div>
+
+      <!-- Documents -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Documents</h3><button class="btn btn-outline btn-sm" id="addDocCatBtn" type="button">+ Add Category</button></div>
+        <div id="docsList"></div>
+      </div>
+
+      <!-- Contacts -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Contacts</h3><button class="btn btn-outline btn-sm" id="addContactBtn" type="button">+ Add Contact</button></div>
+        <div id="contactsList"></div>
+      </div>
+
+      <!-- Maps -->
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Maps</h3><button class="btn btn-outline btn-sm" id="addMapBtn" type="button">+ Add Place</button></div>
+        <div id="mapsList"></div>
+      </div>
+
+      <!-- Expenses -->
+      <div class="admin-card">
+        <h3>Expenses</h3>
+        <div class="form-grid">
+          <div class="field"><label>Currency</label><input class="f-input" id="exp_currency" placeholder="USD" /></div>
+          <div class="field"><label>Per Diem (per day)</label><input class="f-input" type="number" id="exp_perDiem" /></div>
+        </div>
+        <h4>Logged Items</h4>
+        <div id="expensesList"></div>
+        <button class="btn btn-outline btn-sm" id="addExpenseBtn" type="button">+ Add Expense Item</button>
+      </div>
+
+      <div class="admin-savebar">
+        <button class="btn btn-primary" id="saveTripBtn">Save Trip</button>
+        <button class="btn btn-outline" id="setActiveBtn">Set as Default in Portal</button>
+        <button class="btn btn-ghost" id="cancelEditBtn">Back to All Trips</button>
+      </div>
+
+    </section>
+
+    <!-- ============ EXECUTIVES LIST ============ -->
+    <section class="view" id="view-executives" hidden>
+      <div class="admin-toolbar">
+        <h2>Executives</h2>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-outline btn-sm" id="downloadExecIndexBtn">Download executives-index.json</button>
+          <button class="btn btn-primary btn-sm" id="newExecBtn">+ New Executive</button>
+        </div>
+      </div>
+      <p style="font-size:12px;color:var(--ink-500);margin:-6px 0 14px;">Executives are stored as ONE array file — <code>data/executives-index.json</code>. After adding/editing/removing any executive, click <strong>Download executives-index.json</strong> and replace the whole file in your repo (don't merge by hand).</p>
+      <div class="trips-grid" id="execGrid"><!-- injected --></div>
+    </section>
+
+    <!-- ============ EXECUTIVE PROFILE / EDITOR ============ -->
+    <section class="view" id="view-exec-editor" hidden>
+      <div class="admin-toolbar">
+        <h2 id="execEditorHeading">Edit Executive</h2>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-ghost btn-sm" id="deleteExecBtn">Delete</button>
+        </div>
+      </div>
+
+      <div class="profile-header">
+        <div class="profile-header__avatar" id="execProfileAvatar">—</div>
+        <div>
+          <div class="profile-header__name" id="execProfileName">New Executive</div>
+          <div class="profile-header__role" id="execProfileRole"></div>
+          <div class="profile-header__dept" id="execProfileDept"></div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Profile</h3>
+        <div class="form-grid">
+          <div class="field"><label>Executive ID</label><input class="f-input" id="ex_execId" placeholder="EXEC-XX000" /></div>
+          <div class="field"><label>Department</label><input class="f-input" id="ex_department" placeholder="Finance" /></div>
+          <div class="field"><label>Full Name</label><input class="f-input" id="ex_name" placeholder="Full name" /></div>
+          <div class="field"><label>Position / Title</label><input class="f-input" id="ex_position" placeholder="Regional Finance Manager" /></div>
+          <div class="field"><label>Photo Initials</label><input class="f-input" id="ex_initials" maxlength="3" placeholder="PR" /></div>
+          <div class="field"><label>Nationality</label><input class="f-input" id="ex_nationality" /></div>
+          <div class="field"><label>Email</label><input class="f-input" type="email" id="ex_email" /></div>
+          <div class="field"><label>Phone</label><input class="f-input" id="ex_phone" placeholder="+254701112233" /></div>
+          <div class="field span-2"><label>Notes</label><textarea class="f-input" id="ex_notes" placeholder="Seat preference, frequent flyer status, dietary notes…"></textarea></div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-card__head"><h3>Trips</h3><button class="btn btn-outline btn-sm" id="execNewTripBtn" type="button">+ New Trip for this Executive</button></div>
+        <div id="execTripsList"></div>
+      </div>
+
+      <div class="admin-savebar">
+        <button class="btn btn-primary" id="saveExecBtn">Save Executive</button>
+        <button class="btn btn-outline" id="downloadExecBtn">Download JSON</button>
+        <button class="btn btn-ghost" id="cancelExecBtn">Back to Executives</button>
+      </div>
+    </section>
+
+    <!-- ============ SETTINGS ============ -->
+    <section class="view" id="view-settings" hidden>
+      <div class="admin-toolbar"><h2>Settings</h2></div>
+
+      <div class="admin-card">
+        <h3>How data &amp; publishing works</h3>
+        <p style="font-size:13px;color:var(--ink-700);line-height:1.6;margin:0 0 10px;">
+          This is a static site (GitHub Pages) — there's no server or database behind it.
+          Everything you add or edit in Trips and Executives is saved to <strong>this browser's
+          local storage</strong>, which is why changes appear instantly when you preview a trip in
+          the portal. To make a change <strong>permanent</strong> for everyone, download the
+          trip's (or executive's) JSON, commit it into the right folder below, and push —
+          GitHub Pages redeploys automatically.
+        </p>
+        <h4>Folder structure</h4>
+        <pre style="background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;font-size:11.5px;line-height:1.7;overflow-x:auto;color:var(--ink-700);">data/
+  trips-index.json          → directory of every trip
+  executives-index.json       → directory of every executive
+  trips/
+    EFL-UG-0726.json             → one file per trip
+    EFL-SG-0812.json
+documents/                        → PDFs referenced by trips</pre>
+        <h4>Resolution order the portal uses</h4>
+        <p style="font-size:12.5px;color:var(--ink-500);line-height:1.6;margin:0;">
+          1. <code>?trip=&lt;id&gt;</code> in the URL &nbsp;→&nbsp;
+          2. last trip opened on that device &nbsp;→&nbsp;
+          3. <code>defaultTripId</code> in <code>trips-index.json</code>.
+        </p>
+      </div>
+
+      <div class="admin-card">
+        <h3>Publishing checklist — where each downloaded file goes</h3>
+        <p style="font-size:12.5px;color:var(--ink-500);line-height:1.6;margin:0 0 12px;">
+          Every "Download" button in this tool produces a file already named
+          correctly for your repository. Here's exactly where each one goes:
+        </p>
+        <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+          <tr style="text-align:left; color:var(--ink-500);"><th style="padding:6px 8px 6px 0;">You downloaded…</th><th style="padding:6px 8px;">Goes in…</th><th style="padding:6px 0;">Also do…</th></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;"><code>&lt;tripId&gt;.json</code> (from a Trip)</td><td style="padding:8px;"><code>data/trips/</code></td><td style="padding:8px 0;">Click <strong>Download trips-index.json</strong> in the Trips tab and replace <code>data/trips-index.json</code> too</td></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;"><code>trips-index.json</code></td><td style="padding:8px;"><code>data/</code> (replace the whole file)</td><td style="padding:8px 0;">—</td></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;"><code>executives-index.json</code></td><td style="padding:8px;"><code>data/</code> (replace the whole file)</td><td style="padding:8px 0;">This is one array of ALL executives — don't try to merge individual downloads by hand, always use this whole-file download</td></tr>
+          <tr style="border-top:1px solid var(--line-soft);"><td style="padding:8px 8px 8px 0;">A PDF (boarding pass, hotel confirmation, etc.)</td><td style="padding:8px;"><code>documents/</code></td><td style="padding:8px 0;">Reference it in the trip as <code>documents/your-file.pdf</code> — see below</td></tr>
+        </table>
+      </div>
+
+      <div class="admin-card">
+        <h3>Attaching documents (PDFs or Google Drive links)</h3>
+        <p style="font-size:13px;color:var(--ink-700);line-height:1.6;margin:0 0 10px;">
+          Every document/attachment field in the trip editor (Flights, Hotels, Meetings,
+          Documents, Itinerary attachments) accepts <strong>either</strong> of two things:
+        </p>
+        <p style="font-size:12.5px;color:var(--ink-700);line-height:1.7;margin:0 0 8px;">
+          <strong>1. A local PDF you host yourself</strong> — upload the PDF file directly into
+          the <code>documents/</code> folder in your GitHub repository (via GitHub's web
+          "Add file → Upload files", or by copying it into that folder before you commit &amp;
+          push). Then type <code>documents/your-file-name.pdf</code> into the field — that's the
+          path relative to the site root, so it must start with <code>documents/</code>.
+        </p>
+        <p style="font-size:12.5px;color:var(--ink-700);line-height:1.7;margin:0;">
+          <strong>2. A link to a file hosted elsewhere</strong> (Google Drive, SharePoint, etc.)
+          — paste the full sharing URL instead, e.g.
+          <code>https://drive.google.com/file/d/XXXXXXXX/view</code>. Make sure the file's
+          sharing setting is "Anyone with the link can view", since the executive opening it
+          from the portal won't be logged into your Drive. No file needs to go in
+          <code>documents/</code> for this option.
+        </p>
+      </div>
+
+      <div class="admin-card">
+        <h3>Export &amp; Import</h3>
+        <p style="font-size:12.5px;color:var(--ink-500);margin:0 0 12px;">Back up every trip and executive currently saved in this browser, or restore/seed from a backup file. This bundle is for backup/restore <em>within this tool</em> — it isn't in the same shape as the repo files above, so use the table above for publishing.</p>
+        <div class="admin-toolbar__actions">
+          <button class="btn btn-primary btn-sm" id="exportAllBtn">Export All (JSON)</button>
+          <button class="btn btn-outline btn-sm" id="importAllBtn">Import Bundle</button>
+        </div>
+        <input type="file" id="importAllFile" accept="application/json" hidden />
+      </div>
+
+      <div class="admin-card">
+        <h3>Danger Zone</h3>
+        <p style="font-size:12.5px;color:var(--ink-500);margin:0 0 12px;">
+          Clears every trip and executive edit saved in this browser's local storage (does not
+          touch files already committed to the repository). Use this if local preview data has
+          gotten out of sync.
+        </p>
+        <button class="btn btn-ghost btn-sm" id="resetLocalBtn">Clear All Local Admin Edits</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+  <div class="toast__text" id="toastText"></div>
+  <button class="toast__close" id="toastClose">✕</button>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
