@@ -64,9 +64,22 @@ function showToast(msg) {
 
 let TRIPS_INDEX = null;
 
+// Wraps fetch with a hard timeout — on a flaky mobile connection a request
+// can otherwise hang indefinitely, which would freeze the whole app on the
+// splash screen since everything downstream is waiting on it.
+async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function loadTrip() {
   try {
-    const idxRes = await fetch('data/trips-index.json', { cache: 'no-store' });
+    const idxRes = await fetchWithTimeout('data/trips-index.json', { cache: 'no-store' });
     const idx = await idxRes.json();
     TRIPS_INDEX = idx;
 
@@ -84,7 +97,7 @@ async function loadTrip() {
 
     const entry = idx.trips.find(t => t.tripId === TRIP_ID);
     const file = entry ? entry.file : `data/trips/${TRIP_ID}.json`;
-    const res = await fetch(file, { cache: 'no-store' });
+    const res = await fetchWithTimeout(file, { cache: 'no-store' });
     TRIP = await res.json();
   } catch (err) {
     console.error('Failed to load trip data', err);
@@ -121,7 +134,7 @@ async function loadAllTripsForTraveller() {
     try {
       const override = localStorage.getItem('efl-trip-data-' + entry.tripId);
       if (override) return JSON.parse(override);
-      const res = await fetch(entry.file, { cache: 'no-store' });
+      const res = await fetchWithTimeout(entry.file, { cache: 'no-store' });
       return await res.json();
     } catch (err) {
       console.warn('Could not load trip', entry.tripId, err);
@@ -859,40 +872,79 @@ function initInstall() {
 
 /* ---------------- Init ---------------- */
 
+function hideSplash() {
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('hidden');
+}
+
+// Shown in place of the dashboard if the trip data genuinely couldn't be
+// loaded (e.g. no signal) — so the person sees a clear retry action instead
+// of a frozen, empty-looking app.
+function renderLoadError() {
+  const homeView = document.getElementById('view-home');
+  if (!homeView) return;
+  homeView.innerHTML = `
+    <div style="min-height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 20px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:var(--line-soft);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--ink-500);">
+        ${ICONS.document}
+      </div>
+      <h2 style="font-family:var(--font-display); font-size:17px; margin:0 0 8px; color:var(--ink-900);">Couldn't load your trip</h2>
+      <p style="font-size:13.5px; color:var(--ink-500); max-width:280px; margin:0 0 20px;">This is usually a weak connection. Check your signal or Wi-Fi and try again.</p>
+      <button class="btn btn-primary" id="retryLoadBtn">Try Again</button>
+    </div>`;
+  document.getElementById('retryLoadBtn').addEventListener('click', () => window.location.reload());
+}
+
 async function init() {
-  await loadTrip();
-  if (!TRIP) {
-    showToast('Could not load trip data.');
-    return;
-  }
+  // Absolute failsafe: whatever else happens below, never leave the splash
+  // on screen for more than a few seconds — this is what was causing the
+  // app to look "stuck" on mobile when a request stalled or failed.
+  const failsafe = setTimeout(hideSplash, 6000);
 
-  switchView('home');
-  document.querySelectorAll('.sidebar-link[data-view]').forEach(btn => {
-    btn.addEventListener('click', () => switchView(btn.dataset.view));
-  });
+  try {
+    await loadTrip();
 
-  document.getElementById('menuBtn').addEventListener('click', openSidebar);
-  document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
-  document.getElementById('backBtn').addEventListener('click', () => switchView('home'));
+    if (!TRIP) {
+      showToast('Could not load trip data.');
+      renderLoadError();
+      return;
+    }
 
-  document.getElementById('sheetBackdrop').addEventListener('click', (e) => {
-    if (e.target.id === 'sheetBackdrop') closeSheet();
-  });
-  document.getElementById('toastClose').addEventListener('click', () => document.getElementById('toast').classList.remove('show'));
+    switchView('home');
+    document.querySelectorAll('.sidebar-link[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.view));
+    });
 
-  document.getElementById('darkModeToggle').addEventListener('change', (e) => applyTheme(e.target.checked));
-  document.getElementById('offlineToggle').addEventListener('change', (e) => applyOffline(e.target.checked));
-  applyTheme(localStorage.getItem('efl-theme') === 'dark');
-  applyOffline(localStorage.getItem('efl-offline') === '1');
+    document.getElementById('menuBtn').addEventListener('click', openSidebar);
+    document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+    document.getElementById('backBtn').addEventListener('click', () => switchView('home'));
 
-  initInstall();
+    document.getElementById('sheetBackdrop').addEventListener('click', (e) => {
+      if (e.target.id === 'sheetBackdrop') closeSheet();
+    });
+    document.getElementById('toastClose').addEventListener('click', () => document.getElementById('toast').classList.remove('show'));
 
-  // Splash screen
-  setTimeout(() => document.getElementById('splash').classList.add('hidden'), 1100);
+    document.getElementById('darkModeToggle').addEventListener('change', (e) => applyTheme(e.target.checked));
+    document.getElementById('offlineToggle').addEventListener('change', (e) => applyOffline(e.target.checked));
+    applyTheme(localStorage.getItem('efl-theme') === 'dark');
+    applyOffline(localStorage.getItem('efl-offline') === '1');
 
-  // Service worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js').catch(err => console.warn('SW registration failed', err));
+    initInstall();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(err => console.warn('SW registration failed', err));
+    }
+  } catch (err) {
+    console.error('App failed to initialise', err);
+    showToast('Something went wrong loading the app.');
+    renderLoadError();
+  } finally {
+    clearTimeout(failsafe);
+    // Keep the short, deliberate splash animation on a normal successful
+    // load; on failure, drop it immediately rather than making someone
+    // wait out the animation just to see an error.
+    if (TRIP) setTimeout(hideSplash, 1100);
+    else hideSplash();
   }
 }
 

@@ -31,6 +31,16 @@
   <div class="splash-loader"><span></span></div>
 </div>
 
+<!-- Absolute last-resort failsafe: hides the splash even if script.js
+     fails to load or throws before it can — so the app can never get
+     permanently stuck on the splash screen. -->
+<script>
+  setTimeout(function () {
+    var s = document.getElementById('splash');
+    if (s) s.classList.add('hidden');
+  }, 8000);
+</script>
+
 <!-- ============ APP SHELL ============ -->
 <div id="app">
 
