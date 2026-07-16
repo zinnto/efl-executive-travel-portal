@@ -1,5 +1,5 @@
 {
-  "defaultTripId": "EFL-UG-0726",
+  "defaultTripId": "EFL-WASANTHA-BBMC",
   "trips": [
     {
       "tripId": "EFL-UG-0726",
@@ -7,25 +7,43 @@
       "travellerName": "Prageeth Ranasinghe",
       "position": "Regional Finance Manager — East Africa",
       "destination": "Kampala & Entebbe, Uganda",
-      "dates": "20 – 27 Jul 2026",
+      "dates": "20 – 27 July 2026",
       "status": "active"
     },
     {
-      "tripId": "EFL-SG-0812",
-      "file": "data/trips/EFL-SG-0812.json",
-      "travellerName": "Amara Chen",
-      "position": "Chief Financial Officer",
-      "destination": "Singapore",
-      "dates": "12 – 16 Aug 2026",
+      "tripId": "EFL-WASANTHA-BBMC",
+      "file": "data/trips/EFL-WASANTHA-BBMC.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "London - UK",
+      "dates": "14th July 2026",
+      "status": "archived"
+    },
+    {
+      "tripId": "EFL-WASANTHA-INOG",
+      "file": "data/trips/EFL-WASANTHA-INOG.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "Seattle - USA",
+      "dates": "16th July 2026",
+      "status": "active"
+    },
+    {
+      "tripId": "EFL-WASANTHA-HK5C",
+      "file": "data/trips/EFL-WASANTHA-HK5C.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "Edmonton - Canada",
+      "dates": "17 - 20th July",
       "status": "upcoming"
     },
     {
-      "tripId": "EFL-RW-1110",
-      "file": "data/trips/EFL-RW-1110.json",
-      "travellerName": "Prageeth Ranasinghe",
-      "position": "Regional Finance Manager — East Africa",
-      "destination": "Kigali, Rwanda",
-      "dates": "10 – 14 Nov 2026",
+      "tripId": "EFL-WASANTHA-P0IO",
+      "file": "data/trips/EFL-WASANTHA-P0IO.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "Los Angeles, California",
+      "dates": "20-23 Jul",
       "status": "upcoming"
     }
   ]
