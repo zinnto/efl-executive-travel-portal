@@ -1,0 +1,246 @@
+{
+  "meta": {
+    "tripName": "Singapore Investor Roadshow \u2014 August 2026",
+    "companyName": "EFL Global",
+    "generatedOn": "2026-07-10",
+    "stage": "active"
+  },
+  "traveller": {
+    "name": "Amara Chen",
+    "position": "Chief Financial Officer",
+    "photoInitials": "AC",
+    "destination": "Singapore",
+    "dates": "12 \u2013 16 Aug 2026",
+    "tripId": "EFL-SG-0812",
+    "execId": "EXEC-AC002"
+  },
+  "nextEvent": {
+    "type": "flight",
+    "airline": "Singapore Airlines",
+    "flightNumber": "SQ317",
+    "route": "Nairobi (NBO) \u2192 Singapore (SIN)",
+    "departure": "23:55",
+    "arrival": "18:40",
+    "date": "12 Aug 2026",
+    "terminal": "Terminal 1A",
+    "gate": "7",
+    "seat": "3K",
+    "status": "On Time",
+    "dateISO": "2026-08-12"
+  },
+  "status": {
+    "documentsReady": true,
+    "hotelsConfirmed": true,
+    "transportArranged": false
+  },
+  "quickAccess": [
+    {
+      "id": "flights",
+      "label": "Flights",
+      "icon": "flight"
+    },
+    {
+      "id": "hotels",
+      "label": "Hotels",
+      "icon": "hotel"
+    },
+    {
+      "id": "itinerary",
+      "label": "Itinerary",
+      "icon": "itinerary"
+    },
+    {
+      "id": "meetings",
+      "label": "Meetings",
+      "icon": "meeting"
+    },
+    {
+      "id": "transport",
+      "label": "Transport",
+      "icon": "transport"
+    },
+    {
+      "id": "documents",
+      "label": "Documents",
+      "icon": "document"
+    },
+    {
+      "id": "maps",
+      "label": "Maps",
+      "icon": "map"
+    },
+    {
+      "id": "contacts",
+      "label": "Contacts",
+      "icon": "contact"
+    },
+    {
+      "id": "expenses",
+      "label": "Expenses",
+      "icon": "expense"
+    }
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "date": "Wed, 12 Aug 2026",
+      "city": "Nairobi \u2192 Singapore",
+      "events": [
+        {
+          "time": "20:30",
+          "title": "Leave home for airport",
+          "type": "transport",
+          "location": "Runda, Nairobi",
+          "contact": "EFL Global Office",
+          "notes": "Vehicle arranged via head office pool car.",
+          "attachments": [],
+          "mapQuery": "Jomo Kenyatta International Airport"
+        },
+        {
+          "time": "23:55",
+          "title": "Flight SQ317 \u2014 Nairobi to Singapore",
+          "type": "flight",
+          "location": "Jomo Kenyatta Intl Airport, Terminal 1A",
+          "contact": "Singapore Airlines \u2014 +254 20 276 6700",
+          "notes": "Seat 3K, Business Class. Overnight flight.",
+          "attachments": [],
+          "mapQuery": "Jomo Kenyatta International Airport"
+        }
+      ],
+      "dateISO": "2026-08-12"
+    },
+    {
+      "day": 2,
+      "date": "Thu, 13 Aug 2026",
+      "city": "Singapore",
+      "events": [
+        {
+          "time": "18:40",
+          "title": "Arrival \u2014 Changi Airport",
+          "type": "flight",
+          "location": "Singapore Changi Airport",
+          "contact": "\u2014",
+          "notes": "Hotel car booking pending confirmation.",
+          "attachments": [],
+          "mapQuery": "Singapore Changi Airport"
+        },
+        {
+          "time": "20:30",
+          "title": "Check-in \u2014 Marina Bay Sands",
+          "type": "dining",
+          "location": "Marina Bay Sands, Singapore",
+          "contact": "Hotel Front Desk",
+          "notes": "",
+          "attachments": [],
+          "mapQuery": "Marina Bay Sands Singapore"
+        }
+      ],
+      "dateISO": "2026-08-13"
+    }
+  ],
+  "flights": [
+    {
+      "airline": "Singapore Airlines",
+      "flightNumber": "SQ317",
+      "route": "Nairobi (NBO) \u2192 Singapore (SIN)",
+      "date": "12 Aug 2026",
+      "departure": "23:55",
+      "arrival": "18:40 (+1)",
+      "class": "Business",
+      "seat": "3K",
+      "pnr": "QF8L2M",
+      "document": "",
+      "dateISO": "2026-08-12"
+    }
+  ],
+  "hotels": [
+    {
+      "name": "Marina Bay Sands",
+      "address": "10 Bayfront Avenue, Singapore",
+      "checkIn": "13 Aug 2026, 15:00",
+      "checkOut": "16 Aug 2026, 12:00",
+      "room": "Deluxe Room, Marina View",
+      "confirmation": "MBS-55219",
+      "document": "",
+      "mapQuery": "Marina Bay Sands Singapore"
+    }
+  ],
+  "meetings": [
+    {
+      "title": "Investor Roadshow \u2014 DBS Group",
+      "with": "Wei Ling Tan, Head of Institutional Banking",
+      "date": "14 Aug 2026, 10:00",
+      "location": "DBS Asia Central, Marina Bay",
+      "document": ""
+    }
+  ],
+  "transport": [],
+  "documents": {
+    "Flight Documents": [],
+    "Hotel Reservations": [],
+    "Visa & Passport": [],
+    "Insurance": [],
+    "Meeting Documents": [],
+    "Expense Documents": []
+  },
+  "contacts": [
+    {
+      "name": "Wei Ling Tan",
+      "company": "DBS Group",
+      "role": "Head of Institutional Banking",
+      "phone": "+6598761234",
+      "whatsapp": "6598761234",
+      "email": "weiling.tan@dbs.com"
+    },
+    {
+      "name": "EFL Global Office",
+      "company": "EFL Global",
+      "role": "Nairobi Head Office",
+      "phone": "+254203212345",
+      "whatsapp": "254203212345",
+      "email": "info@eflglobal.com"
+    }
+  ],
+  "maps": [
+    {
+      "category": "Airport",
+      "name": "Singapore Changi Airport",
+      "address": "Singapore",
+      "query": "Singapore Changi Airport"
+    },
+    {
+      "category": "Hotel",
+      "name": "Marina Bay Sands",
+      "address": "10 Bayfront Avenue, Singapore",
+      "query": "Marina Bay Sands Singapore"
+    },
+    {
+      "category": "Meeting",
+      "name": "DBS Asia Central",
+      "address": "Marina Bay, Singapore",
+      "query": "DBS Asia Central Marina Bay"
+    }
+  ],
+  "expenses": {
+    "currency": "USD",
+    "perDiem": 180,
+    "items": []
+  },
+  "checklist": [
+    {
+      "id": "c1",
+      "label": "Documents Ready",
+      "done": true
+    },
+    {
+      "id": "c2",
+      "label": "Hotels Confirmed",
+      "done": true
+    },
+    {
+      "id": "c3",
+      "label": "Transport Arranged",
+      "done": false
+    }
+  ]
+}

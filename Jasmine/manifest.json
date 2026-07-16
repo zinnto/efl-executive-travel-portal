@@ -1,0 +1,17 @@
+{
+  "name": "EFL Global — Executive Travel Portal",
+  "short_name": "EFL Travel",
+  "description": "The complete executive travel portal for EFL Global — flights, hotels, itinerary, documents and contacts in one premium app.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#3D3F42",
+  "theme_color": "#3D3F42",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
