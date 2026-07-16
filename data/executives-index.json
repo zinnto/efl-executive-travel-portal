@@ -1,13 +1,35 @@
 [
   {
     "execId": "EXEC-PR001",
-    "name": "Wasantha Ranasinghe",
-    "position": "Director - East Africa",
-    "department": "Management",
-    "photoInitials": "WR",
-    "email": "wasanthar@efl.global",
-    "phone": "+254700665186",
+    "name": "Prageeth Ranasinghe",
+    "position": "Regional Finance Manager — East Africa",
+    "department": "Finance",
+    "photoInitials": "PR",
+    "email": "prageeth.ranasinghe@eflglobal.com",
+    "phone": "+254701112233",
     "nationality": "Sri Lankan",
+    "notes": "Prefers aisle seats. Frequent flyer: Kenya Airways Gold."
+  },
+  {
+    "execId": "EXEC-AC002",
+    "name": "Amara Chen",
+    "position": "Chief Financial Officer",
+    "department": "Executive Office",
+    "photoInitials": "AC",
+    "email": "amara.chen@eflglobal.com",
+    "phone": "+254701998800",
+    "nationality": "Singaporean",
+    "notes": "Requires business class on all sectors over 4 hours."
+  },
+  {
+    "execId": "EXEC-DO003",
+    "name": "David Ochieng",
+    "position": "Regional Director, East Africa",
+    "department": "Operations",
+    "photoInitials": "DO",
+    "email": "david.ochieng@eflglobal.com",
+    "phone": "+256701998877",
+    "nationality": "Kenyan",
     "notes": ""
   }
 ]

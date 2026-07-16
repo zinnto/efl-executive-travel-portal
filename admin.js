@@ -562,7 +562,8 @@ const FIELD_SCHEMAS = {
 
 function renderSimpleSections() {
   renderRepeatList(document.getElementById('flightsList'), currentTrip.flights, FIELD_SCHEMAS.flight,
-    { title: (i) => `${i.airline || 'Flight'} ${i.flightNumber || ''}`.trim() || 'New Flight', emptyText: 'No flights added.' });
+    { title: (i) => `${i.airline || 'Flight'} ${i.flightNumber || ''}`.trim() || 'New Flight', emptyText: 'No flights added.', onChange: refreshNeCopyFromFlightOptions });
+  refreshNeCopyFromFlightOptions();
 
   renderRepeatList(document.getElementById('hotelsList'), currentTrip.hotels, FIELD_SCHEMAS.hotel,
     { title: (i) => i.name || 'New Hotel', emptyText: 'No hotels added.' });
@@ -771,6 +772,19 @@ function renderChecklist() {
 }
 
 /* ---------------- Executive-select dropdown (used inside trip editor) ---------------- */
+
+function refreshNeCopyFromFlightOptions() {
+  const sel = document.getElementById('ne_copy_from_flight');
+  if (!sel || !currentTrip) return;
+  const flights = currentTrip.flights || [];
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">— Select a flight below to copy from —</option>' +
+    flights.map((fl, i) => {
+      const route = fl.route || (fl.from && fl.to ? `${shortLabel(fl.from)} → ${shortLabel(fl.to)}` : 'no route yet');
+      return `<option value="${i}">${esc(fl.airline || 'Flight')} ${esc(fl.flightNumber || '')} — ${esc(route)}</option>`;
+    }).join('');
+  if (prev && Number(prev) < flights.length) sel.value = prev;
+}
 
 async function populateExecutiveSelect(selectedExecId) {
   const sel = document.getElementById('f_execId');
@@ -1148,6 +1162,26 @@ function init() {
   neToSelect.addEventListener('change', () => { neToOther.style.display = neToSelect.value === OTHER_VALUE ? '' : 'none'; updateNeRoute(); });
   neFromOther.addEventListener('input', updateNeRoute);
   neToOther.addEventListener('input', updateNeRoute);
+
+  document.getElementById('ne_copy_from_flight').addEventListener('change', (e) => {
+    const idx = e.target.value;
+    if (idx === '' || !currentTrip) return;
+    const fl = currentTrip.flights[Number(idx)];
+    if (!fl) return;
+    setSelectOtherPair(neAirlineSelect, neAirlineOther, fl.airline || '', AIRLINE_OPTIONS);
+    neAirlineOther.style.display = neAirlineSelect.value === OTHER_VALUE ? '' : 'none';
+    setSelectOtherPair(neFromSelect, neFromOther, fl.from || '', AIRPORT_OPTIONS);
+    neFromOther.style.display = neFromSelect.value === OTHER_VALUE ? '' : 'none';
+    setSelectOtherPair(neToSelect, neToOther, fl.to || '', AIRPORT_OPTIONS);
+    neToOther.style.display = neToSelect.value === OTHER_VALUE ? '' : 'none';
+    document.getElementById('ne_flightNumber').value = fl.flightNumber || '';
+    document.getElementById('ne_route').value = fl.route || '';
+    document.getElementById('ne_date').value = fl.date || '';
+    document.getElementById('ne_departure').value = fl.departure || '';
+    document.getElementById('ne_arrival').value = fl.arrival || '';
+    document.getElementById('ne_seat').value = fl.seat || '';
+    showToast('Next Event filled from that flight — terminal, gate and status still need your input.');
+  });
 
   // Trip ID: system-generated. Regenerate button (new trips only) + live regeneration as the name is typed.
   document.getElementById('regenTripIdBtn').addEventListener('click', () => {

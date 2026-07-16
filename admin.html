@@ -17,7 +17,7 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-brand__mark">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M2 16l6.5-2 3.2 1.9L13 14l-3-5.4L14.5 3l1 .6L13 10l6 1.7.6 1.6-7 .3-2.4 4.2L8 20l-1.4-.4.7-4.6L2 16z" fill="#D6B876"/></svg>
+        <img src="assets/brand/efl-mark-256.png" alt="EFL Global" />
       </div>
       <div>
         <div class="sidebar-brand__name">EFL GLOBAL</div>
@@ -134,6 +134,12 @@
       <!-- Next Event -->
       <div class="admin-card">
         <div class="admin-card__head"><h3>Next Event</h3><button class="btn btn-ghost btn-sm" id="clearNextEventBtn" type="button">Clear</button></div>
+        <div class="field" style="margin-bottom:14px;">
+          <label>Copy details from an existing flight</label>
+          <select class="f-input" id="ne_copy_from_flight">
+            <option value="">— Select a flight below to copy from —</option>
+          </select>
+        </div>
         <div class="form-grid cols-3">
           <div class="field"><label>Airline</label>
             <select class="f-input" id="ne_airline_select"></select>
@@ -178,6 +184,7 @@
       <!-- Flights -->
       <div class="admin-card">
         <div class="admin-card__head"><h3>Flights</h3><button class="btn btn-outline btn-sm" id="addFlightBtn" type="button">+ Add Flight</button></div>
+        <p style="font-size:12px;color:var(--ink-500);margin:-4px 0 12px;">Add every leg here. Then scroll up to <strong>Next Event</strong> and use "Copy details from an existing flight" instead of retyping.</p>
         <div id="flightsList"></div>
       </div>
 
