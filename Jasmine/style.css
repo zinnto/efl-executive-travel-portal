@@ -865,6 +865,13 @@ a { color: inherit; text-decoration: none; }
 @media (min-width: 640px) { .field.span-2 { grid-column: span 2; } }
 .field.span-3 { grid-column: span 1; }
 @media (min-width: 640px) { .field.span-3 { grid-column: span 3; } }
+.policy-hint {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 11.5px; line-height: 1.4; color: var(--gold-500);
+  background: var(--gold-100); border-radius: var(--r-sm);
+  padding: 7px 10px; margin: 6px 0 0;
+}
+.policy-hint::before { content: "◆"; font-size: 8px; margin-top: 3px; flex: none; }
 .field label, .field-label { font-size: 11.5px; font-weight: 600; color: var(--ink-500); letter-spacing: 0.01em; }
 .field input, .field textarea, .field select,
 input.f-input, textarea.f-input, select.f-input {

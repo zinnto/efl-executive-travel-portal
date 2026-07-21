@@ -42,7 +42,7 @@ const ICONS = {
 };
 
 function blankExecutive() {
-  return { execId: '', name: '', position: '', department: '', photoInitials: '', email: '', phone: '', nationality: '', notes: '' };
+  return { execId: '', name: '', position: '', department: '', tier: '', photoInitials: '', email: '', phone: '', nationality: '', notes: '' };
 }
 function newExecId(name) {
   return `EXEC-${slugify(name).slice(0, 6) || 'NEW'}${Date.now().toString(36).slice(-3).toUpperCase()}`;
@@ -83,6 +83,76 @@ const AIRPORT_OPTIONS = [
 ];
 
 const OTHER_VALUE = '__other__';
+
+/* ---------------- Travel policy reference (for editor hints) ---------------- */
+
+let POLICY_DATA = null;
+async function loadPolicyData() {
+  if (POLICY_DATA) return POLICY_DATA;
+  try {
+    const res = await fetch('data/travel-policy.json', { cache: 'no-store' });
+    POLICY_DATA = await res.json();
+  } catch (err) {
+    console.warn('Could not load travel-policy.json — policy hints will be unavailable.', err);
+    POLICY_DATA = null;
+  }
+  return POLICY_DATA;
+}
+function policyRowForZone(section, zone) {
+  if (!POLICY_DATA || !POLICY_DATA[section]) return null;
+  return POLICY_DATA[section].rows.find(r => r.zone === zone) || null;
+}
+function policyRowForTier(tier) {
+  if (!POLICY_DATA || !POLICY_DATA.classOfService) return null;
+  return POLICY_DATA.classOfService.rows.find(r => r.level === tier) || null;
+}
+
+// Recomputes every policy hint shown in the trip editor, based on the
+// currently selected Travel Zone and the linked executive's Policy Tier.
+// Purely informational — nothing here validates or blocks saving.
+async function updatePolicyHints() {
+  if (!currentTrip) return;
+  await loadPolicyData();
+
+  const zone = document.getElementById('f_zone').value;
+  const zoneCountriesEl = document.getElementById('zoneCountriesHint');
+  const perDiemHintEl = document.getElementById('perDiemHint');
+  const hotelHintEl = document.getElementById('hotelHint');
+  const classHintEl = document.getElementById('classHint');
+
+  if (zone && POLICY_DATA) {
+    const pd = policyRowForZone('perDiemByZone', zone);
+    const hl = policyRowForZone('hotelLimitsByZone', zone);
+
+    zoneCountriesEl.textContent = pd ? pd.countries : '';
+    zoneCountriesEl.style.display = pd ? '' : 'none';
+
+    perDiemHintEl.textContent = pd ? `Policy per diem for ${zone}: ${pd.dailyLimit}/day` : '';
+    perDiemHintEl.style.display = pd ? '' : 'none';
+
+    hotelHintEl.textContent = hl ? `Policy hotel limit for ${zone}: ${hl.range}` : '';
+    hotelHintEl.style.display = hl ? '' : 'none';
+  } else {
+    zoneCountriesEl.style.display = 'none';
+    perDiemHintEl.style.display = 'none';
+    hotelHintEl.style.display = 'none';
+  }
+
+  const execId = document.getElementById('f_execId').value;
+  let cls = null, execLabel = '';
+  if (execId) {
+    try {
+      const exec = await loadExecutiveById(execId);
+      if (exec && exec.tier) { cls = policyRowForTier(exec.tier); execLabel = exec.name || ''; }
+    } catch (err) { /* executive not found — leave hint hidden */ }
+  }
+  if (cls) {
+    classHintEl.textContent = `Policy class for ${execLabel} (${cls.level}): ${cls.shortHaul} (≤6h) · ${cls.longHaul} (>6h)`;
+    classHintEl.style.display = '';
+  } else {
+    classHintEl.style.display = 'none';
+  }
+}
 
 // A "select + other" field shows a dropdown of common options, plus a free-text
 // input (revealed by choosing "Other…") for anything not on the list.
@@ -162,7 +232,7 @@ function download(filename, text) {
 function blankTrip() {
   return {
     meta: { tripName: 'New Trip', companyName: 'EFL Global', generatedOn: new Date().toISOString().slice(0, 10), stage: 'upcoming' },
-    traveller: { name: '', position: '', photoInitials: '', destination: '', dates: '', tripId: '' },
+    traveller: { name: '', position: '', photoInitials: '', destination: '', dates: '', tripId: '', zone: '' },
     nextEvent: null,
     status: { documentsReady: false, hotelsConfirmed: false, transportArranged: false },
     quickAccess: [
@@ -838,6 +908,7 @@ async function openEditorWithTrip(trip, isNew) {
   f('f_tripId').value = trip.traveller.tripId || '';
   document.getElementById('regenTripIdBtn').style.display = isNew ? '' : 'none';
   f('f_stage').value = trip.meta.stage;
+  f('f_zone').value = trip.traveller.zone || '';
   await populateExecutiveSelect(trip.traveller.execId || '');
   f('f_tripName').value = trip.meta.tripName || '';
   f('f_companyName').value = trip.meta.companyName || 'EFL Global';
@@ -869,6 +940,7 @@ async function openEditorWithTrip(trip, isNew) {
   renderItinerary();
   renderSimpleSections();
   renderDocuments();
+  updatePolicyHints();
 
   showView('editor');
   document.getElementById('topnavTitle').textContent = isNew ? 'New Trip' : 'Edit Trip';
@@ -895,6 +967,7 @@ function collectBasicFieldsIntoTrip() {
   currentTrip.traveller.position = f('f_position').value;
   currentTrip.traveller.photoInitials = f('f_initials').value || initials(f('f_travellerName').value);
   currentTrip.traveller.destination = f('f_destination').value;
+  currentTrip.traveller.zone = f('f_zone').value;
   currentTrip.traveller.dates = f('f_dates').value;
 
   const neAirline = getSelectOtherValue(f('ne_airline_select'), f('ne_airline_other'));
@@ -1008,6 +1081,7 @@ async function openExecEditorWithData(exec, isNew) {
   f('ex_department').value = exec.department || '';
   f('ex_name').value = exec.name || '';
   f('ex_position').value = exec.position || '';
+  f('ex_tier').value = exec.tier || '';
   f('ex_initials').value = exec.photoInitials || '';
   f('ex_nationality').value = exec.nationality || '';
   f('ex_email').value = exec.email || '';
@@ -1061,6 +1135,7 @@ function collectExecFields() {
   currentExec.department = f('ex_department').value;
   currentExec.name = f('ex_name').value;
   currentExec.position = f('ex_position').value;
+  currentExec.tier = f('ex_tier').value;
   currentExec.photoInitials = f('ex_initials').value || initials(f('ex_name').value);
   currentExec.nationality = f('ex_nationality').value;
   currentExec.email = f('ex_email').value;
@@ -1131,6 +1206,8 @@ function handleBackClick() {
 
 
 function init() {
+  loadPolicyData();
+
   document.getElementById('menuBtn').addEventListener('click', openSidebar);
   document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
   document.getElementById('backBtn').addEventListener('click', handleBackClick);
@@ -1248,7 +1325,10 @@ function init() {
       }
       showToast(`Autofilled traveller details from ${exec.name}.`);
     } catch (err) { /* profile not found — leave fields as-is */ }
+    updatePolicyHints();
   });
+
+  document.getElementById('f_zone').addEventListener('change', updatePolicyHints);
 
   const importFile = document.getElementById('importFile');
   document.getElementById('importBtn').addEventListener('click', () => importFile.click());

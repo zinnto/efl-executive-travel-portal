@@ -116,6 +116,15 @@
               <option value="archived">Archived</option>
             </select>
           </div>
+          <div class="field"><label>Travel Zone <span style="font-weight:400;color:var(--ink-500);">(policy limits)</span></label>
+            <select class="f-input" id="f_zone">
+              <option value="">— Not set —</option>
+              <option value="Zone 1">Zone 1</option>
+              <option value="Zone 2">Zone 2</option>
+              <option value="Zone 3">Zone 3</option>
+            </select>
+            <p class="policy-hint" id="zoneCountriesHint" style="display:none;"></p>
+          </div>
           <div class="field span-2"><label>Executive</label>
             <select class="f-input" id="f_execId">
               <option value="">— Not linked to an executive profile —</option>
@@ -134,6 +143,7 @@
       <!-- Next Event -->
       <div class="admin-card">
         <div class="admin-card__head"><h3>Next Event</h3><button class="btn btn-ghost btn-sm" id="clearNextEventBtn" type="button">Clear</button></div>
+        <p class="policy-hint" id="classHint" style="display:none;"></p>
         <div class="field" style="margin-bottom:14px;">
           <label>Copy details from an existing flight</label>
           <select class="f-input" id="ne_copy_from_flight">
@@ -192,6 +202,7 @@
       <!-- Hotels -->
       <div class="admin-card">
         <div class="admin-card__head"><h3>Hotels</h3><button class="btn btn-outline btn-sm" id="addHotelBtn" type="button">+ Add Hotel</button></div>
+        <p class="policy-hint" id="hotelHint" style="display:none;"></p>
         <div id="hotelsList"></div>
       </div>
 
@@ -232,6 +243,7 @@
           <div class="field"><label>Currency</label><input class="f-input" id="exp_currency" placeholder="USD" /></div>
           <div class="field"><label>Per Diem (per day)</label><input class="f-input" type="number" id="exp_perDiem" /></div>
         </div>
+        <p class="policy-hint" id="perDiemHint" style="display:none;"></p>
         <h4>Logged Items</h4>
         <div id="expensesList"></div>
         <button class="btn btn-outline btn-sm" id="addExpenseBtn" type="button">+ Add Expense Item</button>
@@ -283,6 +295,15 @@
           <div class="field"><label>Department</label><input class="f-input" id="ex_department" placeholder="Finance" /></div>
           <div class="field"><label>Full Name</label><input class="f-input" id="ex_name" placeholder="Full name" /></div>
           <div class="field"><label>Position / Title</label><input class="f-input" id="ex_position" placeholder="Regional Finance Manager" /></div>
+          <div class="field"><label>Policy Tier <span style="font-weight:400;color:var(--ink-500);">(flight class)</span></label>
+            <select class="f-input" id="ex_tier">
+              <option value="">— Not set —</option>
+              <option value="Global CEO">Global CEO</option>
+              <option value="C-Suite, Directors, Country Heads, Global Leaders">C-Suite / Director / Country Head / Global Leader</option>
+              <option value="Head, GM, SM">Head / GM / SM</option>
+              <option value="All Other Employees">All Other Employees</option>
+            </select>
+          </div>
           <div class="field"><label>Photo Initials</label><input class="f-input" id="ex_initials" maxlength="3" placeholder="PR" /></div>
           <div class="field"><label>Nationality</label><input class="f-input" id="ex_nationality" /></div>
           <div class="field"><label>Email</label><input class="f-input" type="email" id="ex_email" /></div>
