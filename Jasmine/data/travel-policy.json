@@ -1,0 +1,59 @@
+{
+  "policyName": "Business Travel & Related Expenses Policy",
+  "version": "3.2",
+  "effectiveDate": "1 June 2026",
+  "fullPolicyDocument": "documents/travel-policy-v3.2.pdf",
+  "classOfService": {
+    "note": "Duration is per sector (one leg of the journey), not the whole trip. All domestic travel is Economy Class regardless of level.",
+    "rows": [
+      { "level": "Global CEO", "shortHaul": "Business Class", "longHaul": "Business Class" },
+      { "level": "C-Suite, Directors, Country Heads, Global Leaders", "shortHaul": "Premium Economy", "longHaul": "Business Class" },
+      { "level": "Head, GM, SM", "shortHaul": "Economy", "longHaul": "Premium Economy" },
+      { "level": "All Other Employees", "shortHaul": "Economy", "longHaul": "Economy" }
+    ],
+    "durationNote": "Short-haul = 6 hrs or less · Long-haul = more than 6 hrs"
+  },
+  "perDiemByZone": {
+    "note": "Covers meals, snacks and beverages only. Paid in advance — no receipts required. Does not cover personal expenses.",
+    "rows": [
+      { "zone": "Zone 1", "countries": "United States, Canada, Europe, Australia, East Asia & Singapore", "dailyLimit": "USD 60" },
+      { "zone": "Zone 2", "countries": "South America, Middle East & Southeast Asia (excl. Singapore)", "dailyLimit": "USD 50" },
+      { "zone": "Zone 3", "countries": "South Asia, Africa and any other countries", "dailyLimit": "USD 40" }
+    ]
+  },
+  "hotelLimitsByZone": {
+    "note": "For short-term international travel (up to 3 weeks). Bed & Breakfast basis. Exceeding these limits needs prior approval.",
+    "rows": [
+      { "zone": "Zone 1", "range": "USD 100 – 250 / day" },
+      { "zone": "Zone 2", "range": "USD 100 – 200 / day" },
+      { "zone": "Zone 3", "range": "USD 75 – 150 / day" }
+    ]
+  },
+  "otherLimits": [
+    { "item": "Laundry (trips longer than 5 days)", "limit": "USD 50 / week" },
+    { "item": "Data roaming", "limit": "USD 5 / day" }
+  ],
+  "keyRules": [
+    "Submit Travel Request Form (TRF) approval at least 1 month before travel where possible, to allow for visa processing and the best rates.",
+    "Emergency travel (departing within 48 hrs): retroactive TRF is allowed, but you still need prior written/email approval from your supervisor. Submit the TRF within 3 days of completing travel.",
+    "Use the same airline, direct flights, and round-trip tickets whenever feasible.",
+    "Class upgrades for medical reasons require a doctor's note.",
+    "Hotel booking must be on Bed & Breakfast basis, close to the workplace or visit location. Mini bar and in-room alcohol are not reimbursable.",
+    "Post Travel Expense Report is due within 10 business days of returning, with original itemized receipts attached.",
+    "Reimbursement is processed within 14 business days of a complete, approved claim.",
+    "Business trips exceeding 30 consecutive days are treated as temporary assignments and need prior approval.",
+    "If combining business travel with personal time, only the business-related portion is reimbursable."
+  ],
+  "approvalMatrix": {
+    "note": "Applies to international business travel. All domestic travel is approved by the relevant Country Head.",
+    "rows": [
+      { "entityType": "Station", "category": "Non-managerial employees", "firstApproval": "Dept. Head, Country Head, Regional Head", "finalApproval": "Global CEO" },
+      { "entityType": "Station", "category": "Dept. Head", "firstApproval": "Country Head, Regional Head", "finalApproval": "Global CEO" },
+      { "entityType": "Station", "category": "Country Head", "firstApproval": "Regional Head", "finalApproval": "Global CEO" },
+      { "entityType": "Corporate HQ", "category": "Non-managerial employees", "firstApproval": "Dept. Head, Functional Head", "finalApproval": "Global CEO" },
+      { "entityType": "Corporate HQ", "category": "Dept. Head", "firstApproval": "Functional Head", "finalApproval": "Global CEO" },
+      { "entityType": "Corporate HQ", "category": "Regional Head", "firstApproval": "N/A", "finalApproval": "Global CEO" },
+      { "entityType": "Corporate HQ", "category": "Functional Head", "firstApproval": "N/A", "finalApproval": "Global CEO" }
+    ]
+  }
+}
