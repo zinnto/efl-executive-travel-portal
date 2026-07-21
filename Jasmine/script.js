@@ -806,7 +806,17 @@ async function renderPolicy() {
         ${p.fullPolicyDocument ? `<div class="info-card__actions"><a class="btn btn-primary btn-full" href="${p.fullPolicyDocument}" target="_blank" rel="noopener">${ICONS.pdf} View Full Policy (PDF)</a></div>` : ''}
       </div>
 
-      <div class="section-head" style="margin-top:22px"><h2>Class of Service</h2></div>
+      <div class="section-head" style="margin-top:22px"><h2>Downloadable Forms</h2></div>
+      <div class="info-card" style="padding:8px 12px;">
+        ${(p.forms || []).map(f => `
+          <a class="doc-row" href="${f.file}" target="_blank" rel="noopener">
+            <div class="doc-row__icon">${ICONS.pdf}</div>
+            <div class="doc-row__name">${f.name}</div>
+            <div class="doc-row__open">${ICONS.chevron}</div>
+          </a>`).join('')}
+      </div>
+
+      <div class="section-head"><h2>Class of Service</h2></div>
       <div class="info-card">
         ${policyTable(['Level', '≤6 hrs', '>6 hrs'], p.classOfService.rows.map(r => [r.level, r.shortHaul, r.longHaul]))}
         <p class="policy-note">${p.classOfService.note}</p>
