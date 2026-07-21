@@ -773,6 +773,83 @@ function emptyState(icon, text) {
   return `<div class="empty-state">${ICONS[icon] || ICONS.document}<p>${text}</p></div>`;
 }
 
+/* ---------------- Render: Travel Policy ---------------- */
+
+let POLICY_CACHE = null;
+
+function policyTable(headers, rows) {
+  return `<div class="policy-table-wrap"><table class="policy-table">
+    <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+async function renderPolicy() {
+  const wrap = document.getElementById('policyContent');
+  wrap.innerHTML = `<div class="empty-state">${ICONS.document}<p>Loading policy…</p></div>`;
+
+  try {
+    if (!POLICY_CACHE) {
+      const res = await fetchWithTimeout('data/travel-policy.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('travel-policy.json — ' + res.status);
+      POLICY_CACHE = await res.json();
+    }
+    const p = POLICY_CACHE;
+
+    wrap.innerHTML = `
+      <div class="info-card">
+        <div class="info-card__head">
+          <div class="info-card__title">${p.policyName}</div>
+          <div class="info-card__badge">v${p.version}</div>
+        </div>
+        <div class="info-card__route">Effective ${p.effectiveDate}</div>
+        ${p.fullPolicyDocument ? `<div class="info-card__actions"><a class="btn btn-primary btn-full" href="${p.fullPolicyDocument}" target="_blank" rel="noopener">${ICONS.pdf} View Full Policy (PDF)</a></div>` : ''}
+      </div>
+
+      <div class="section-head" style="margin-top:22px"><h2>Class of Service</h2></div>
+      <div class="info-card">
+        ${policyTable(['Level', '≤6 hrs', '>6 hrs'], p.classOfService.rows.map(r => [r.level, r.shortHaul, r.longHaul]))}
+        <p class="policy-note">${p.classOfService.note}</p>
+      </div>
+
+      <div class="section-head"><h2>Meal Per Diem by Zone</h2></div>
+      <div class="info-card">
+        ${policyTable(['Zone', 'Countries', 'Daily Limit'], p.perDiemByZone.rows.map(r => [r.zone, r.countries, `<strong>${r.dailyLimit}</strong>`]))}
+        <p class="policy-note">${p.perDiemByZone.note}</p>
+      </div>
+
+      <div class="section-head"><h2>Hotel Limits by Zone</h2></div>
+      <div class="info-card">
+        ${policyTable(['Zone', 'Per Day'], p.hotelLimitsByZone.rows.map(r => [r.zone, `<strong>${r.range}</strong>`]))}
+        <p class="policy-note">${p.hotelLimitsByZone.note}</p>
+      </div>
+
+      <div class="section-head"><h2>Other Limits</h2></div>
+      <div class="info-card">
+        ${policyTable(['Item', 'Limit'], p.otherLimits.map(r => [r.item, `<strong>${r.limit}</strong>`]))}
+      </div>
+
+      <div class="section-head"><h2>Key Rules</h2></div>
+      <div class="status-card">
+        ${p.keyRules.map(rule => `
+          <div class="status-row">
+            <div class="status-check">${ICONS.check}</div>
+            <div class="status-text">${rule}</div>
+          </div>`).join('')}
+      </div>
+
+      <div class="section-head"><h2>Approval Matrix</h2></div>
+      <div class="info-card">
+        ${policyTable(['Entity', 'Category', 'First Approval', 'Final Approval'], p.approvalMatrix.rows.map(r => [r.entityType, r.category, r.firstApproval, r.finalApproval]))}
+        <p class="policy-note">${p.approvalMatrix.note}</p>
+      </div>
+    `;
+  } catch (err) {
+    console.error('Failed to load travel policy', err);
+    wrap.innerHTML = emptyState('document', 'Could not load the travel policy. Check your connection and try again.');
+  }
+}
+
 /* ---------------- Settings ---------------- */
 
 function renderSettings() {
@@ -805,12 +882,12 @@ function renderSettings() {
 const VIEW_TITLES = {
   home: 'Dashboard', flights: 'Flights', hotels: 'Hotels', itinerary: 'Itinerary',
   meetings: 'Meetings', transport: 'Transport', documents: 'Documents', maps: 'Maps',
-  contacts: 'Contacts', expenses: 'Expenses', settings: 'Settings'
+  contacts: 'Contacts', expenses: 'Expenses', policy: 'Travel Policy', settings: 'Settings'
 };
 const RENDERERS = {
   home: renderHome, flights: renderFlights, hotels: renderHotels, itinerary: renderItinerary,
   meetings: renderMeetings, transport: renderTransport, documents: renderDocuments, maps: renderMaps,
-  contacts: renderContacts, expenses: renderExpenses, settings: renderSettings
+  contacts: renderContacts, expenses: renderExpenses, policy: renderPolicy, settings: renderSettings
 };
 
 function switchView(name) {
@@ -957,6 +1034,7 @@ async function init() {
     document.getElementById('toastClose').addEventListener('click', () => document.getElementById('toast').classList.remove('show'));
 
     document.getElementById('darkModeToggle').addEventListener('change', (e) => applyTheme(e.target.checked));
+    document.getElementById('policyRow').addEventListener('click', () => switchView('policy'));
     document.getElementById('offlineToggle').addEventListener('change', (e) => applyOffline(e.target.checked));
     applyTheme(localStorage.getItem('efl-theme') === 'dark');
     applyOffline(localStorage.getItem('efl-offline') === '1');

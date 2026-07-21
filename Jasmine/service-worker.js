@@ -1,6 +1,6 @@
 /* EFL Global Executive Travel Portal — Service Worker */
 
-const CACHE_NAME = 'efl-travel-portal-v12';
+const CACHE_NAME = 'efl-travel-portal-v13';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -11,6 +11,7 @@ const CORE_ASSETS = [
   './manifest.json',
   './data/trips-index.json',
   './data/executives-index.json',
+  './data/travel-policy.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/brand/efl-mark-256.png'
