@@ -44,6 +44,12 @@
     "Business trips exceeding 30 consecutive days are treated as temporary assignments and need prior approval.",
     "If combining business travel with personal time, only the business-related portion is reimbursable."
   ],
+  "forms": [
+    { "name": "Travel Request Form (TRF)", "file": "documents/form-travel-request-form.pdf" },
+    { "name": "Post Travel Expense Report", "file": "documents/form-post-travel-expense-report.pdf" },
+    { "name": "Meal Per Diem Claim Form", "file": "documents/form-meal-per-diem-claim.pdf" },
+    { "name": "Travel Expense Claim Form", "file": "documents/form-travel-expense-claim.pdf" }
+  ],
   "approvalMatrix": {
     "note": "Applies to international business travel. All domestic travel is approved by the relevant Country Head.",
     "rows": [
