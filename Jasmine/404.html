@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Page Not Found — EFL Global</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+  .nf-card { max-width: 360px; text-align: center; }
+  .nf-mark { width: 64px; height: 64px; border-radius: 18px; overflow: hidden; margin: 0 auto 20px; box-shadow: var(--shadow-card-lg); }
+  .nf-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nf-code { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; color: var(--gold-500); font-weight: 700; margin-bottom: 10px; }
+  .nf-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--ink-900); margin: 0 0 10px; }
+  .nf-body { font-size: 13.5px; color: var(--ink-500); line-height: 1.6; margin: 0 0 26px; }
+  .nf-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="nf-card">
+    <div class="nf-mark"><img src="assets/brand/efl-mark-256.png" alt="EFL Global" /></div>
+    <div class="nf-code">404</div>
+    <h1 class="nf-title">Page not found</h1>
+    <p class="nf-body">The page or document you're looking for doesn't exist at this address, or may have moved. Double-check the link, or head back to the portal.</p>
+    <div class="nf-actions">
+      <a class="btn btn-primary" href="index.html">Open Portal</a>
+      <a class="btn btn-outline" href="admin.html">Open Admin</a>
+    </div>
+  </div>
+</body>
+</html>

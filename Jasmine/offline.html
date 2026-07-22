@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>You're Offline — EFL Global</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+  .off-card { max-width: 360px; text-align: center; }
+  .off-mark { width: 64px; height: 64px; border-radius: 18px; overflow: hidden; margin: 0 auto 20px; box-shadow: var(--shadow-card-lg); display: flex; align-items: center; justify-content: center; background: var(--line-soft); color: var(--ink-500); }
+  .off-mark svg { width: 30px; height: 30px; }
+  .off-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--ink-900); margin: 0 0 10px; }
+  .off-body { font-size: 13.5px; color: var(--ink-500); line-height: 1.6; margin: 0 0 26px; }
+</style>
+</head>
+<body>
+  <div class="off-card">
+    <div class="off-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M8.5 8.5a5 5 0 0 1 7 0M5.5 5.5a9 9 0 0 1 10.6-1.5M12 19h.01"/></svg>
+    </div>
+    <h1 class="off-title">You're offline</h1>
+    <p class="off-body">This page hasn't been saved for offline access yet. Reconnect to the internet, or open a trip you've already viewed — turn on <strong>Settings → Offline Mode</strong> next time you have signal so it's ready for next time.</p>
+    <button class="btn btn-primary" onclick="window.location.reload()">Try Again</button>
+  </div>
+</body>
+</html>

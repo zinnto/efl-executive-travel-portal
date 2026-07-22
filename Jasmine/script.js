@@ -111,7 +111,12 @@ async function loadTrip() {
         entry = idx.trips.find(t => t.tripId === TRIP_ID);
       }
     }
-    if (!entry && !idx.trips.length) throw new Error('trips-index.json has no trips listed.');
+    if (!entry && !idx.trips.length) {
+      // Not an error — this office genuinely has no trips configured yet.
+      LOAD_ERROR_DETAIL = 'EMPTY';
+      TRIP = null;
+      return;
+    }
     const file = entry ? entry.file : `data/trips/${TRIP_ID}.json`;
     const res = await fetchWithTimeout(file, { cache: 'no-store' });
     if (!res.ok) throw new Error(`${file} — ${res.status} ${res.statusText}${!entry ? ' (Trip ID "' + TRIP_ID + '" was not found in trips-index.json — it may be stale from an earlier test.)' : ''}`);
@@ -983,6 +988,23 @@ function hideSplash() {
   if (splash) splash.classList.add('hidden');
 }
 
+// Shown when this office/deployment genuinely has no trips configured yet —
+// Day 1 for a new office, not an error, so it gets a welcoming tone rather
+// than the error screen.
+function renderEmptyState() {
+  const homeView = document.getElementById('view-home');
+  if (!homeView) return;
+  homeView.innerHTML = `
+    <div style="min-height:60vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 20px;">
+      <div style="width:64px;height:64px;border-radius:18px;overflow:hidden;margin-bottom:18px;">
+        <img src="assets/brand/efl-mark-256.png" alt="EFL Global" style="width:100%;height:100%;object-fit:cover;" />
+      </div>
+      <h2 style="font-family:var(--font-display); font-size:19px; margin:0 0 8px; color:var(--ink-900);">Welcome to the Executive Travel Portal</h2>
+      <p style="font-size:13.5px; color:var(--ink-500); max-width:300px; margin:0 0 22px; line-height:1.5;">No trips have been set up yet. Once your travel team adds the first trip in the Admin Dashboard, it'll appear here automatically.</p>
+      <a class="btn btn-primary" href="admin.html">Open Admin Dashboard</a>
+    </div>`;
+}
+
 // Shown in place of the dashboard if the trip data genuinely couldn't be
 // loaded (e.g. no signal) — so the person sees a clear retry action instead
 // of a frozen, empty-looking app.
@@ -1024,8 +1046,12 @@ async function init() {
     await loadTrip();
 
     if (!TRIP) {
-      showToast(LOAD_ERROR_DETAIL ? `Could not load trip data: ${LOAD_ERROR_DETAIL}` : 'Could not load trip data.');
-      renderLoadError();
+      if (LOAD_ERROR_DETAIL === 'EMPTY') {
+        renderEmptyState();
+      } else {
+        showToast(LOAD_ERROR_DETAIL ? `Could not load trip data: ${LOAD_ERROR_DETAIL}` : 'Could not load trip data.');
+        renderLoadError();
+      }
       return;
     }
 

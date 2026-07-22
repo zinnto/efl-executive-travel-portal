@@ -1,6 +1,6 @@
 /* EFL Global Executive Travel Portal — Service Worker */
 
-const CACHE_NAME = 'efl-travel-portal-v14';
+const CACHE_NAME = 'efl-travel-portal-v16';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -14,7 +14,9 @@ const CORE_ASSETS = [
   './data/travel-policy.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
-  './assets/brand/efl-mark-256.png'
+  './assets/brand/efl-mark-256.png',
+  './offline.html',
+  './404.html'
 ];
 
 self.addEventListener('install', (event) => {
@@ -60,7 +62,16 @@ self.addEventListener('fetch', (event) => {
           }
           return res;
         })
-        .catch(() => cached);
+        .catch(() => {
+          if (cached) return cached;
+          // Nothing cached and the network failed — for a page navigation,
+          // show the branded offline page instead of the browser's default
+          // "no internet" screen.
+          if (event.request.mode === 'navigate' || (event.request.headers.get('accept') || '').includes('text/html')) {
+            return caches.match('./offline.html');
+          }
+          return Response.error();
+        });
     })
   );
 });
