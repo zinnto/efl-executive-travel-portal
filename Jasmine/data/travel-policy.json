@@ -45,10 +45,10 @@
     "If combining business travel with personal time, only the business-related portion is reimbursable."
   ],
   "forms": [
-    { "name": "Travel Request Form (TRF)", "file": "documents/form-travel-request-form.pdf" },
-    { "name": "Post Travel Expense Report", "file": "documents/form-post-travel-expense-report.pdf" },
-    { "name": "Meal Per Diem Claim Form", "file": "documents/form-meal-per-diem-claim.pdf" },
-    { "name": "Travel Expense Claim Form", "file": "documents/form-travel-expense-claim.pdf" }
+    { "key": "trf", "name": "Travel Request Form (TRF)", "file": "documents/form-travel-request-form.pdf", "timing": "Pre-travel" },
+    { "key": "posttravel", "name": "Post Travel Expense Report", "file": "documents/form-post-travel-expense-report.pdf", "timing": "Post-travel" },
+    { "key": "perdiem", "name": "Meal Per Diem Claim Form", "file": "documents/form-meal-per-diem-claim.pdf", "timing": "Pre-travel" },
+    { "key": "claim", "name": "Travel Expense Claim Form", "file": "documents/form-travel-expense-claim.pdf", "timing": "Post-travel" }
   ],
   "approvalMatrix": {
     "note": "Applies to international business travel. All domestic travel is approved by the relevant Country Head.",
