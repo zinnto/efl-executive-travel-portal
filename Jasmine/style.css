@@ -760,7 +760,10 @@ a { color: inherit; text-decoration: none; }
   background: var(--white); border-radius: var(--r-md);
   box-shadow: var(--shadow-card); padding: 16px;
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  transition: transform .15s ease, box-shadow .15s ease;
 }
+.stat-card[data-nav]:hover { box-shadow: var(--shadow-card-lg); transform: translateY(-1px); }
+.stat-card[data-nav]:active { transform: translateY(0) scale(.98); }
 .stat-card__text { min-width: 0; }
 .stat-card__label { font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-500); }
 .stat-card__value { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-top: 3px; }
@@ -829,7 +832,8 @@ a { color: inherit; text-decoration: none; }
 @media (min-width: 720px) { .trips-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1080px) { .trips-grid { grid-template-columns: repeat(3, 1fr); } }
 
-.trip-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow-card); padding: 16px; }
+.trip-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow-card); padding: 16px; transition: box-shadow .15s ease, transform .15s ease; }
+.trip-card[style*="cursor:pointer"]:hover { box-shadow: var(--shadow-card-lg); transform: translateY(-1px); }
 .trip-card__top { display: flex; gap: 12px; align-items: center; }
 .trip-card__avatar {
   width: 44px; height: 44px; border-radius: 13px; flex: none;

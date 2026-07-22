@@ -390,14 +390,22 @@ async function renderDashboard() {
   });
 
   statGrid.innerHTML = [
-    { label: 'Total Trips', value: trips.length, icon: 'itinerary' },
-    { label: 'Executives', value: execs.length, icon: 'contact', gold: true },
-    { label: 'Active Trips', value: activeCount, icon: 'flight' },
-    { label: 'Pending Items', value: pending.length, icon: 'document', gold: pending.length > 0 }
-  ].map(c => `<div class="stat-card">
+    { label: 'Total Trips', value: trips.length, icon: 'itinerary', nav: 'list' },
+    { label: 'Executives', value: execs.length, icon: 'contact', gold: true, nav: 'executives' },
+    { label: 'Active Trips', value: activeCount, icon: 'flight', nav: 'list' },
+    { label: 'Pending Items', value: pending.length, icon: 'document', gold: pending.length > 0, nav: 'pending' }
+  ].map(c => `<div class="stat-card" style="cursor:pointer;" data-nav="${c.nav}">
       <div class="stat-card__text"><div class="stat-card__label">${c.label}</div><div class="stat-card__value">${c.value}</div></div>
       <div class="stat-card__icon ${c.gold ? 'gold' : ''}">${ICONS[c.icon]}</div>
     </div>`).join('');
+  statGrid.querySelectorAll('.stat-card[data-nav]').forEach(card => {
+    card.addEventListener('click', () => {
+      const nav = card.dataset.nav;
+      if (nav === 'list') backToList();
+      else if (nav === 'executives') backToExecutives();
+      else if (nav === 'pending') pendingWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
 
   if (!pending.length) {
     pendingWrap.innerHTML = `<div class="status-row"><div class="status-check">${ICONS.check}</div><div class="status-text">Nothing pending — every trip is fully arranged.</div></div>`;
@@ -413,7 +421,7 @@ async function renderDashboard() {
   }
 
   previewWrap.innerHTML = trips.slice(0, 6).map(t => `
-    <div class="trip-card" data-id="${esc(t.traveller.tripId)}">
+    <div class="trip-card" style="cursor:pointer;" data-id="${esc(t.traveller.tripId)}">
       <div class="trip-card__top">
         <div class="trip-card__avatar">${initials(t.traveller.name)}</div>
         <div><div class="trip-card__name">${esc(t.traveller.name) || '(unnamed)'}</div><div class="trip-card__role">${esc(t.traveller.position || '')}</div></div>
@@ -425,6 +433,13 @@ async function renderDashboard() {
         <button class="btn btn-outline btn-sm" data-act="preview">Open in Portal</button>
       </div>
     </div>`).join('') || '<div class="empty-hint">No trips yet — head to the Trips tab to create the first one.</div>';
+  previewWrap.querySelectorAll('.trip-card[data-id]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return; // buttons handle their own action below
+      editorOrigin = 'dashboard';
+      openEditor(card.dataset.id);
+    });
+  });
 
   previewWrap.querySelectorAll('.trip-card').forEach(card => {
     const id = card.dataset.id;

@@ -1,6 +1,6 @@
 /* EFL Global Executive Travel Portal — Service Worker */
 
-const CACHE_NAME = 'efl-travel-portal-v16';
+const CACHE_NAME = 'efl-travel-portal-v17';
 const CORE_ASSETS = [
   './',
   './index.html',
