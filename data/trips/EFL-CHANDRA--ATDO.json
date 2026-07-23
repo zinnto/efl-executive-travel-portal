@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "tripName": "NBO - BOM",
+    "companyName": "EFL Global",
+    "generatedOn": "2026-07-23",
+    "stage": "upcoming"
+  },
+  "traveller": {
+    "name": "Chandra Sekar B.",
+    "position": "Assistant Manager - Air Export Operations",
+    "photoInitials": "C.S",
+    "destination": "Nairobi, Kenya",
+    "dates": "25 Sep",
+    "tripId": "EFL-CHANDRA--ATDO",
+    "zone": "Zone 3",
+    "execId": "EXEC-CHANDRCA2"
+  },
+  "nextEvent": {
+    "type": "flight",
+    "airline": "Kenya Airways",
+    "flightNumber": "KQ203",
+    "status": "On Time",
+    "route": "Mumbai (BOM) → Nairobi (NBO)",
+    "from": "Mumbai (BOM)",
+    "to": "Nairobi (NBO) — Jomo Kenyatta Intl",
+    "dateISO": "2026-09-25",
+    "date": "Fri, 25 Sept 2026",
+    "departure": "02:40",
+    "arrival": "06:25",
+    "terminal": "",
+    "gate": "",
+    "seat": ""
+  },
+  "status": {
+    "documentsReady": false,
+    "hotelsConfirmed": false,
+    "transportArranged": false
+  },
+  "quickAccess": [
+    {
+      "id": "flights",
+      "label": "Flights",
+      "icon": "flight"
+    },
+    {
+      "id": "hotels",
+      "label": "Hotels",
+      "icon": "hotel"
+    },
+    {
+      "id": "itinerary",
+      "label": "Itinerary",
+      "icon": "itinerary"
+    },
+    {
+      "id": "meetings",
+      "label": "Meetings",
+      "icon": "meeting"
+    },
+    {
+      "id": "transport",
+      "label": "Transport",
+      "icon": "transport"
+    },
+    {
+      "id": "documents",
+      "label": "Documents",
+      "icon": "document"
+    },
+    {
+      "id": "maps",
+      "label": "Maps",
+      "icon": "map"
+    },
+    {
+      "id": "contacts",
+      "label": "Contacts",
+      "icon": "contact"
+    },
+    {
+      "id": "expenses",
+      "label": "Expenses",
+      "icon": "expense"
+    }
+  ],
+  "itinerary": [],
+  "flights": [
+    {
+      "airline": "Kenya Airways",
+      "flightNumber": "KQ203",
+      "from": "Mumbai (BOM)",
+      "to": "Nairobi (NBO) — Jomo Kenyatta Intl",
+      "route": "Mumbai (BOM) → Nairobi (NBO)",
+      "dateISO": "2026-09-25",
+      "date": "Fri, 25 Sept 2026",
+      "departure": "02:40",
+      "arrival": "06:25",
+      "class": "Economy (T)",
+      "seat": "",
+      "pnr": "9T3GWG",
+      "document": "documents/MR CHANDRASEKAR BOJAN.pdf"
+    }
+  ],
+  "hotels": [],
+  "meetings": [],
+  "transport": [],
+  "documents": {},
+  "contacts": [
+    {
+      "name": "Fridah",
+      "company": "RTS Travel",
+      "role": "Travel Agent",
+      "phone": "+254704205195",
+      "whatsapp": "+254704205195",
+      "email": "info@rtstravellimited.com"
+    }
+  ],
+  "maps": [],
+  "expenses": {
+    "currency": "USD",
+    "perDiem": 0,
+    "items": []
+  },
+  "checklist": [
+    {
+      "id": "c1784808071934",
+      "label": "Flight Confirmation",
+      "done": true
+    }
+  ]
+}
