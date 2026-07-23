@@ -36,6 +36,24 @@
       "destination": "Nairobi, Kenya",
       "dates": "29 - 30 Jul",
       "status": "upcoming"
+    },
+    {
+      "tripId": "EFL-CHANDRA--JFMM",
+      "file": "data/trips/EFL-CHANDRA--JFMM.json",
+      "travellerName": "Chandra Sekar B.",
+      "position": "Assistant Manager - Air Export Operations",
+      "destination": "Mumbai, India",
+      "dates": "26 Aug ",
+      "status": "upcoming"
+    },
+    {
+      "tripId": "EFL-CHANDRA--RO56",
+      "file": "data/trips/EFL-CHANDRA--RO56.json",
+      "travellerName": "Chandra Sekar B. (Copy)",
+      "position": "Assistant Manager - Air Export Operations",
+      "destination": "Mumbai, India",
+      "dates": "26 Aug ",
+      "status": "upcoming"
     }
   ]
 }
