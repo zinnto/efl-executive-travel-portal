@@ -35,7 +35,7 @@
   {
     "execId": "EXEC-004",
     "name": "Lasitha Perera",
-    "position": "Senior Manager \u2013 Business Development & Commercial \u2022 GSA Operations",
+    "position": "Senior Manager – Business Development & Commercial • GSA Operations",
     "department": "GSA/Sales",
     "photoInitials": "LP",
     "email": "lasithap@efl.global",
@@ -46,12 +46,24 @@
   {
     "execId": "EXEC-005",
     "name": "Imtiaz Dada",
-    "position": "General Manager - Perishables Kenya \u2022 Perishable Operations",
+    "position": "General Manager - Perishables Kenya • Perishable Operations",
     "department": "PERISHABLES",
     "photoInitials": "ID",
     "email": "Imtiazd@efl.global",
     "phone": "+254722209901",
     "nationality": "Kenyan",
+    "notes": ""
+  },
+  {
+    "execId": "EXEC-CHANDRCA2",
+    "name": "Chandra Sekar B.",
+    "position": "Assistant Manager - Air Export Operations",
+    "department": "OPS",
+    "tier": "All Other Employees",
+    "photoInitials": "C.S",
+    "email": "chandras@efl.global",
+    "phone": "+254706137198",
+    "nationality": "Indian",
     "notes": ""
   }
 ]
