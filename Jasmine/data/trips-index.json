@@ -1,5 +1,5 @@
 {
-  "defaultTripId": "EFL-WASANTHA-D03I",
+  "defaultTripId": "EFL-WASANTHA-WKVR",
   "trips": [
     {
       "tripId": "EFL-WASANTHA-D03I",
@@ -29,12 +29,12 @@
       "status": "active"
     },
     {
-      "tripId": "EFL-WASANTHA-2BSG",
-      "file": "data/trips/EFL-WASANTHA-2BSG.json",
+      "tripId": "EFL-WASANTHA-VVTF",
+      "file": "data/trips/EFL-WASANTHA-VVTF.json",
       "travellerName": "Wasantha Ranasinghe",
       "position": "Director - East Africa",
-      "destination": "",
-      "dates": "23 - 26 July",
+      "destination": "Nairobi, Kenya",
+      "dates": "29 - 30 Jul",
       "status": "upcoming"
     }
   ]
