@@ -1,31 +1,40 @@
 {
-  "defaultTripId": "EFL-UG-0726",
+  "defaultTripId": "EFL-WASANTHA-D03I",
   "trips": [
     {
-      "tripId": "EFL-UG-0726",
-      "file": "data/trips/EFL-UG-0726.json",
-      "travellerName": "Prageeth Ranasinghe",
-      "position": "Regional Finance Manager — East Africa",
-      "destination": "Kampala & Entebbe, Uganda",
-      "dates": "20 – 27 Jul 2026",
+      "tripId": "EFL-WASANTHA-D03I",
+      "file": "data/trips/EFL-WASANTHA-D03I.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "Los Angeles",
+      "dates": "20-23 Jul",
       "status": "active"
     },
     {
-      "tripId": "EFL-SG-0812",
-      "file": "data/trips/EFL-SG-0812.json",
-      "travellerName": "Amara Chen",
-      "position": "Chief Financial Officer",
-      "destination": "Singapore",
-      "dates": "12 – 16 Aug 2026",
+      "tripId": "EFL-WASANTHA-WKVR",
+      "file": "data/trips/EFL-WASANTHA-WKVR.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "Newark, NJ/NewYork, NY, US",
+      "dates": "23 - 26 July",
       "status": "upcoming"
     },
     {
-      "tripId": "EFL-RW-1110",
-      "file": "data/trips/EFL-RW-1110.json",
-      "travellerName": "Prageeth Ranasinghe",
-      "position": "Regional Finance Manager — East Africa",
-      "destination": "Kigali, Rwanda",
-      "dates": "10 – 14 Nov 2026",
+      "tripId": "EFL-LASITHA--QH5Q",
+      "file": "data/trips/EFL-LASITHA--QH5Q.json",
+      "travellerName": "Lasitha Perera",
+      "position": "Senior Manager – Business Development & Commercial • GSA Operations",
+      "destination": "Dar es Salam",
+      "dates": "22-23 Jul",
+      "status": "active"
+    },
+    {
+      "tripId": "EFL-WASANTHA-2BSG",
+      "file": "data/trips/EFL-WASANTHA-2BSG.json",
+      "travellerName": "Wasantha Ranasinghe",
+      "position": "Director - East Africa",
+      "destination": "",
+      "dates": "23 - 26 July",
       "status": "upcoming"
     }
   ]
