@@ -1,0 +1,150 @@
+{
+  "meta": {
+    "tripName": "New York",
+    "companyName": "EFL Global",
+    "generatedOn": "2026-07-23",
+    "stage": "active"
+  },
+  "traveller": {
+    "name": "Wasantha Ranasinghe",
+    "position": "Director - East Africa",
+    "photoInitials": "WR",
+    "destination": "Newark, NJ/NewYork, NY, US",
+    "dates": "23 - 29 July",
+    "tripId": "EFL-WASANTHA-O714",
+    "zone": "Zone 1",
+    "execId": "EXEC-001"
+  },
+  "nextEvent": null,
+  "status": {
+    "documentsReady": false,
+    "hotelsConfirmed": false,
+    "transportArranged": false
+  },
+  "quickAccess": [
+    {
+      "id": "flights",
+      "label": "Flights",
+      "icon": "flight"
+    },
+    {
+      "id": "hotels",
+      "label": "Hotels",
+      "icon": "hotel"
+    },
+    {
+      "id": "itinerary",
+      "label": "Itinerary",
+      "icon": "itinerary"
+    },
+    {
+      "id": "meetings",
+      "label": "Meetings",
+      "icon": "meeting"
+    },
+    {
+      "id": "transport",
+      "label": "Transport",
+      "icon": "transport"
+    },
+    {
+      "id": "documents",
+      "label": "Documents",
+      "icon": "document"
+    },
+    {
+      "id": "maps",
+      "label": "Maps",
+      "icon": "map"
+    },
+    {
+      "id": "contacts",
+      "label": "Contacts",
+      "icon": "contact"
+    },
+    {
+      "id": "expenses",
+      "label": "Expenses",
+      "icon": "expense"
+    }
+  ],
+  "itinerary": [],
+  "flights": [
+    {
+      "airline": "United Airlines",
+      "flightNumber": "UA 2227",
+      "from": "Los Angeles (LAX) — LA Intl",
+      "to": "New York (EWR) — Newark Liberty",
+      "route": "Los Angeles (LAX) → New York (EWR)",
+      "dateISO": "2026-07-23",
+      "date": "Thu, 23 Jul 2026",
+      "departure": "12:15 PM",
+      "arrival": "8:49 PM",
+      "class": "Business",
+      "seat": "",
+      "pnr": "OS6N8X",
+      "document": "documents/LAX - EWR 23 JUL.pdf"
+    }
+  ],
+  "hotels": [
+    {
+      "name": "Hilton Garden Inn New York / Staten Island",
+      "address": "1100 South Ave, Staten Island, US",
+      "checkIn": "Thursday, July 23, 2026",
+      "checkOut": "Sunday, July 26, 2026",
+      "room": "Room, 1 King Bed",
+      "confirmation": "9093802483942",
+      "document": "documents/Global Hotel Card Hilton Garden Inn New York  Staten Island jul 23-26.pdf",
+      "mapQuery": "1100 South Ave, Staten Island, US"
+    }
+  ],
+  "meetings": [],
+  "transport": [],
+  "documents": {
+    "New Category": [
+      {
+        "name": "Flight",
+        "file": "documents/LAX - EWR 23 JUL.pdf"
+      },
+      {
+        "name": "Hotel 23-26",
+        "file": "documents/Global Hotel Card Hilton Garden Inn New York  Staten Island jul 23-26.pdf"
+      },
+      {
+        "name": "Hotel 28-29",
+        "file": "documents/Global Hotel Card Hilton Garden Inn New York Staten Island july 28-29.pdf"
+      }
+    ]
+  },
+  "contacts": [],
+  "maps": [
+    {
+      "category": "Hotel",
+      "name": "Hilton Garden Inn New York / Staten Island",
+      "address": "1100 South Ave, Staten Island, US",
+      "query": "1100 South Ave, Staten Island, US"
+    }
+  ],
+  "expenses": {
+    "currency": "USD",
+    "perDiem": 0,
+    "items": []
+  },
+  "checklist": [
+    {
+      "id": "c1",
+      "label": "Documents Ready",
+      "done": false
+    },
+    {
+      "id": "c2",
+      "label": "Hotels Confirmed",
+      "done": false
+    },
+    {
+      "id": "c3",
+      "label": "Transport Arranged",
+      "done": false
+    }
+  ]
+}
