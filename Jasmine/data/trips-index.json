@@ -1,5 +1,5 @@
 {
-  "defaultTripId": "EFL-WASANTHA-WKVR",
+  "defaultTripId": "EFL-WASANTHA-D03I",
   "trips": [
     {
       "tripId": "EFL-WASANTHA-D03I",
@@ -8,7 +8,7 @@
       "position": "Director - East Africa",
       "destination": "Los Angeles",
       "dates": "20-23 Jul",
-      "status": "archived"
+      "status": "active"
     },
     {
       "tripId": "EFL-WASANTHA-WKVR",
@@ -17,7 +17,7 @@
       "position": "Director - East Africa",
       "destination": "Newark, NJ/NewYork, NY, US",
       "dates": "23 - 26 July",
-      "status": "active"
+      "status": "upcoming"
     },
     {
       "tripId": "EFL-LASITHA--QH5Q",
@@ -29,30 +29,12 @@
       "status": "active"
     },
     {
-      "tripId": "EFL-WASANTHA-VVTF",
-      "file": "data/trips/EFL-WASANTHA-VVTF.json",
+      "tripId": "EFL-WASANTHA-2BSG",
+      "file": "data/trips/EFL-WASANTHA-2BSG.json",
       "travellerName": "Wasantha Ranasinghe",
       "position": "Director - East Africa",
-      "destination": "Nairobi, Kenya",
-      "dates": "29 - 30 Jul",
-      "status": "upcoming"
-    },
-    {
-      "tripId": "EFL-CHANDRA--JFMM",
-      "file": "data/trips/EFL-CHANDRA--JFMM.json",
-      "travellerName": "Chandra Sekar B.",
-      "position": "Assistant Manager - Air Export Operations",
-      "destination": "Mumbai, India",
-      "dates": "26 Aug ",
-      "status": "upcoming"
-    },
-    {
-      "tripId": "EFL-CHANDRA--RO56",
-      "file": "data/trips/EFL-CHANDRA--RO56.json",
-      "travellerName": "Chandra Sekar B. (Copy)",
-      "position": "Assistant Manager - Air Export Operations",
-      "destination": "Mumbai, India",
-      "dates": "26 Aug ",
+      "destination": "",
+      "dates": "23 - 26 July",
       "status": "upcoming"
     }
   ]
