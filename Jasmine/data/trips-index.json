@@ -1,12 +1,12 @@
 {
-  "defaultTripId": "EFL-WASANTHA-D03I",
+  "defaultTripId": "EFL-CHANDRA--LWR8",
   "trips": [
     {
       "tripId": "EFL-WASANTHA-O714",
       "file": "data/trips/EFL-WASANTHA-O714.json",
       "travellerName": "Wasantha Ranasinghe",
       "position": "Director - East Africa",
-      "destination": "",
+      "destination": "Newark, NJ/NewYork, NY, US",
       "dates": "23 - 29 July",
       "status": "active"
     },
@@ -17,7 +17,25 @@
       "position": "Director - East Africa",
       "destination": "Nairobi, Kenya",
       "dates": "29 July",
-      "status": "active"
+      "status": "upcoming"
+    },
+    {
+      "tripId": "EFL-CHANDRA--LWR8",
+      "file": "data/trips/EFL-CHANDRA--LWR8.json",
+      "travellerName": "Chandra Sekar B.",
+      "position": "Assistant Manager - Air Export Operations",
+      "destination": "Mumbai, India",
+      "dates": "26 Aug ",
+      "status": "upcoming"
+    },
+    {
+      "tripId": "EFL-CHANDRA--ATDO",
+      "file": "data/trips/EFL-CHANDRA--ATDO.json",
+      "travellerName": "Chandra Sekar B.",
+      "position": "Assistant Manager - Air Export Operations",
+      "destination": "Nairobi, Kenya",
+      "dates": "25 Sep",
+      "status": "upcoming"
     }
   ]
 }
