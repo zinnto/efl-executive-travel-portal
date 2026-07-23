@@ -531,6 +531,75 @@ async function renderTripsList() {
   });
 }
 
+/* ---------------- View: Trip Reports ---------------- */
+
+const REPORT_FORMS = [
+  { key: 'trf', label: 'Travel Request Form', timing: 'Pre-travel', icon: 'M7 3h7l5 5v13H7z M14 3v5h5' },
+  { key: 'perdiem', label: 'Meal Per Diem', timing: 'Pre-travel', icon: 'M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' },
+  { key: 'claim', label: 'Expense Claim', timing: 'Post-travel', icon: 'M3 7h18v10H3z M3 10h18' },
+  { key: 'posttravel', label: 'Post Travel Report', timing: 'Post-travel', icon: 'M7 3h7l5 5v13H7z M14 3v5h5 M9 13h6M9 17h4' },
+];
+
+async function renderReports() {
+  const wrap = document.getElementById('reportsList');
+  wrap.innerHTML = '<div class="empty-hint">Loading trips…</div>';
+
+  const idx = await loadTripsIndex();
+  if (!idx.trips.length) {
+    wrap.innerHTML = `<div class="empty-hint">No trips yet. Add one in the Trips tab, then come back here to generate its forms.</div>`;
+    return;
+  }
+
+  await loadPolicyData();
+
+  const trips = (await Promise.all(idx.trips.map(async (entry) => {
+    try { return await loadTripById(entry.tripId, entry.file); } catch (e) { return null; }
+  }))).filter(Boolean);
+
+  wrap.innerHTML = trips.map(t => `
+    <div class="report-card" data-id="${esc(t.traveller.tripId)}">
+      <div class="report-card__top">
+        <div class="trip-card__avatar">${initials(t.traveller.name)}</div>
+        <div>
+          <div class="trip-card__name">${esc(t.traveller.name) || '(unnamed)'}</div>
+          <div class="report-card__meta">${esc(t.traveller.destination || '\u2014')} \u00b7 ${esc(t.traveller.dates || '\u2014')}</div>
+        </div>
+      </div>
+      <div class="report-card__forms">
+        ${REPORT_FORMS.map(f => `
+          <button type="button" class="report-form-btn" data-generate="${f.key}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${f.icon}"/></svg>
+            <span>${f.label}</span>
+            <span class="report-form-btn__timing">${f.timing}</span>
+          </button>`).join('')}
+      </div>
+    </div>`).join('');
+
+  wrap.querySelectorAll('.report-card').forEach(card => {
+    const trip = trips.find(t => t.traveller.tripId === card.dataset.id);
+    card.querySelectorAll('[data-generate]').forEach(btn => {
+      btn.addEventListener('click', () => handleGenerateReportForm(btn.dataset.generate, trip, btn));
+    });
+  });
+}
+
+async function handleGenerateReportForm(kind, trip, btn) {
+  if (typeof window.jspdf === 'undefined') { showToast('PDF generator failed to load \u2014 check your connection and try again.'); return; }
+  const original = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span>Generating\u2026</span>';
+  try {
+    await generateFormByKind(kind, trip, POLICY_DATA);
+    showToast(`Generated for ${trip.traveller.name} \u2014 check your downloads.`);
+  } catch (err) {
+    console.error('Form generation failed', err);
+    showToast('Could not generate the form. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = original;
+  }
+}
+
 /* ---------------- Generic repeatable-field list builder ---------------- */
 
 function renderRepeatList(containerEl, items, fields, opts) {
@@ -1174,8 +1243,8 @@ const ICON_PLANE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
 
-const VIEW_IDS = { dashboard: 'view-dashboard', list: 'view-list', editor: 'view-editor', executives: 'view-executives', 'exec-editor': 'view-exec-editor', settings: 'view-settings' };
-const VIEW_TITLES_ADMIN = { dashboard: 'Dashboard', list: 'Trips', editor: 'Edit Trip', executives: 'Executives', 'exec-editor': 'Executive Profile', settings: 'Settings' };
+const VIEW_IDS = { dashboard: 'view-dashboard', list: 'view-list', editor: 'view-editor', executives: 'view-executives', 'exec-editor': 'view-exec-editor', reports: 'view-reports', settings: 'view-settings' };
+const VIEW_TITLES_ADMIN = { dashboard: 'Dashboard', list: 'Trips', editor: 'Edit Trip', executives: 'Executives', 'exec-editor': 'Executive Profile', reports: 'Trip Reports', settings: 'Settings' };
 
 function activeTabFor(name) {
   if (name === 'editor') return editorOrigin === 'dashboard' ? 'dashboard' : editorOrigin === 'executives' ? 'executives' : 'list';
@@ -1206,6 +1275,7 @@ function backToExecutives() {
   renderExecutivesList();
 }
 function goToSettings() { showView('settings'); }
+function goToReports() { showView('reports'); renderReports(); }
 
 function goBackFromEditor() {
   currentTrip = null;
@@ -1229,6 +1299,7 @@ function init() {
   document.querySelector('.sidebar-link[data-view="dashboard"]').addEventListener('click', backToDashboard);
   document.querySelector('.sidebar-link[data-view="list"]').addEventListener('click', backToList);
   document.querySelector('.sidebar-link[data-view="executives"]').addEventListener('click', backToExecutives);
+  document.querySelector('.sidebar-link[data-view="reports"]').addEventListener('click', goToReports);
   document.querySelector('.sidebar-link[data-view="settings"]').addEventListener('click', goToSettings);
 
   document.getElementById('newTripBtn').addEventListener('click', () => { editorOrigin = 'list'; openEditorWithTrip(blankTrip(), true); });

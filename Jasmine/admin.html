@@ -29,6 +29,7 @@
       <li><button class="sidebar-link active" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg><span>Dashboard</span></button></li>
       <li><button class="sidebar-link" data-view="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 3.5l7 7-3.5 1.4-3.9-2.5-2.1 2.1 1.6 3-1.4 1.4-3-3.6-3.6-3 1.4-1.4 3 1.6 2.1-2.1-2.5-3.9 1.4-3.5z"/></svg><span>Trips</span></button></li>
       <li><button class="sidebar-link" data-view="executives"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="8" r="2.7"/><path d="M15.5 14.2c2.8.4 4.5 2.5 4.5 5.8"/></svg><span>Executives</span></button></li>
+      <li><button class="sidebar-link" data-view="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span>Reports</span></button></li>
     </ul>
 
     <div class="sidebar-divider"></div>
@@ -324,6 +325,15 @@
       </div>
     </section>
 
+    <!-- ============ REPORTS ============ -->
+    <section class="view" id="view-reports" hidden>
+      <div class="admin-toolbar">
+        <h2>Trip Reports</h2>
+      </div>
+      <p style="font-size:12.5px;color:var(--ink-500);margin:-6px 0 16px;">Generate travel-policy forms pre-filled from any trip's saved details — no need to open the portal as that traveller. "Blank" opens the original template; the other buttons generate a filled copy.</p>
+      <div id="reportsList"></div>
+    </section>
+
     <!-- ============ SETTINGS ============ -->
     <section class="view" id="view-settings" hidden>
       <div class="admin-toolbar"><h2>Settings</h2></div>
@@ -422,6 +432,9 @@ documents/                        → PDFs referenced by trips</pre>
   <button class="toast__close" id="toastClose">✕</button>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.0.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/5.0.8/jspdf.plugin.autotable.min.js"></script>
+<script src="forms.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>
